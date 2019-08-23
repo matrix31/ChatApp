@@ -7,6 +7,7 @@ package Network;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.io.Serializable;
@@ -51,11 +52,11 @@ public class TCPclient implements Serializable {
        }  
    }
    
-  public void SendFile() throws IOException{
+  public void SendFile(File file) throws IOException{
       
       DataOutputStream out = new DataOutputStream(socket.getOutputStream());
       byte[] header ={0x02};
-      byte[] FILE = Files.readAllBytes(Paths.get("/home/ubiquity/Downloads/img.txt"));
+      byte[] FILE = Files.readAllBytes(file.toPath());
 
       // use of Deflater compression
       Deflater compressor = new Deflater();

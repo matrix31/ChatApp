@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.io.DataInputStream;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
@@ -90,7 +91,7 @@ public class TCPreceiver extends Thread implements Serializable{
                                 bos.close();
                             } catch (IOException e) {
                             }
-                            byte[] decompressedData = bos.toByteArray();
+                            byte[] decompressedData = bos.toByteArray();      
                             FileOutputStream fileOut = new FileOutputStream("/home/ubiquity/Downloads/img.txt"); 
                             System.out.println("I have received a file");
                             fileOut.write(decompressedData);
