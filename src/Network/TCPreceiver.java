@@ -54,7 +54,7 @@ public class TCPreceiver extends Thread implements Serializable{
                         byte[] ByteArray = new byte[socket.getInputStream().available()];
                     
                         input.read(ByteArray);
-                        System.out.println(Arrays.toString(ByteArray)); // tableau compresse
+                        System.out.println(Arrays.toString(ByteArray)); // compressed array
                         element = ByteArray[0];
                         System.out.println(element); 
  
