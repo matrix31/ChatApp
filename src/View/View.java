@@ -5,20 +5,24 @@ package View;
 
 import Config.csv_read;
 import Network.*;
+import java.awt.Color;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class View extends javax.swing.JFrame{
 
    static TCPclient tcpclient;
+  Border redline = BorderFactory.createLineBorder(Color.red);
 
    public View() throws FileNotFoundException {
         initComponents();
@@ -30,10 +34,7 @@ public class View extends javax.swing.JFrame{
 
         jSend.setLineWrap(true);
         jSend.setWrapStyleWord(true);
-       
-       
         
-
     }
     // Interface components
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -46,7 +47,7 @@ public class View extends javax.swing.JFrame{
         jScrollPane1 = new javax.swing.JScrollPane();
         jAreaConv = new javax.swing.JTextArea();
         jFile = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        jSendIcon = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jSend = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
@@ -86,21 +87,38 @@ public class View extends javax.swing.JFrame{
 
         jFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/clip.png"))); // NOI18N
         jFile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jFileMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jFileMouseReleased(evt);
+            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jFileMouseClicked(evt);
             }
         });
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/paper-plane.png"))); // NOI18N
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jSendIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/paper-plane.png"))); // NOI18N
+        jSendIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jSendIconMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jSendIconMouseReleased(evt);
+            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                jSendIconMouseClicked(evt);
             }
         });
 
         jSend.setBackground(new java.awt.Color(239, 239, 239));
         jSend.setColumns(20);
         jSend.setRows(5);
+        jSend.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jSendMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jSend);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/profile-user(1).png"))); // NOI18N
@@ -117,31 +135,29 @@ public class View extends javax.swing.JFrame{
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jChat)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jClose))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(16, 16, 16)
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
+                        .addGap(31, 31, 31)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSendIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jChat)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel3)))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jFile))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jClose))))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,24 +165,28 @@ public class View extends javax.swing.JFrame{
                 .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jClose)
-                    .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jChat))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22))
-                    .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(22, 22, 22))
+                            .addComponent(jLabel3)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(jSendIcon)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         setJMenuBar(jMenuBar1);
@@ -187,8 +207,10 @@ public class View extends javax.swing.JFrame{
 
     private void jChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jChatActionPerformed
       
-       
+ 
        try {
+          jSend.setText("Type something here...");
+          jSend.setForeground(Color.lightGray);
           String  remoteAdr = jBoxModem.getSelectedItem().toString();
           DataOutputStream out = new DataOutputStream(tcpclient.socket.getOutputStream());
           
@@ -218,15 +240,15 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jBoxModemActionPerformed
 
     private void jCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCloseActionPerformed
+   
+  
        try {
            tcpclient.Close(); // close the socket
        } catch (IOException ex) {
            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
        }
-                      
-                           
-                   
-                    
+       
+  
 
     }//GEN-LAST:event_jCloseActionPerformed
 
@@ -259,24 +281,46 @@ public class View extends javax.swing.JFrame{
                 Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (result == JFileChooser.CANCEL_OPTION) {
-                System.out.println("Cancel was selected");
 }
     
     }//GEN-LAST:event_jFileMouseClicked
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+    private void jSendIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMouseClicked
 
         // When clicked take the text written from the jSend text area and send it to remote host
+       
         String Text = jSend.getText();
         tcpclient.SendMessage(Text+"\n");
         jSend.setText("");
         jAreaConv.append("[Me] : "+Text+"\n");
-    }//GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_jSendIconMouseClicked
 
     private void jAdrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAdrActionPerformed
      
  
     }//GEN-LAST:event_jAdrActionPerformed
+
+    private void jSendMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendMouseClicked
+        jSend.setText("");
+        jSend.setForeground(Color.BLACK);
+    }//GEN-LAST:event_jSendMouseClicked
+
+    private void jSendIconMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMousePressed
+      //  jSendIcon.setVisible(true);
+       
+    }//GEN-LAST:event_jSendIconMousePressed
+
+    private void jSendIconMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMouseReleased
+       // jSendIcon.setVisible(true);
+    }//GEN-LAST:event_jSendIconMouseReleased
+
+    private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
+        //jFile.setVisible(false);
+    }//GEN-LAST:event_jFileMousePressed
+
+    private void jFileMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMouseReleased
+       // jFile.setVisible(true);
+    }//GEN-LAST:event_jFileMouseReleased
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -342,13 +386,13 @@ public class View extends javax.swing.JFrame{
     private javax.swing.JButton jChat;
     private javax.swing.JButton jClose;
     private javax.swing.JLabel jFile;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jSend;
+    private javax.swing.JLabel jSendIcon;
     // End of variables declaration//GEN-END:variables
 
 }

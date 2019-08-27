@@ -13,9 +13,12 @@ import java.nio.file.Files;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.Deflater;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -148,13 +151,13 @@ public class TCPclient implements Serializable {
     
      
   }
-  public void Close() throws IOException{
-      socket.close();
-      
+  public void Close() throws IOException{ 
+            socket.close();
+           
   }
 }
-    
  
+
 
      
     

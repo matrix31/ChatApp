@@ -27,6 +27,7 @@ import static jdk.nashorn.internal.objects.NativeRegExp.test;
 public class TCPreceiver extends Thread implements Serializable{
 
     public Socket socket;
+    public DataInputStream in ;
     
     public String str;
     public String checkAT = "+++AT!AR:2:OK\r\n";
@@ -150,15 +151,7 @@ public class TCPreceiver extends Thread implements Serializable{
                             
                             System.out.println("nb de byte recu : "+ i);
                            
-                           
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
+      
                                     
                     }
                 } 
@@ -166,7 +159,9 @@ public class TCPreceiver extends Thread implements Serializable{
             } catch (FileNotFoundException ex) {
             Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
+            csv_read adr = new csv_read();
+            System.out.println(" ChatApp > The acoustic connection with modem "+adr.getAdr() + " has been closed");
+            
         }
     }
 }
