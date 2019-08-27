@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class View extends javax.swing.JFrame{
 
@@ -49,7 +50,6 @@ public class View extends javax.swing.JFrame{
         jScrollPane2 = new javax.swing.JScrollPane();
         jSend = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jAdr = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
 
@@ -105,8 +105,6 @@ public class View extends javax.swing.JFrame{
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/profile-user(1).png"))); // NOI18N
 
-        jTextField1.setText("jTextField1");
-
         jAdr.setBackground(new java.awt.Color(183, 208, 243));
         jAdr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,11 +142,6 @@ public class View extends javax.swing.JFrame{
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jFile))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,11 +167,6 @@ public class View extends javax.swing.JFrame{
                         .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(37, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         setJMenuBar(jMenuBar1);
@@ -249,15 +237,30 @@ public class View extends javax.swing.JFrame{
 
     private void jFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMouseClicked
         JFileChooser popMenu = new JFileChooser("/home/ubiquity/Downloads"); // to do : make csv file
-        popMenu.showSaveDialog(null);
-        popMenu.setMultiSelectionEnabled(true);
-        File selectedFile = popMenu.getSelectedFile();
-        try {
-            tcpclient.SendFile(selectedFile); // Perform the sending of the file selected
-        }
-        catch (IOException ex) {
-            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+       
+        
+        popMenu.setDialogTitle("Choose a file to send");
+        popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        popMenu.setMultiSelectionEnabled(false);
+  
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG & PNG Images", "jpeg", "png"); 
+        popMenu.setFileFilter(filter); //desactiver le type par défault ??
+        
+        
+        // cancel button 
+        int result = popMenu.showDialog(null,"Send");
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = popMenu.getSelectedFile();
+            try {
+                tcpclient.SendFile(selectedFile); // Perform the sending of the file selected
+            }
+            catch (IOException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (result == JFileChooser.CANCEL_OPTION) {
+                System.out.println("Cancel was selected");
+}
     
     }//GEN-LAST:event_jFileMouseClicked
 
@@ -346,7 +349,6 @@ public class View extends javax.swing.JFrame{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jSend;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
 }

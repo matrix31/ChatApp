@@ -11,11 +11,15 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 import java.io.DataInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
+import static jdk.nashorn.internal.objects.NativeRegExp.test;
 
 
 
@@ -51,11 +55,19 @@ public class TCPreceiver extends Thread implements Serializable{
                 
                     while  ( socket.getInputStream().available()>0){
                         
+                        
+                        
                         DataInputStream  input = new DataInputStream(socket.getInputStream());
                         byte[] ByteArray = new byte[socket.getInputStream().available()];
+                        
+                        int i = 0 ;
+                            for ( byte a : ByteArray){
+                                i++;
+                              
+                            }
                     
                         input.read(ByteArray);
-                        System.out.println(Arrays.toString(ByteArray)); // compressed array
+                    //    System.out.println(Arrays.toString(ByteArray)); // compressed array
                         element = ByteArray[0];
                         System.out.println(element); 
  
@@ -69,9 +81,9 @@ public class TCPreceiver extends Thread implements Serializable{
                             jAreaConv.append("["+adr.getAdr()+"] : "+str_sub+"\n"); // display text
                                
                         }
-                        
+                      
                       if ( element == file_header[0]){
-                          
+                            /*
                             int t = ByteArray.length -1 ;
                             byte [] test = new byte[t] ;
                             System.arraycopy(ByteArray,1,test,0,t); // new array without the header
@@ -113,17 +125,56 @@ public class TCPreceiver extends Thread implements Serializable{
                             jAreaConv.append("["+socket.getInetAddress()+"] : "+str.substring(17)+"\n"); // display text     
                             }
                             */
+                            int t = ByteArray.length -1 ;
+                            byte [] test = new byte[t] ;
+                            System.arraycopy(ByteArray,1,test,0,t); // new array without the header
+                            
+                            
+                            
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream(test.length);
+                            System.out.println("bos created");
+                   
+                        //  while(socket.getInputStream().available() >0) {
+                                bos.write(test);
+                               
+                                
+                                // System.out.println("la");
+                           // }
+                                  // System.out.println("ici");
+                            byte[] decompressedData = bos.toByteArray();
+                            System.out.println("I have received a file");
+                            System.out.println(Arrays.toString(decompressedData));
+                            FileOutputStream fileOut = new FileOutputStream("/home/ubiquity/Downloads/img.jpeg");
+                            fileOut.write(decompressedData);
+                            
+                            
+                            System.out.println("nb de byte recu : "+ i);
+                           
+                           
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                                    
                     }
                 } 
-            }      
-            }
-           catch (IOException ex) {
-                csv_read adr = new csv_read(); 
-                System.out.println(" ChatApp > Current acoustic connection with "+adr.getAdr()+ " has been shut");
-            }
+            }     
+            } catch (FileNotFoundException ex) {
+            Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
 }
+
+           
+    
+  
+
   
        
                   
