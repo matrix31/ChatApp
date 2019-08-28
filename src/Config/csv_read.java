@@ -61,6 +61,14 @@ public class csv_read {
            return er ;
        }
    }
+   public int numberOfModem(){
+       
+       int element = 0 ; 
+       for ( List<String> str : list){
+           element++;
+       }
+       return element;
+   }
 }
    
    

@@ -5,6 +5,7 @@
         <group>
             <file>file:/Users/franck/Downloads/ChatApp/src/View/View.java</file>
             <file>file:/Users/franck/Downloads/ChatApp/src/Network/TCPreceiver.java</file>
+            <file>file:/Users/franck/Downloads/ChatApp/src/Config/csv_read.java</file>
             <file>file:/Users/franck/Downloads/ChatApp/src/Network/TCPclient.java</file>
         </group>
     </open-files>

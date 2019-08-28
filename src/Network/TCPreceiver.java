@@ -80,6 +80,7 @@ public class TCPreceiver extends Thread implements Serializable{
                             csv_read adr = new csv_read();
                             jAreaConv.append("\n");
                             jAreaConv.append("["+adr.getAdr()+"] : "+str_sub+"\n"); // display text
+                            jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text 
                                
                         }
                       

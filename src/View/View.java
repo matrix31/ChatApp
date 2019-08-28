@@ -6,16 +6,25 @@ package View;
 import Config.csv_read;
 import Network.*;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import static javax.swing.JComponent.WHEN_FOCUSED;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -31,6 +40,7 @@ public class View extends javax.swing.JFrame{
         jAreaConv.setLineWrap(true);
         jAreaConv.setWrapStyleWord(true);
         jAreaConv.setEditable(false);
+       // jAreaConv.setAutoscrolls(true);
 
         jSend.setLineWrap(true);
         jSend.setWrapStyleWord(true);
@@ -106,9 +116,6 @@ public class View extends javax.swing.JFrame{
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jSendIconMouseReleased(evt);
             }
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jSendIconMouseClicked(evt);
-            }
         });
 
         jSend.setBackground(new java.awt.Color(239, 239, 239));
@@ -117,6 +124,11 @@ public class View extends javax.swing.JFrame{
         jSend.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jSendMouseClicked(evt);
+            }
+        });
+        jSend.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jSendKeyPressed(evt);
             }
         });
         jScrollPane2.setViewportView(jSend);
@@ -163,9 +175,9 @@ public class View extends javax.swing.JFrame{
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jClose)
-                    .addComponent(jChat))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jChat, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jClose))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -285,16 +297,6 @@ public class View extends javax.swing.JFrame{
     
     }//GEN-LAST:event_jFileMouseClicked
 
-    private void jSendIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMouseClicked
-
-        // When clicked take the text written from the jSend text area and send it to remote host
-       
-        String Text = jSend.getText();
-        tcpclient.SendMessage(Text+"\n");
-        jSend.setText("");
-        jAreaConv.append("[Me] : "+Text+"\n");
-    }//GEN-LAST:event_jSendIconMouseClicked
-
     private void jAdrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAdrActionPerformed
      
  
@@ -306,12 +308,19 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jSendMouseClicked
 
     private void jSendIconMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMousePressed
-      //  jSendIcon.setVisible(true);
+        // When clicked take the text written from the jSend write it in the display text area and send it to remote host
+        jSendIcon.setVisible(false);
+        String Text = jSend.getText();
+        tcpclient.SendMessage(Text+"\n");
+        jSend.setText("");
+        jAreaConv.append("[Me] : "+Text+"\n");
+        jAreaConv.append("\n");
+        jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text 
        
     }//GEN-LAST:event_jSendIconMousePressed
 
     private void jSendIconMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMouseReleased
-       // jSendIcon.setVisible(true);
+       jSendIcon.setVisible(true);
     }//GEN-LAST:event_jSendIconMouseReleased
 
     private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
@@ -319,9 +328,30 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jFileMousePressed
 
     private void jFileMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMouseReleased
-       // jFile.setVisible(true);
+        jFile.setVisible(true);
     }//GEN-LAST:event_jFileMouseReleased
 
+    private void jSendKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jSendKeyPressed
+        if (evt.getKeyChar() == '\n'){
+            int condition = WHEN_FOCUSED;  
+            // get our maps for binding from the chatEnterArea JTextArea
+            InputMap inputMap = jSend.getInputMap(condition);
+            KeyStroke enterStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+
+            // tell input map that we are handling the enter key
+            inputMap.put(enterStroke, enterStroke.toString());
+            String Text = jSend.getText();
+            tcpclient.SendMessage(Text+"\n");
+            jSend.setText("");
+            jAreaConv.append("[Me] : "+Text+"\n");
+            jAreaConv.append("\n");
+            
+        }
+    }//GEN-LAST:event_jSendKeyPressed
+    
+    // PB : enlever line feed lorsque saut de ligne 
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -362,13 +392,13 @@ public class View extends javax.swing.JFrame{
                         tcpclient = new TCPclient(csv_read.list.get(0).get(0),9200); // create Client Socket on IPadr,Port
                         String myRemoteAdr = adr_socket.list.get(0).get(1);
                         jBoxModem.removeItem(myRemoteAdr); // remove myRemoteAddress from the list of remote modem
-                        
+                         
                     }
                     catch (ClassNotFoundException ex) {
                         Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    } 
                    TCPreceiver thread = new TCPreceiver(tcpclient.socket) ;
                    // Create the thread in charge of listening input streams
                     thread.start();
@@ -391,7 +421,7 @@ public class View extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jSend;
+    public static javax.swing.JTextArea jSend;
     private javax.swing.JLabel jSendIcon;
     // End of variables declaration//GEN-END:variables
 
