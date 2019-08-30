@@ -107,6 +107,11 @@ public class View extends javax.swing.JFrame{
                 jFileMouseClicked(evt);
             }
         });
+        jFile.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentMoved(java.awt.event.ComponentEvent evt) {
+                jFileComponentMoved(evt);
+            }
+        });
 
         jSendIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/paper-plane.png"))); // NOI18N
         jSendIcon.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -153,7 +158,7 @@ public class View extends javax.swing.JFrame{
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSendIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -192,15 +197,16 @@ public class View extends javax.swing.JFrame{
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jSendIcon)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jFile, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                        .addGap(24, 24, 24)
+                        .addComponent(jFile))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
+        jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -270,30 +276,9 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jSelectFileActionPerformed
 
     private void jFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMouseClicked
-        JFileChooser popMenu = new JFileChooser("/home/ubiquity/Downloads"); // to do : make csv file
+      
         
-       
-        
-        popMenu.setDialogTitle("Choose a file to send");
-        popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        popMenu.setMultiSelectionEnabled(false);
-  
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG & PNG Images", "jpeg", "png"); 
-        popMenu.setFileFilter(filter); //desactiver le type par défault ??
-        
-        
-        // cancel button 
-        int result = popMenu.showDialog(null,"Send");
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = popMenu.getSelectedFile();
-            try {
-                tcpclient.SendFile(selectedFile); // Perform the sending of the file selected
-            }
-            catch (IOException ex) {
-                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else if (result == JFileChooser.CANCEL_OPTION) {
-}
+
     
     }//GEN-LAST:event_jFileMouseClicked
 
@@ -324,7 +309,32 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jSendIconMouseReleased
 
     private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
-        //jFile.setVisible(false);
+        jFile.setVisible(false);
+        JFileChooser popMenu = new JFileChooser("/home/ubiquity/Downloads"); // to do : make csv file
+
+        popMenu.setDialogTitle("Choose a file to send");
+        popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        popMenu.setMultiSelectionEnabled(false);
+  
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG & PNG Images", "jpeg", "png"); 
+        popMenu.setFileFilter(filter); //desactiver le type par défault ??
+        
+        
+        // cancel button 
+        int result = popMenu.showDialog(null,"Send");
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = popMenu.getSelectedFile();
+            try {
+                jFile.setVisible(true);
+                tcpclient.SendFile(selectedFile); // Perform the sending of the file selected
+            }
+            catch (IOException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (result == JFileChooser.CANCEL_OPTION) {
+            jFile.setVisible(true);
+ 
+        }
     }//GEN-LAST:event_jFileMousePressed
 
     private void jFileMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMouseReleased
@@ -348,6 +358,10 @@ public class View extends javax.swing.JFrame{
             
         }
     }//GEN-LAST:event_jSendKeyPressed
+
+    private void jFileComponentMoved(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jFileComponentMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFileComponentMoved
     
     // PB : enlever line feed lorsque saut de ligne 
     
