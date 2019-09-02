@@ -52,13 +52,6 @@ public class TCPclient implements Serializable {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             byte[] Type_file ={0x01};
             byte[] Message = message.getBytes();
-         
-          
-         
-          
-          
-          
-          
             byte[] Packet = new byte[Type_file.length + Message.length];
             
             System.arraycopy(Type_file,0,Packet,0,Type_file.length);
@@ -117,7 +110,7 @@ public class TCPclient implements Serializable {
       
       
       byte[] FILE = Files.readAllBytes(file.toPath());
-      ByteArrayOutputStream os = new ByteArrayOutputStream(FILE.length);
+     // ByteArrayOutputStream os = new ByteArrayOutputStream(FILE.length);
     /* Compresion */
     
     
@@ -134,15 +127,16 @@ public class TCPclient implements Serializable {
     /*           */ 
     
     
-    ImageIO.write(originalImage,"jpeg",os);         // utiliser tableau de byte File au lieu de  la taille de FileToByte
+    //ImageIO.write(originalImage,"jpeg",os);         // utiliser tableau de byte File au lieu de  la taille de FileToByte
     //os.flush();                                   // 2192 vs 2883 byte 
     
-    byte [] FileToByte  = os.toByteArray(); // Array Byte of File 
-    System.out.println("Taille tableau "+FileToByte.length);
+    //byte [] FileToByte  = os.toByteArray(); // Array Byte of File 
+    
     
     /* Header Construction */
     
     Integer fileSize =  FILE.length;  // size of the file in int
+    System.out.println("Taille tableau "+fileSize);
     fileSizeInt = Integer.parseInt(Integer.toHexString(fileSize),16); 
     
     /*
@@ -164,9 +158,9 @@ public class TCPclient implements Serializable {
     
     /* Sending */
     
-    byte[] Packet = new byte[Header.length + FileToByte.length];
+    byte[] Packet = new byte[Header.length + FILE.length];
     System.arraycopy(Header,0,Packet,0,Header.length);
-    System.arraycopy(FileToByte, 0,Packet, Header.length, FileToByte.length);
+    System.arraycopy(FILE, 0,Packet, Header.length, FILE.length);
       
       out.flush();
       out.write(Packet); 
