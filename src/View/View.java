@@ -6,24 +6,21 @@ package View;
 import Config.csv_read;
 import Network.*;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import static javax.swing.JComponent.WHEN_FOCUSED;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JTextField;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -44,7 +41,7 @@ public class View extends javax.swing.JFrame{
 
         jSend.setLineWrap(true);
         jSend.setWrapStyleWord(true);
-        
+           
     }
     // Interface components
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -312,7 +309,7 @@ public class View extends javax.swing.JFrame{
         popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
         popMenu.setMultiSelectionEnabled(false);
   
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG & PNG & GIF", "jpeg", "png","gif"); 
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG, PNG & PDF", "jpeg", "png","pdf"); 
         popMenu.setFileFilter(filter); //desactiver le type par défault ??
         
         
