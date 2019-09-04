@@ -4,37 +4,19 @@
 
 package Network;
 
-
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
-import java.io.Serializable;
-import static java.lang.Integer.toHexString;
 import java.net.Socket;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.zip.Deflater;
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 
 
-
-public class TCPclient implements Serializable {
+public class TCPclient {
     
     public Socket socket ;
-    static String fileSizeString;
-    public int fileSizeInt; 
+    private int fileSizeInt; 
+
     
     public TCPclient(String adr, int port) throws ClassNotFoundException{
         try {
@@ -54,21 +36,97 @@ public class TCPclient implements Serializable {
             byte[] Message = message.getBytes();
             byte[] Packet = new byte[Type_file.length + Message.length];
             
+            /* Construction of the array */
             System.arraycopy(Type_file,0,Packet,0,Type_file.length);
             System.arraycopy(Message, 0,Packet, Type_file.length, Message.length);
             
+            /* Sending */ 
             out.flush();
             out.write(Packet);
             out.flush();
            /* Temporary store data to send in a buffer and clear it so data can be sent in one go : 
             improve performances */
         }
+       
        catch (IOException o){
        }  
    }
    
-  public void SendFile(File file) throws IOException{
-     /*
+   public void SendFile(File file) throws IOException{
+      
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            byte[] FILE = Files.readAllBytes(file.toPath());
+
+            /* Header Construction */
+            Integer fileSize =  FILE.length;
+            String fileName = file.getName();
+
+            fileSizeInt = Integer.parseInt(Integer.toHexString(fileSize),16);
+            /*
+               Integer.toHexString(fileSize) Size of the File -->  String Hexadecimal
+               Integer.parseInt(String) String Hexa --> Int 
+            */
+            
+            ByteBuffer byteBuff = ByteBuffer.allocate(4); // allocation of ByteBuffer for the size 
+            byteBuff.putInt(fileSizeInt); // put the size in
+
+
+            byte [] fileSizeByte = byteBuff.array(); 
+            byte[] Type_file ={0x02};
+            byte [] BytefileName = fileName.getBytes();  
+
+            Integer fileNameSize = BytefileName.length;
+
+            byte [] Header = new byte[6+fileNameSize];  
+            byte byteFileNameSize = fileNameSize.byteValue();
+
+            /* Header = Type of file[1] + Size of File[4] + SizeOfFileName[1] + file Name[SizeOfFileName[] 
+               Theoretical Maximum size of the file 4.294.967.295 that can be passed 
+            */
+
+            
+            Header[0]= Type_file[0];        // Type of data 
+            Header[5] = byteFileNameSize;   // Size of File name 
+
+            /* Construction of the Header */
+            System.arraycopy(fileSizeByte,0,Header,1,fileSizeByte.length);  
+            System.arraycopy(BytefileName,0,Header,6,fileNameSize);
+
+            /* Construction of the final byte Array */
+            byte[] Packet = new byte[Header.length + FILE.length];
+            System.arraycopy(Header,0,Packet,0,Header.length);
+            System.arraycopy(FILE, 0,Packet, Header.length, FILE.length);
+
+               /* Sending */
+              out.flush();
+              out.write(Packet); 
+              out.flush(); 
+
+
+            /* 
+            System.out.println("Taille tableau "+fileSize);
+            System.out.println(Arrays.toString(Packet));
+            System.out.println("\n");
+            System.out.println("Taille du fichier " +FILE.length);
+            System.out.println("Header "+Arrays.toString(Header));
+            */
+    
+    }
+   
+   
+    public void Close() throws IOException{ 
+            socket.close();
+           
+    }
+}
+ 
+
+
+     
+ 
+    
+      
+/********************************************************************************
       DataOutputStream out = new DataOutputStream(socket.getOutputStream());
       byte[] header ={0x02};
       byte[] FILE = Files.readAllBytes(file.toPath());
@@ -103,14 +161,14 @@ public class TCPclient implements Serializable {
       System.out.println(compressedData.length); 
       */
       
-      
-      DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-      BufferedImage originalImage = ImageIO.read(file);
+
+  
+
+//BufferedImage originalImage = ImageIO.read(file);
        //float quality = 0.7f;
-      
-      
-      byte[] FILE = Files.readAllBytes(file.toPath());
-     // ByteArrayOutputStream os = new ByteArrayOutputStream(FILE.length);
+   
+
+  // ByteArrayOutputStream os = new ByteArrayOutputStream(FILE.length);
     /* Compresion */
     
     
@@ -131,64 +189,4 @@ public class TCPclient implements Serializable {
     //os.flush();                                   // 2192 vs 2883 byte 
     
     //byte [] FileToByte  = os.toByteArray(); // Array Byte of File 
-    
-    
-    /* Header Construction */
-    
-    Integer fileSize =  FILE.length;  // size of the file in int
-    System.out.println("Taille tableau "+fileSize);
-    fileSizeInt = Integer.parseInt(Integer.toHexString(fileSize),16); 
-    
-    /*
-       Integer.toHexString(fileSize) Size of the File -->  String Hexadecimal
-       Integer.parseInt(String) String Hexa --> Int 
-    */
-   
-    
-    ByteBuffer byteBuff = ByteBuffer.allocate(4); // allocation of ByteBuffer for the size 
-    byteBuff.putInt(fileSizeInt); // put the size in 
-    
-    byte [] fileSizeByte = byteBuff.array(); 
-    byte[] Type_file ={0x02}; 
-    byte [] Header = new byte[5];  // Header = Type of file[1] + Size of File[4] ; Maximum size of 4.294.967.295
-    
-    Header[0]= Type_file[0];
-    System.arraycopy(fileSizeByte,0,Header,1,fileSizeByte.length);
-    
-    
-    /* Sending */
-    
-    byte[] Packet = new byte[Header.length + FILE.length];
-    System.arraycopy(Header,0,Packet,0,Header.length);
-    System.arraycopy(FILE, 0,Packet, Header.length, FILE.length);
-      
-      out.flush();
-      out.write(Packet); 
-      out.flush(); 
-      
-    
-    System.out.println(Arrays.toString(Packet));
-    System.out.println("\n");
-    System.out.println("Taille du fichier " +FILE.length);
-    System.out.println("Header "+Arrays.toString(Header));
-    
-
-  }
-  public void Close() throws IOException{ 
-            socket.close();
-           
-  }
-}
- 
-
-
-     
-    
-    
-      
-      
-
-  
-
-   
  

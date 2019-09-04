@@ -316,7 +316,7 @@ public class View extends javax.swing.JFrame{
         popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
         popMenu.setMultiSelectionEnabled(false);
   
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG & PNG Images", "jpeg", "png"); 
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG & PNG & GIF", "jpeg", "png","gif"); 
         popMenu.setFileFilter(filter); //desactiver le type par défault ??
         
         
@@ -401,6 +401,8 @@ public class View extends javax.swing.JFrame{
                 new Thread() {
                 public void run() {
                     try {
+                        System.out.println("\033[H\033[2J"); 
+                        System.out.flush();
                         csv_read adr_socket = new csv_read();
                         adr_socket.read(); 
                         tcpclient = new TCPclient(csv_read.list.get(0).get(0),9200); // create Client Socket on IPadr,Port
