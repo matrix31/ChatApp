@@ -10,10 +10,12 @@ import java.io.ByteArrayOutputStream;
 import java.net.Socket;
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +33,7 @@ public class TCPreceiver extends Thread {
    
     private final byte txt_byte = 0x01 ;
     private final byte file_byte = 0x02 ;
+    private final byte AT_byte = 0x2b;
     private byte byteType;
  
     private boolean first_fragment = true ;
@@ -55,14 +58,18 @@ public class TCPreceiver extends Thread {
         
         while (true){
          
+          
+         
             try {
                 while  ( socket.getInputStream().available()>0){
-                  
+                    
                     
                     DataInputStream  input = new DataInputStream(socket.getInputStream());
                     byte[] ByteArray = new byte[socket.getInputStream().available()];
                     input.read(ByteArray);
                     byteType = ByteArray[0];
+                 
+                    
                     
                     /* first packet received */
                     if (first_fragment){
@@ -88,7 +95,11 @@ public class TCPreceiver extends Thread {
                             
                             /* Progress in %tage */
                             ratio = ((float) FILE.length ) / ((float) size);
+                            
+                            csv_read adr = new csv_read();
+                            
                             DecimalFormat df = new DecimalFormat("#.##");
+                            System.out.println(" ChatApp > "+adr.getAdr()+" is sending you a file" );
                             System.out.print(" ChatApp > "+df.format(ratio*100)+" % of the file received\r");
                             
                             first_fragment = false ;
@@ -125,6 +136,18 @@ public class TCPreceiver extends Thread {
                             jAreaConv.append("["+adr.getAdr()+"] : "+str_sub+"\n"); // display text
                             jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
                         }
+                        
+                        /* AT command for setting the remote address */
+                        if (byteType == AT_byte){
+                            
+                            str = new String(ByteArray) ; // convert byte to string
+                            if (str.equals(checkAT)){
+                                System.out.println(" ChatApp > Remote Address has been set correctly");
+                                System.out.println(" ChatApp > You can Chat\n");
+                        
+                        }
+                        
+                    }
                     }
                     
                     /* fragments number x received */
@@ -174,13 +197,19 @@ public class TCPreceiver extends Thread {
                     */
                     
                     
-                }
+                
+            } 
+                } catch (FileNotFoundException ex) {
+                Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 }
+            
+        
+
 
 /*******************************************************************************************************/
                       
@@ -214,10 +243,7 @@ public class TCPreceiver extends Thread {
                 }
                 
                 else {
-                str = new String(ByteArray) ; // convert it in string
-                if (str.equals(checkAT)){
-                System.out.println(" ChatApp > Remote Address has been set correctly");
-                System.out.println(" ChatApp > You can Chat\n");
+                
                 }
                 }
                 System.out.println("nb de byte recu : "+ i);

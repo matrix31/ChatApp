@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 
 public class TCPclient {
@@ -29,6 +30,27 @@ public class TCPclient {
         }
     }
     
+  public void SendAT(String message) throws IOException{
+      
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            byte[] Type_file ={0x0B};
+            byte[] Message = message.getBytes();
+            byte[] Packet = new byte[Type_file.length + Message.length];
+            
+            
+            /* Construction of the array */
+            System.arraycopy(Type_file,0,Packet,0,Type_file.length);
+            System.arraycopy(Message, 0,Packet, Type_file.length, Message.length);
+      
+            out.flush();
+            out.write(Message);
+            out.flush();
+          
+            /* Temporary store data to send in a buffer and clear it so data can be sent in one go : 
+            improve performances */
+         
+  }
+    
    public void SendMessage(String message){
        try{
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
@@ -44,8 +66,7 @@ public class TCPclient {
             out.flush();
             out.write(Packet);
             out.flush();
-           /* Temporary store data to send in a buffer and clear it so data can be sent in one go : 
-            improve performances */
+           
         }
        
        catch (IOException o){
@@ -64,8 +85,8 @@ public class TCPclient {
             fileSizeInt = Integer.parseInt(Integer.toHexString(fileSize),16);
             /*
                Integer.toHexString(fileSize) Size of the File -->  String Hexadecimal
-               Integer.parseInt(String) String Hexa --> Int 
-            */
+               Integer.parseInt(String) String Hexa --> Int */
+            
             
             ByteBuffer byteBuff = ByteBuffer.allocate(4); // allocation of ByteBuffer for the size 
             byteBuff.putInt(fileSizeInt); // put the size in
@@ -81,8 +102,8 @@ public class TCPclient {
             byte byteFileNameSize = fileNameSize.byteValue();
 
             /* Header = Type of file[1] + Size of File[4] + SizeOfFileName[1] + file Name[SizeOfFileName[] 
-               Theoretical Maximum size of the file 4.294.967.295 that can be passed 
-            */
+               Theoretical Maximum size of the file 4.294.967.295 that can be passed  */
+            
 
             
             Header[0]= Type_file[0];        // Type of data 
@@ -97,7 +118,7 @@ public class TCPclient {
             System.arraycopy(Header,0,Packet,0,Header.length);
             System.arraycopy(FILE, 0,Packet, Header.length, FILE.length);
 
-               /* Sending */
+              /* Sending */
               out.flush();
               out.write(Packet); 
               out.flush(); 

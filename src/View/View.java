@@ -236,13 +236,9 @@ public class View extends javax.swing.JFrame{
           String ATadr = "+++AT!AR"+remoteAdr+"\n" ;
           
 
-          byte[] ATtableADR = ATadr.getBytes();
-          byte[] ATtableBUF = ATdrop_buff.getBytes();
- 
-          out.flush();
-          out.write(ATtableBUF);
-          out.write(ATtableADR);
-          out.flush();
+         tcpclient.SendAT(ATdrop_buff);
+         tcpclient.SendAT(ATadr);
+         
           
           csv_read read = new csv_read();
           jAdr.setText(read.getAdr());
