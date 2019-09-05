@@ -17,6 +17,7 @@ public class TCPclient {
     
     public Socket socket ;
     private int fileSizeInt; 
+    int cpt = 0 ; 
 
     
     public TCPclient(String adr, int port) throws ClassNotFoundException{
@@ -73,14 +74,21 @@ public class TCPclient {
        }  
    }
    
-   public void SendFile(File file) throws IOException{
+   public void SendFile(File file) throws IOException, InterruptedException{
       
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             byte[] FILE = Files.readAllBytes(file.toPath());
+            
+           
+            
 
             /* Header Construction */
             Integer fileSize =  FILE.length;
             String fileName = file.getName();
+           
+           
+            
+           
 
             fileSizeInt = Integer.parseInt(Integer.toHexString(fileSize),16);
             /*
@@ -119,9 +127,31 @@ public class TCPclient {
             System.arraycopy(FILE, 0,Packet, Header.length, FILE.length);
 
               /* Sending */
-              out.flush();
-              out.write(Packet); 
-              out.flush(); 
+              
+            int nb_frag = Math.round(Packet.length/1024);
+            int sizeLastFrag = Packet.length - (1024*nb_frag) ;
+           
+            
+           
+            for ( int i = 0 ; i < nb_frag ; i++){
+                byte[] frag = new byte[1024]; 
+                Thread.sleep(3000);
+                System.arraycopy(Packet, i*1024, frag, 0, 1024);
+                out.flush();
+                out.write(frag); 
+                out.flush(); 
+ 
+                
+            }
+            Thread.sleep(3000);
+            byte[] frag = new byte[sizeLastFrag]; 
+            System.arraycopy(Packet, nb_frag*1024, frag, 0, sizeLastFrag);
+            
+             out.flush();
+             out.write(frag); 
+             out.flush(); 
+            
+     
 
 
             /* 

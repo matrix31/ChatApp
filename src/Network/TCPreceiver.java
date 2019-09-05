@@ -39,6 +39,7 @@ public class TCPreceiver extends Thread {
     private boolean first_fragment = true ;
     
     private int size ;
+    private int i = 0 ; 
     private int byteFileSize;
  
     private float ratio; 
@@ -62,6 +63,7 @@ public class TCPreceiver extends Thread {
          
             try {
                 while  ( socket.getInputStream().available()>0){
+                 
                     
                     
                     DataInputStream  input = new DataInputStream(socket.getInputStream());
@@ -76,6 +78,7 @@ public class TCPreceiver extends Thread {
                         
                         /* Data received from file */
                         if (file_byte == byteType){
+                            i++;
                             
                             /* Get de size of the file from the Header */
                             System.arraycopy(ByteArray,1,fileSizeArray,0,4);
@@ -98,11 +101,15 @@ public class TCPreceiver extends Thread {
                             
                             csv_read adr = new csv_read();
                             
-                            DecimalFormat df = new DecimalFormat("#.##");
+                            DecimalFormat df = new DecimalFormat("#.#");
                             System.out.println(" ChatApp > "+adr.getAdr()+" is sending you a file" );
                             System.out.print(" ChatApp > "+df.format(ratio*100)+" % of the file received\r");
                             
                             first_fragment = false ;
+                            System.out.print(Arrays.toString(ByteArray));
+                            System.out.println( "Size :"+size +" received : "+ByteArray.length);
+                            System.out.println("-------------------------");
+                            
                             
                             /* if no fragmantation induced by the hardware */
                             if ( FILE.length == size){
@@ -152,17 +159,24 @@ public class TCPreceiver extends Thread {
                     
                     /* fragments number x received */
                     else if (byteType != txt_byte ) {
+                        i++;
                         
                         /* Reception */
                         recept.write(ByteArray, 0,ByteArray.length);
                         byte[] FILE = recept.toByteArray();
+                        System.out.println(Arrays.toString(ByteArray));
+                        System.out.println( "Size :"+size +" received : "+ByteArray.length);
+                        System.out.println("fragment "+i );
+                        System.out.println("-------------------------");
+                        
                         
                         
                         /* Progress in %tage */
                         ratio = ((float) FILE.length ) / ((float) size);
-                        DecimalFormat df = new DecimalFormat("#.##");
+                        DecimalFormat df = new DecimalFormat("#.#");
                         System.out.print(" ChatApp > "+df.format(ratio*100)+" % of the file received\r");
-                        
+                         System.out.println("\n");
+                        System.out.println( "Size :"+size +"received : "+FILE.length);
                         /* Wait the last fragment */
                         if ( FILE.length == size){
                             

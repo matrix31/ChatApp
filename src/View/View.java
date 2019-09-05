@@ -17,10 +17,6 @@ import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import static javax.swing.JComponent.WHEN_FOCUSED;
 import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -99,14 +95,6 @@ public class View extends javax.swing.JFrame{
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jFileMouseReleased(evt);
-            }
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jFileMouseClicked(evt);
-            }
-        });
-        jFile.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentMoved(java.awt.event.ComponentEvent evt) {
-                jFileComponentMoved(evt);
             }
         });
 
@@ -268,13 +256,6 @@ public class View extends javax.swing.JFrame{
 
     }//GEN-LAST:event_jSelectFileActionPerformed
 
-    private void jFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMouseClicked
-      
-        
-
-    
-    }//GEN-LAST:event_jFileMouseClicked
-
     private void jAdrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAdrActionPerformed
      
  
@@ -323,6 +304,8 @@ public class View extends javax.swing.JFrame{
             }
             catch (IOException ex) {
                 Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (result == JFileChooser.CANCEL_OPTION) {
             jFile.setVisible(true);
@@ -351,10 +334,6 @@ public class View extends javax.swing.JFrame{
             
         }
     }//GEN-LAST:event_jSendKeyPressed
-
-    private void jFileComponentMoved(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jFileComponentMoved
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFileComponentMoved
     
     // PB : enlever line feed lorsque saut de ligne 
     
@@ -394,7 +373,7 @@ public class View extends javax.swing.JFrame{
                 new Thread() {
                 public void run() {
                     try {
-                        System.out.println("\033[H\033[2J"); 
+                        System.out.println("\033[H\033[2J");  // clean the console 
                         System.out.flush();
                         csv_read adr_socket = new csv_read();
                         adr_socket.read(); 
