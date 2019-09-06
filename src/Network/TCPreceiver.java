@@ -69,7 +69,9 @@ public class TCPreceiver extends Thread {
                     DataInputStream  input = new DataInputStream(socket.getInputStream());
                     byte[] ByteArray = new byte[socket.getInputStream().available()];
                     input.read(ByteArray);
+                    if (first_fragment){
                     byteType = ByteArray[0];
+                    }
                  
                     
                     
@@ -77,7 +79,8 @@ public class TCPreceiver extends Thread {
                     if (first_fragment){
                         
                         /* Data received from file */
-                        if (file_byte == byteType){
+                        if (byteType == file_byte){
+                        
                             i++;
                             
                             /* Get de size of the file from the Header */
@@ -129,22 +132,25 @@ public class TCPreceiver extends Thread {
                                 first_fragment = true ;
                                 
                                 System.out.println(" ChatApp > File reception sucessful - the file has been saved under "+fileName);
-                            }
+                            
+                        }
                         }
                         
                         /* Data for conversation to be displayed */
+                        
                         if (byteType == txt_byte){
                             
                             str = new String(ByteArray) ; // Byte to String
                             str_sub = str.substring(1); // Delete the type byte (first byte)
                             
-                            csv_read adr = new csv_read();
+                            csv_read adr1 = new csv_read();
   
-                            jAreaConv.append("["+adr.getAdr()+"] : "+str_sub+"\n"); // display text
+                            jAreaConv.append("["+adr1.getAdr()+"] : "+str_sub+"\n"); // display text
                             jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
                         }
                         
                         /* AT command for setting the remote address */
+                        
                         if (byteType == AT_byte){
                             
                             str = new String(ByteArray) ; // convert byte to string
@@ -158,7 +164,7 @@ public class TCPreceiver extends Thread {
                     }
                     
                     /* fragments number x received */
-                    else if (byteType != txt_byte ) {
+                    else {
                         i++;
                         
                         /* Reception */

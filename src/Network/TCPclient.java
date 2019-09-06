@@ -135,15 +135,16 @@ public class TCPclient {
            
             for ( int i = 0 ; i < nb_frag ; i++){
                 byte[] frag = new byte[1024]; 
-                Thread.sleep(3000);
+                
                 System.arraycopy(Packet, i*1024, frag, 0, 1024);
                 out.flush();
                 out.write(frag); 
                 out.flush(); 
+                Thread.sleep(5000);
  
                 
             }
-            Thread.sleep(3000);
+           Thread.sleep(5000);
             byte[] frag = new byte[sizeLastFrag]; 
             System.arraycopy(Packet, nb_frag*1024, frag, 0, sizeLastFrag);
             
