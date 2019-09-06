@@ -4,6 +4,7 @@
 
 package Network;
 
+import Config.csv_read;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.nio.file.Files;
@@ -22,9 +23,10 @@ public class TCPclient {
     
     public TCPclient(String adr, int port) throws ClassNotFoundException{
         try {
+            csv_read read = new csv_read();
             System.out.println(" ChatApp > Welcome");
             socket = new Socket(adr,port);     // socket creation
-            System.out.println(" ChatApp > Socket created to " + socket.getInetAddress());
+            System.out.println(" ChatApp > Socket created to " + read.getAdr());
             System.out.println(" ChatApp > Select a remote Address\n");
         }
         catch (IOException e){
@@ -78,21 +80,15 @@ public class TCPclient {
       
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             byte[] FILE = Files.readAllBytes(file.toPath());
-            
-           
-            
 
             /* Header Construction */
             Integer fileSize =  FILE.length;
             String fileName = file.getName();
-           
-           
-            
-           
 
             fileSizeInt = Integer.parseInt(Integer.toHexString(fileSize),16);
-            /*
-               Integer.toHexString(fileSize) Size of the File -->  String Hexadecimal
+            
+            
+            /* Integer.toHexString(fileSize) Size of the File -->  String Hexadecimal
                Integer.parseInt(String) String Hexa --> Int */
             
             
@@ -101,7 +97,7 @@ public class TCPclient {
 
 
             byte [] fileSizeByte = byteBuff.array(); 
-            byte[] Type_file ={0x02};
+            byte [] Type_file ={0x02};
             byte [] BytefileName = fileName.getBytes();  
 
             Integer fileNameSize = BytefileName.length;
@@ -126,31 +122,33 @@ public class TCPclient {
             System.arraycopy(Header,0,Packet,0,Header.length);
             System.arraycopy(FILE, 0,Packet, Header.length, FILE.length);
 
-              /* Sending */
-              
-            int nb_frag = Math.round(Packet.length/1024);
+            
+            int nb_frag = Math.round(Packet.length/1024);        // nb of fragmentes of 1024 bytes transmits
             int sizeLastFrag = Packet.length - (1024*nb_frag) ;
            
-            
-           
+            /* fragmenting in 1024 packet bytes */
             for ( int i = 0 ; i < nb_frag ; i++){
-                byte[] frag = new byte[1024]; 
                 
+                /* Sending */
+                byte[] frag = new byte[1024]; 
                 System.arraycopy(Packet, i*1024, frag, 0, 1024);
                 out.flush();
                 out.write(frag); 
                 out.flush(); 
-                Thread.sleep(5000);
+                Thread.sleep(2000); // slow data transmission if not impossible to tranfer files > 30 kB 
  
                 
             }
-           Thread.sleep(5000);
-            byte[] frag = new byte[sizeLastFrag]; 
-            System.arraycopy(Packet, nb_frag*1024, frag, 0, sizeLastFrag);
+           byte[] frag = new byte[sizeLastFrag]; 
+           System.arraycopy(Packet, nb_frag*1024, frag, 0, sizeLastFrag);
             
+            /* Sending last fragment */ 
              out.flush();
              out.write(frag); 
              out.flush(); 
+             
+            csv_read read = new csv_read();
+            System.out.println(" ChatApp > File "+fileName+" sent to "+read.getAdr());
             
      
 

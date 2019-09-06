@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 public class TCPreceiver extends Thread {
 
     public Socket socket;
-    private DataInputStream in ;
     
     private final String checkAT = "+++AT!AR:2:OK\r\n";
     private final String adoptedRemoteAdr="+++AT:7:RADDR";
@@ -43,6 +42,7 @@ public class TCPreceiver extends Thread {
     private int byteFileSize;
  
     private float ratio; 
+    private long beginningTime;
     
 
     // Constructor : take current socket in argument
@@ -68,6 +68,7 @@ public class TCPreceiver extends Thread {
                     
                     DataInputStream  input = new DataInputStream(socket.getInputStream());
                     byte[] ByteArray = new byte[socket.getInputStream().available()];
+                    beginningTime = System.currentTimeMillis();
                     input.read(ByteArray);
                     if (first_fragment){
                     byteType = ByteArray[0];
@@ -87,6 +88,8 @@ public class TCPreceiver extends Thread {
                             System.arraycopy(ByteArray,1,fileSizeArray,0,4);
                             ByteBuffer bytebuff = ByteBuffer.allocate(4);
                             bytebuff = ByteBuffer.wrap(fileSizeArray);
+                            
+                            
                             size = bytebuff.getInt();
                             
                             /* Get de name of the file from the Header */
@@ -117,6 +120,8 @@ public class TCPreceiver extends Thread {
                             /* if no fragmantation induced by the hardware */
                             if ( FILE.length == size){
                                 
+                                long endTime1 = System.currentTimeMillis();
+                                
                                 /* File creation */
                                 File file = new File("/home/ubiquity/Downloads",fileName);
                                 FileOutputStream recvFile = new FileOutputStream(file);
@@ -131,8 +136,12 @@ public class TCPreceiver extends Thread {
                                 ratio = 0;
                                 first_fragment = true ;
                                 
-                                System.out.println(" ChatApp > File reception sucessful - the file has been saved under "+fileName);
-                            
+                                System.out.println(" ChatApp > File reception sucessful");
+                                System.out.println("    -- Name : "+fileName);
+                                System.out.println("    -- Size : "+size/1000+" Kbytes");
+                                System.out.println("    -- Transmission time : "+((endTime1-beginningTime)/1000)+" s");
+                                System.out.println("    -- Rate : "+ ((size/1000)/(endTime1-beginningTime)/1000)+" Kb/s") ;
+                                    
                         }
                         }
                         
@@ -149,14 +158,13 @@ public class TCPreceiver extends Thread {
                             jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
                         }
                         
-                        /* AT command for setting the remote address */
-                        
+                        /* AT command for setting the remote address */               
                         if (byteType == AT_byte){
                             
                             str = new String(ByteArray) ; // convert byte to string
                             if (str.equals(checkAT)){
                                 System.out.println(" ChatApp > Remote Address has been set correctly");
-                                System.out.println(" ChatApp > You can Chat\n");
+                                System.out.println(" ChatApp > You can chat and send files\n");
                         
                         }
                         
@@ -186,6 +194,8 @@ public class TCPreceiver extends Thread {
                         /* Wait the last fragment */
                         if ( FILE.length == size){
                             
+                            long endTime1 = System.currentTimeMillis();
+                            
                             /* File creation */
                             File file = new File("/home/ubiquity/Downloads",fileName);
                             FileOutputStream recvFile = new FileOutputStream(file);
@@ -200,7 +210,11 @@ public class TCPreceiver extends Thread {
                             size = 0;
                             ratio = 0;
                             
-                            System.out.println(" ChatApp > File reception sucessful - the file has been saved under "+fileName);
+                            System.out.println(" ChatApp > File reception sucessful");
+                            System.out.println("    -- Name : "+fileName);
+                            System.out.println("    -- Size : "+size/1000+" Kbytes");
+                            System.out.println("    -- Transmission time : "+((endTime1-beginningTime)/1000)+" seconds");
+                            System.out.println("    -- Rate : "+ ((size/1000)/(endTime1-beginningTime)/1000)) ;
                             
                         }
                     }
