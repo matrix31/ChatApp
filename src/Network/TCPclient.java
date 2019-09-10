@@ -36,14 +36,14 @@ public class TCPclient {
   public void SendAT(String message) throws IOException{
       
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            byte[] Type_file ={0x0B};
+           // byte[] Type_file ={0x0B};
             byte[] Message = message.getBytes();
-            byte[] Packet = new byte[Type_file.length + Message.length];
+           // byte[] Packet = new byte[Type_file.length + Message.length];
             
             
             /* Construction of the array */
-            System.arraycopy(Type_file,0,Packet,0,Type_file.length);
-            System.arraycopy(Message, 0,Packet, Type_file.length, Message.length);
+            // System.arraycopy(Type_file,0,Packet,0,Type_file.length);
+            //System.arraycopy(Message, 0,Packet, Type_file.length, Message.length);
       
             out.flush();
             out.write(Message);
@@ -77,6 +77,9 @@ public class TCPclient {
    }
    
    public void SendFile(File file) throws IOException, InterruptedException{
+       
+            System.out.println("");
+            System.out.println(" ChatApp > You are sending a file please wait...");
       
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             byte[] FILE = Files.readAllBytes(file.toPath());
@@ -135,10 +138,11 @@ public class TCPclient {
                 out.flush();
                 out.write(frag); 
                 out.flush(); 
-                Thread.sleep(2000); // slow data transmission if not impossible to tranfer files > 30 kB 
+                Thread.sleep(3000); // slow data transmission ; if not impossible to tranfer files > 30 kB 
  
                 
             }
+           Thread.sleep(3000);
            byte[] frag = new byte[sizeLastFrag]; 
            System.arraycopy(Packet, nb_frag*1024, frag, 0, sizeLastFrag);
             
@@ -148,7 +152,8 @@ public class TCPclient {
              out.flush(); 
              
             csv_read read = new csv_read();
-            System.out.println(" ChatApp > File "+fileName+" sent to "+read.getAdr());
+            System.out.println(" ChatApp > File "+fileName+" sucessfully sent to "+read.getAdr());
+            
             
      
 
