@@ -21,7 +21,7 @@ public class csv_read {
     
     public static void read() throws FileNotFoundException{
         
-        BufferedReader br = new BufferedReader(new FileReader("/home/ubiquity/Downloads/adr_config.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("./ChatApp/adr_config.csv"));
         String line ="";
         try {
             while ((line = br.readLine()) != null) {

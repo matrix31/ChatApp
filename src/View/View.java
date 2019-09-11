@@ -338,7 +338,7 @@ public class View extends javax.swing.JFrame{
 
     private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
         jFile.setVisible(false);
-        JFileChooser popMenu = new JFileChooser("/home/ubiquity/Downloads"); // to do : make csv file
+        JFileChooser popMenu = new JFileChooser("/home/ChatApp/Files/toSend"); // to do : make csv file
 
         popMenu.setDialogTitle("Choose a file to send");
         popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);

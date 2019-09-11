@@ -14,9 +14,11 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import static javax.swing.JComponent.WHEN_FOCUSED;
+import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
+
 
 /**
  *
@@ -59,9 +61,9 @@ public class ATConsole extends javax.swing.JFrame {
         jSendAT = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuAT = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jItemManuals = new javax.swing.JMenuItem();
+        jItemWebSite = new javax.swing.JMenuItem();
+        jItemClose = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -86,22 +88,29 @@ public class ATConsole extends javax.swing.JFrame {
 
         jMenuAT.setText("Settings");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("See Manuals");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jItemManuals.setText("See Manuals");
+        jItemManuals.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jItemManualsActionPerformed(evt);
             }
         });
-        jMenuAT.add(jMenuItem1);
+        jMenuAT.add(jItemManuals);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("EvoLogic Website");
-        jMenuAT.add(jMenuItem2);
+        jItemWebSite.setText("EvoLogic Website");
+        jItemWebSite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jItemWebSiteActionPerformed(evt);
+            }
+        });
+        jMenuAT.add(jItemWebSite);
 
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem3.setText("Close");
-        jMenuAT.add(jMenuItem3);
+        jItemClose.setText("Close");
+        jItemClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jItemCloseActionPerformed(evt);
+            }
+        });
+        jMenuAT.add(jItemClose);
 
         jMenuBar1.add(jMenuAT);
         jMenuBar1.add(jMenu2);
@@ -130,9 +139,21 @@ public class ATConsole extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void jItemManualsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jItemManualsActionPerformed
+        String ManScript = "./ChatApp/Scripts/manuals.sh";
+        
+        Runtime r = Runtime.getRuntime();
+        Process pr;
+        try {
+            pr = r.exec(ManScript);
+            pr.waitFor();// wait fot the end ;
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    }//GEN-LAST:event_jItemManualsActionPerformed
 
     private void jSendATKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jSendATKeyPressed
         if (evt.getKeyChar() == '\n'){
@@ -152,8 +173,29 @@ public class ATConsole extends javax.swing.JFrame {
             jSendAT.setText("");
             jATdisplay.append("   [Me] : "+Text+"\n");
             jATdisplay.append("\n");
+            jATdisplay.setCaretPosition(jATdisplay.getDocument().getLength()); // auto scroll when adding text
         }
     }//GEN-LAST:event_jSendATKeyPressed
+
+    private void jItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jItemCloseActionPerformed
+        this.setVisible(false);
+        
+    }//GEN-LAST:event_jItemCloseActionPerformed
+
+    private void jItemWebSiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jItemWebSiteActionPerformed
+         String WebScript = "./ChatApp/Scripts/website.sh";
+        
+        Runtime r = Runtime.getRuntime();
+        Process pr;
+        try {
+            pr = r.exec(WebScript);
+            pr.waitFor();// wait fot the end ;
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jItemWebSiteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -185,19 +227,20 @@ public class ATConsole extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ATConsole().setVisible(true);
+                ATConsole ATconsole = new ATConsole();
+                ATconsole.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JTextArea jATdisplay;
+    private javax.swing.JMenuItem jItemClose;
+    private javax.swing.JMenuItem jItemManuals;
+    private javax.swing.JMenuItem jItemWebSite;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenuAT;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jSendAT;

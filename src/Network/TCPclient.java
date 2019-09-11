@@ -24,7 +24,8 @@ public class TCPclient {
     public TCPclient(String adr, int port) throws ClassNotFoundException{
         try {
             csv_read read = new csv_read();
-            System.out.println(" ChatApp > Welcome");
+            System.out.println(" ------- Welcome to ChatApp ------- ");
+            System.out.print("\n");
             socket = new Socket(adr,port);     // socket creation
             System.out.println(" ChatApp > Socket created to " + read.getAdr());
             System.out.println(" ChatApp > Select a remote Address\n");

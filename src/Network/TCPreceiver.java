@@ -60,7 +60,9 @@ public class TCPreceiver extends Thread {
         
         ByteArrayOutputStream recept = new ByteArrayOutputStream();
         byte [] fileSizeArray = new byte[4];
-        
+        try{
+            
+       
         while (true){
          
           
@@ -129,7 +131,7 @@ public class TCPreceiver extends Thread {
                                 long endTime1 = System.currentTimeMillis();
                                 
                                 /* File creation */
-                                File file = new File("/home/ubiquity/Downloads",fileName);
+                                File file = new File("./ChatApp/Files/Received",fileName);
                                 FileOutputStream recvFile = new FileOutputStream(file);
                                 recvFile.write(FILE);
                                 recvFile.close();
@@ -172,7 +174,7 @@ public class TCPreceiver extends Thread {
                         
                         /* AT command for setting the remote address */               
                         if (byteType == AT_byte){
-                              ATcpt++;
+                             ATcpt++; 
        
                             str = new String(ByteArray) ; // convert byte to string
 
@@ -181,6 +183,7 @@ public class TCPreceiver extends Thread {
                                 System.out.println(" ChatApp > You can chat and send files\n");
                         
                         }
+                            /* command for ATconsole */ 
                             if (ATcpt > 2){
                                 jATdisplay.append("   [Modem] : "+str+"\n");
                             }
@@ -218,7 +221,7 @@ public class TCPreceiver extends Thread {
                             long endTime2 = System.currentTimeMillis();
                             
                             /* File creation */
-                            File file = new File("/home/ubiquity/Downloads",fileName);
+                            File file = new File("./ChatApp/Files/Received",fileName);
                             FileOutputStream recvFile = new FileOutputStream(file);
                             recvFile.write(FILE);
                             recvFile.close();
@@ -263,12 +266,15 @@ public class TCPreceiver extends Thread {
                     
                 
             } 
-                } catch (FileNotFoundException ex) {
+                }  catch (IOException ex) {
                 Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } 
         }
+        }
+        catch (NullPointerException n){
+                System.out.println(" ChatApp > The program encountered an issue");
+                System.out.println(" ChatApp > Please check modem alimentation and reboot the sofware");
+            }
     }
 }
             
