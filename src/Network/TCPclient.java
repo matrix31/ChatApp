@@ -168,12 +168,6 @@ public class TCPclient {
             */
     
     }
-   
-   
-    public void Close() throws IOException{ 
-            socket.close();
-           
-    }
 }
  
 

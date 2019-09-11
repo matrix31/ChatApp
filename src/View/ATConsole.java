@@ -17,6 +17,7 @@ import static javax.swing.JComponent.WHEN_FOCUSED;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 
 
@@ -36,11 +37,16 @@ public class ATConsole extends javax.swing.JFrame {
         jATdisplay.setEditable(false);
         Insets in = new Insets(0,30,0,30); 
         jATdisplay.setMargin(in);
-  
-        
         
         jSendAT.setLineWrap(true);
         jSendAT.setWrapStyleWord(true);
+        
+        this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE); // hidding windows
+       
+  
+        
+        
+        
         
        Border border = BorderFactory.createLineBorder(Color.white);
      //  jATdispaly.setBorder(BorderFactory.createCompoundBorder(border,BorderFactory.createEmptyBorder(0, 0, 0, 0)));
@@ -129,11 +135,12 @@ public class ATConsole extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 80, Short.MAX_VALUE))
+                .addGap(0, 79, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGap(0, 213, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap(215, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
         );
 
         pack();
@@ -171,7 +178,7 @@ public class ATConsole extends javax.swing.JFrame {
                 Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
             }
             jSendAT.setText("");
-            jATdisplay.append("   [Me] : "+Text+"\n");
+            jATdisplay.append("    Me >   "+Text+"\n");
             jATdisplay.append("\n");
             jATdisplay.setCaretPosition(jATdisplay.getDocument().getLength()); // auto scroll when adding text
         }
@@ -229,6 +236,8 @@ public class ATConsole extends javax.swing.JFrame {
             public void run() {
                 ATConsole ATconsole = new ATConsole();
                 ATconsole.setVisible(true);
+                
+                
             }
         });
     }

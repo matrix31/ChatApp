@@ -185,7 +185,7 @@ public class TCPreceiver extends Thread {
                         }
                             /* command for ATconsole */ 
                             if (ATcpt > 2){
-                                jATdisplay.append("   [Modem] : "+str+"\n");
+                                jATdisplay.append("    Modem >  "+str+"\n");
                             }
                                 
                                 
