@@ -3,7 +3,7 @@
  */
 package View;
 
-import static View.View.jAreaConv;
+
 import static View.View.tcpclient;
 import java.awt.Color;
 import java.awt.Insets;

@@ -7,6 +7,7 @@ package Network;
 import Config.csv_read;
 import static View.ATConsole.jATdisplay;
 import static View.View.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.Socket;
 import java.io.DataInputStream;
@@ -19,6 +20,11 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 
 public class TCPreceiver extends Thread {
@@ -79,7 +85,6 @@ public class TCPreceiver extends Thread {
                     
                     
                     input.read(ByteArray);
-                    System.out.println(Arrays.toString(ByteArray));
                     if (first_fragment){
                     byteType = ByteArray[0];
                     }
@@ -165,7 +170,23 @@ public class TCPreceiver extends Thread {
                         /* Data for conversation to be displayed */
                         
                         if (byteType == txt_byte){
-                 
+                            
+                            // traitement sur Byte Array
+                            for ( int i = 0 ; i < ByteArray.length ; i++){
+                                if (ByteArray[i]== 0x26){
+                                    if (ByteArray[i+1]== 0x25){
+                                        if (ByteArray[i+2]== 0x24){
+
+                                            ByteArray[i] = 0x2b ;
+                                            ByteArray[i+1] = 0x2b ;
+                                            ByteArray[i+2] = 0x2b ;
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                            }
                             str = new String(ByteArray) ; // Byte to String
                             str_sub = str.substring(1); // Delete the type byte (first byte)
                             
@@ -226,7 +247,7 @@ public class TCPreceiver extends Thread {
                             /* File creation */
                             File file = new File("./ChatApp/Files/Received",fileName);
                             FileOutputStream recvFile = new FileOutputStream(file);
-                            recvFile.write(FILE);
+                            recvFile.write(FILE);                         
                             recvFile.close();
                             
                             /* Reset ByteArrayOutputStream */
@@ -247,6 +268,34 @@ public class TCPreceiver extends Thread {
                             first_fragment = true ;
                             size = 0;
                             ratio = 0;
+                            
+                           
+                            
+                            
+                            
+                            /* Pop up window with the file */
+                            
+                            BufferedImage bimg = ImageIO.read(new File(fileName));
+                            int width = bimg.getWidth();
+                            int height = bimg.getHeight();
+                            JFrame imageFrame = new JFrame();
+                            imageFrame.setTitle(fileName);
+                            imageFrame.setSize(width, height);
+                            imageFrame.setLocationRelativeTo(null);
+                            imageFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                            Icon icon = new ImageIcon(fileName);
+                            
+                            JLabel feuGreen = new JLabel();
+                            feuGreen.setIcon(icon);
+                            imageFrame.add(feuGreen); // Add to  JFrame
+                            imageFrame.setVisible(true); 
+                 
+                 
+                
+               
+                            
+                            
+                           
                             
     
                             

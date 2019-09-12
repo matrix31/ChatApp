@@ -66,10 +66,25 @@ public class TCPclient {
             byte[] Message = message.getBytes();
             byte[] Packet = new byte[Type_file.length + Message.length];
             
-            if (Message[0] == plusByte){
-               if (Message[1] == plusByte){
-                     if (Message[2] == plusByte){}  
-               }
+            int cpt = 0 ; 
+            while ( cpt != Message.length){
+                System.out.println(cpt);
+                if (Message[cpt] == plusByte){
+                    System.out.println(Message[i]);
+                    
+                    if (Message[cpt+1] == plusByte){
+                         System.out.println(Message[i+1]);
+                        if (Message[cpt+2] == plusByte){
+                            System.out.println(Message[i+2]);
+                            Message[cpt] = 0x26 ;
+                            Message[cpt+1] = 0x25;
+                            Message[cpt+2] = 0x24;    
+                        }
+                    }
+                        
+                    }
+                cpt++;
+                        
             }
              /* Construction of the array */
                         System.arraycopy(Type_file,0,Packet,0,Type_file.length);

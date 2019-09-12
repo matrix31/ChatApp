@@ -223,11 +223,11 @@ public class View extends javax.swing.JFrame{
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSendIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,7 +265,7 @@ public class View extends javax.swing.JFrame{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -298,7 +298,10 @@ public class View extends javax.swing.JFrame{
                 inputMap.put(enterStroke, enterStroke.toString());
                 String Text = jSend.getText();
                 
+               
+                
                 /* avoid String text to be interpreted as AT command */
+                /*
                 char[] charArray = Text.toCharArray();
                 for ( int i = 0 ; i < charArray.length ; i++){
                     if (charArray[i] == plusByte){
@@ -306,20 +309,24 @@ public class View extends javax.swing.JFrame{
                     }
                     if (plusCpt == 3){
                         triplePlus = true;
+                        charArray[i-2] = '&';
+                        charArray[i-1] = '1';
+                        charArray[i] ='A';
                     }
                       
                 }
                 plusCpt = 0 ;
            
                 if ( triplePlus == false){
+                */
                         tcpclient.SendMessage(Text+"\n");
                         jSend.setText("");
                         jAreaConv.append("[Me] : "+Text+"\n");
                         jAreaConv.append("\n");
                         jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
       
-                }
-                triplePlus = false ; 
+                //}
+               // triplePlus = false ; 
               
                 
                 
