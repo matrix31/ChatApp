@@ -77,7 +77,9 @@ public class TCPreceiver extends Thread {
                     
                     
                     
+                    
                     input.read(ByteArray);
+                    System.out.println(Arrays.toString(ByteArray));
                     if (first_fragment){
                     byteType = ByteArray[0];
                     }
@@ -86,6 +88,7 @@ public class TCPreceiver extends Thread {
                     
                     /* first packet received */
                     if (first_fragment){
+                        System.out.println(first_fragment);
                         
                         /* Data received from file */
                         if (byteType == file_byte){

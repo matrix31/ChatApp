@@ -18,7 +18,11 @@ public class TCPclient {
     
     public Socket socket ;
     private int fileSizeInt; 
-    int cpt = 0 ; 
+    private int cpt = 0 ;
+    private int  plusCpt = 0; 
+    private int i = 0 ; 
+    private boolean triplePlus = false ;
+    private byte plusByte = 0x2b;
 
     
     public TCPclient(String adr, int port) throws ClassNotFoundException{
@@ -55,27 +59,28 @@ public class TCPclient {
          
   }
     
-   public void SendMessage(String message){
-       try{
+   public void SendMessage(String message) throws IOException{
+
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             byte[] Type_file ={0x01};
             byte[] Message = message.getBytes();
             byte[] Packet = new byte[Type_file.length + Message.length];
             
-            /* Construction of the array */
-            System.arraycopy(Type_file,0,Packet,0,Type_file.length);
-            System.arraycopy(Message, 0,Packet, Type_file.length, Message.length);
-            
-            /* Sending */ 
-            out.flush();
-            out.write(Packet);
-            out.flush();
-           
-        }
-       
-       catch (IOException o){
-       }  
-   }
+            if (Message[0] == plusByte){
+               if (Message[1] == plusByte){
+                     if (Message[2] == plusByte){}  
+               }
+            }
+             /* Construction of the array */
+                        System.arraycopy(Type_file,0,Packet,0,Type_file.length);
+                        System.arraycopy(Message, 0,Packet, Type_file.length, Message.length);
+
+                        /* Sending */ 
+                        out.flush();
+                        out.write(Packet);
+                        out.flush();
+                }
+
    
    public void SendFile(File file) throws IOException, InterruptedException{
        

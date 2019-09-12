@@ -30,6 +30,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class View extends javax.swing.JFrame{
 
    static TCPclient tcpclient;
+   String plus = "+++";
+   private int plusCpt = 0 ; 
+   private final byte plusByte = 0x2b ;
+    private boolean triplePlus = false ;
   
 
    public View() throws FileNotFoundException {
@@ -284,19 +288,46 @@ public class View extends javax.swing.JFrame{
 
     private void jSendKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jSendKeyPressed
         if (evt.getKeyChar() == '\n'){
-            int condition = WHEN_FOCUSED;
-            // get our maps for binding from the chatEnterArea JTextArea
-            InputMap inputMap = jSend.getInputMap(condition);
-            KeyStroke enterStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-
-            // tell input map that we are handling the enter key
-            inputMap.put(enterStroke, enterStroke.toString());
-            String Text = jSend.getText();
-            tcpclient.SendMessage(Text+"\n");
-            jSend.setText("");
-            jAreaConv.append("[Me] : "+Text+"\n");
-            jAreaConv.append("\n");
-            jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+            try {
+                int condition = WHEN_FOCUSED;
+                // get our maps for binding from the chatEnterArea JTextArea
+                InputMap inputMap = jSend.getInputMap(condition);
+                KeyStroke enterStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+                
+                // tell input map that we are handling the enter key
+                inputMap.put(enterStroke, enterStroke.toString());
+                String Text = jSend.getText();
+                
+                /* avoid String text to be interpreted as AT command */
+                char[] charArray = Text.toCharArray();
+                for ( int i = 0 ; i < charArray.length ; i++){
+                    if (charArray[i] == plusByte){
+                        plusCpt++; 
+                    }
+                    if (plusCpt == 3){
+                        triplePlus = true;
+                    }
+                      
+                }
+                plusCpt = 0 ;
+           
+                if ( triplePlus == false){
+                        tcpclient.SendMessage(Text+"\n");
+                        jSend.setText("");
+                        jAreaConv.append("[Me] : "+Text+"\n");
+                        jAreaConv.append("\n");
+                        jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+      
+                }
+                triplePlus = false ; 
+              
+                
+                
+                
+            } catch (IOException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
 
         }
     }//GEN-LAST:event_jSendKeyPressed
@@ -311,14 +342,41 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jSendIconMouseReleased
 
     private void jSendIconMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMousePressed
-        // When clicked take the text written from the jSend write it in the display text area and send it to remote host
-        jSendIcon.setVisible(false);
-        String Text = jSend.getText();
-        tcpclient.SendMessage(Text+"\n");
-        jSend.setText("");
-        jAreaConv.append("[Me] : "+Text+"\n");
-        jAreaConv.append("\n");
-        jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+       try {
+           // When clicked take the text written from the jSend write it in the display text area and send it to remote host
+           jSendIcon.setVisible(false);
+           String Text = jSend.getText();
+           
+            /* avoid String text to be interpreted as AT command */
+                char[] charArray = Text.toCharArray();
+                for ( int i = 0 ; i < charArray.length ; i++){
+                    if (charArray[i] == plusByte){
+                        plusCpt++; 
+                    }
+                    if (plusCpt == 3){
+                        triplePlus = true;
+                    }
+                      
+                }
+     
+                plusCpt = 0 ;
+           
+                if ( triplePlus == false){
+                        tcpclient.SendMessage(Text+"\n");
+                        jSend.setText("");
+                        jAreaConv.append("[Me] : "+Text+"\n");
+                        jAreaConv.append("\n");
+                        jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+      
+                }
+                triplePlus = false ; 
+        
+          
+           
+       } catch (IOException ex) {
+           Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+       }
+        
 
     }//GEN-LAST:event_jSendIconMousePressed
 
@@ -340,17 +398,19 @@ public class View extends javax.swing.JFrame{
         // cancel button
         int result = popMenu.showDialog(null,"Send");
         if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = popMenu.getSelectedFile();
             try {
+                File selectedFile = popMenu.getSelectedFile();
+                
                 jFile.setVisible(true);
                 tcpclient.SendFile(selectedFile); // Perform the sending of the file selected
-
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
                 Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
             }
+
+            
+            
         } else if (result == JFileChooser.CANCEL_OPTION) {
             jFile.setVisible(true);
 
