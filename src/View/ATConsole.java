@@ -81,10 +81,17 @@ public class ATConsole extends javax.swing.JFrame {
         jATdisplay.setMargin(new java.awt.Insets(30, 30, 0, 0));
         jScrollPane1.setViewportView(jATdisplay);
 
+        jSendAT.setBackground(new java.awt.Color(239, 239, 239));
         jSendAT.setColumns(20);
         jSendAT.setRows(5);
         jSendAT.setBorder(null);
+        jSendAT.setCaretColor(new java.awt.Color(255, 255, 255));
         jSendAT.setMargin(new java.awt.Insets(30, 30, 0, 0));
+        jSendAT.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jSendATMouseClicked(evt);
+            }
+        });
         jSendAT.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jSendATKeyPressed(evt);
@@ -138,9 +145,8 @@ public class ATConsole extends javax.swing.JFrame {
                 .addGap(0, 79, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(215, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap()))
+                    .addGap(0, 215, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
@@ -204,6 +210,11 @@ public class ATConsole extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jItemWebSiteActionPerformed
 
+    private void jSendATMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendATMouseClicked
+        jSendAT.setText("");
+        jSendAT.setForeground(Color.BLACK);
+    }//GEN-LAST:event_jSendATMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -252,6 +263,6 @@ public class ATConsole extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jSendAT;
+    public static javax.swing.JTextArea jSendAT;
     // End of variables declaration//GEN-END:variables
 }

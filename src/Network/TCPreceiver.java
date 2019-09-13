@@ -25,6 +25,9 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import java.lang.Object.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 
 public class TCPreceiver extends Thread {
@@ -37,7 +40,8 @@ public class TCPreceiver extends Thread {
     private final String adoptedRemoteAdr="+++AT:7:RADDR";
     private String str;
     private String str_sub ;
-    private String fileName ;
+    private String fileName ; 
+    private final String[] imgExt = {"ai", "eps","pdf","psd","jpg","jpeg","gif","tif","png","svg"} ;
    
     private final byte txt_byte = 0x01 ;
     private final byte file_byte = 0x02 ;
@@ -52,6 +56,8 @@ public class TCPreceiver extends Thread {
     private int ATcpt = 0 ;
     private long beginningTime; 
     private float ratio; 
+    
+ 
 
     
 
@@ -149,18 +155,50 @@ public class TCPreceiver extends Thread {
                                 recept.reset();
                                 
                                 csv_read read = new csv_read();
- 
-                            System.out.println(" ChatApp > Reception sucessfull");
+           
+                            System.out.println(" ChatApp > Reception sucessfull");                          
                             System.out.print("\n");
                             System.out.println("    -- Name : "+fileName);
                             System.out.println("    -- Size : "+df.format(size/1000.0)+" Kbytes");
                             System.out.println("    -- Transmission time : "+df.format((endTime1-beginningTime)/1000.0)+" s");
                             System.out.println("    -- Rate : "+df.format((size/1000.0) / ((endTime1-beginningTime)/1000.0))+" Kb/s") ;
                             System.out.print("\n");
+                            System.out.println(" ChatApp > File saved on your disc");
+                            
                                 
                                 size = 0;
                                 ratio = 0;
                                 first_fragment = true ;
+                                
+                                
+                            /* Pop up window with the image file */    
+                            /* if not an image ->  not displayed */
+                            String ext = "";
+                            int point = fileName.lastIndexOf('.');
+                            if (i > 0) {
+                                ext = fileName.substring(point+1);
+                            }
+                            for ( String extt : imgExt ){       
+                                if ( ext.equals(extt)){
+                                    
+                                    BufferedImage bimg = ImageIO.read(new File("./ChatApp/Files/Received",fileName));
+                                    int width = bimg.getWidth();
+                                    int height = bimg.getHeight();
+                                    JFrame imageFrame = new JFrame();
+                                    imageFrame.setTitle(fileName);
+                                    imageFrame.setSize(width, height);
+                                    imageFrame.setLocationRelativeTo(null);
+                                    imageFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                                    Icon icon = new ImageIcon(fileName);
+
+                                    JLabel label = new JLabel();
+                                    label.setIcon(icon);
+                                    imageFrame.add(label); // Add to  JFrame
+                                    imageFrame.setVisible(true); 
+                                
+                                }
+                                else {}
+                            }
                                 
                                 
                                     
@@ -171,7 +209,7 @@ public class TCPreceiver extends Thread {
                         
                         if (byteType == txt_byte){
                             
-                            // traitement sur Byte Array
+                            // avoid 
                             for ( int i = 0 ; i < ByteArray.length ; i++){
                                 if (ByteArray[i]== 0x26){
                                     if (ByteArray[i+1]== 0x25){
@@ -275,31 +313,33 @@ public class TCPreceiver extends Thread {
                             
                             /* Pop up window with the file */
                             
-                            BufferedImage bimg = ImageIO.read(new File(fileName));
-                            int width = bimg.getWidth();
-                            int height = bimg.getHeight();
-                            JFrame imageFrame = new JFrame();
-                            imageFrame.setTitle(fileName);
-                            imageFrame.setSize(width, height);
-                            imageFrame.setLocationRelativeTo(null);
-                            imageFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                            Icon icon = new ImageIcon(fileName);
-                            
-                            JLabel feuGreen = new JLabel();
-                            feuGreen.setIcon(icon);
-                            imageFrame.add(feuGreen); // Add to  JFrame
-                            imageFrame.setVisible(true); 
-                 
-                 
-                
-               
-                            
-                            
-                           
-                            
-    
-                            
-                            
+                            String ext = "";
+                            int point = fileName.lastIndexOf('.');
+                            if (i > 0) {
+                                ext = fileName.substring(point+1);
+                            }
+                            for ( String extt : imgExt ){       
+                                if ( ext.equals(extt)){
+                                    
+                                    BufferedImage bimg = ImageIO.read(new File("./ChatApp/Files/Received",fileName));
+                                    int width = bimg.getWidth();
+                                    int height = bimg.getHeight();
+                                    JFrame imageFrame = new JFrame();
+                                    imageFrame.setTitle(fileName);
+                                    imageFrame.setSize(width, height);
+                                    imageFrame.setLocationRelativeTo(null);
+                                    imageFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                                    Icon icon = new ImageIcon(fileName);
+
+                                    JLabel label = new JLabel();
+                                    label.setIcon(icon);
+                                    imageFrame.add(label); // Add to  JFrame
+                                    imageFrame.setVisible(true); 
+                                
+                                }
+                                else {}
+                            }
+                               
                             
                         }
                     }
@@ -321,7 +361,7 @@ public class TCPreceiver extends Thread {
                 }  catch (IOException ex) {
                 Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
             } 
-        }
+        }   
         }
         catch (NullPointerException n){
                 System.out.println(" ChatApp > The program encountered an issue");

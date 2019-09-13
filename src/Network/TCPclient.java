@@ -5,13 +5,18 @@
 package Network;
 
 import Config.csv_read;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.nio.file.Path;
 import java.util.Arrays;
+import javax.imageio.ImageIO;
 
 
 public class TCPclient {
@@ -36,6 +41,17 @@ public class TCPclient {
         }
         catch (IOException e){
         }
+    }
+    
+    
+    
+   private static BufferedImage resize(BufferedImage img, int height, int width) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
     }
     
   public void SendAT(String message) throws IOException{
@@ -68,7 +84,6 @@ public class TCPclient {
             
             int cpt = 0 ; 
             while ( cpt != Message.length){
-                System.out.println(cpt);
                 if (Message[cpt] == plusByte){
                     System.out.println(Message[i]);
                     
@@ -97,7 +112,28 @@ public class TCPclient {
                 }
 
    
-   public void SendFile(File file) throws IOException, InterruptedException{
+   public void SendFile(File file1) throws IOException, InterruptedException{
+       
+ 
+        BufferedImage image = ImageIO.read(file1);
+        BufferedImage resized = resize(image, 500, 500);
+
+        /*
+        File file = new File("home/ubiquity/Downloads/ChatApp/Files/toSend/resized.jpeg");
+        ImageIO.write(resized, "jpeg", file);
+        */
+        
+        //Image imageScaled = image.getScaledInstance(500, 500, Image.SCALE_DEFAULT);
+        File file = new File("./ChatApp/Files/toSend/n.jpeg");
+        ImageIO.write(resized, "jpeg",file);
+       
+       
+       
+       
+       
+       
+       
+       
        
             System.out.println("");
             System.out.println(" ChatApp > You are sending a file please wait...");
@@ -188,6 +224,8 @@ public class TCPclient {
             */
     
     }
+   
+   
 }
  
 
