@@ -45,7 +45,7 @@ public class TCPclient {
     
     
     
-   private static BufferedImage resize(BufferedImage img, int height, int width) {
+   public static BufferedImage resize(BufferedImage img, int height, int width) {
         Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = resized.createGraphics();
@@ -112,34 +112,14 @@ public class TCPclient {
                 }
 
    
-   public void SendFile(File file1) throws IOException, InterruptedException{
-       
- 
-        BufferedImage image = ImageIO.read(file1);
-        BufferedImage resized = resize(image, 500, 500);
+   public void SendFile(File file) throws IOException, InterruptedException{
 
-        /*
-        File file = new File("home/ubiquity/Downloads/ChatApp/Files/toSend/resized.jpeg");
-        ImageIO.write(resized, "jpeg", file);
-        */
-        
-        //Image imageScaled = image.getScaledInstance(500, 500, Image.SCALE_DEFAULT);
-        File file = new File("./ChatApp/Files/toSend/n.jpeg");
-        ImageIO.write(resized, "jpeg",file);
-       
-       
-       
-       
-       
-       
-       
-       
-       
             System.out.println("");
             System.out.println(" ChatApp > You are sending a file please wait...");
       
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            byte[] FILE = Files.readAllBytes(file.toPath());
+            File fileTest = new File("./ChatApp/Files/toSend/new.jpeg");
+            byte[] FILE = Files.readAllBytes(fileTest.toPath());
 
             /* Header Construction */
             Integer fileSize =  FILE.length;
@@ -195,11 +175,10 @@ public class TCPclient {
                 out.flush();
                 out.write(frag); 
                 out.flush(); 
-                Thread.sleep(3000); // slow data transmission ; if not impossible to tranfer files > 30 kB 
+                Thread.sleep(2000); // slow data transmission ; if not impossible to tranfer files > 30 kB due to losses
  
                 
             }
-           Thread.sleep(3000);
            byte[] frag = new byte[sizeLastFrag]; 
            System.arraycopy(Packet, nb_frag*1024, frag, 0, sizeLastFrag);
             

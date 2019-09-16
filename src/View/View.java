@@ -5,20 +5,31 @@ package View;
 
 import Config.csv_read;
 import Network.*;
+import static Network.TCPreceiver.clickable;
 import static View.ATConsole.jSendAT;
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import static javax.swing.JComponent.WHEN_FOCUSED;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -78,6 +89,7 @@ public class View extends javax.swing.JFrame{
         jScrollPane1 = new javax.swing.JScrollPane();
         jAreaConv = new javax.swing.JTextArea();
         jConsole = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         jMenu1.setText("File");
@@ -201,6 +213,13 @@ public class View extends javax.swing.JFrame{
             }
         });
 
+        jLabel1.setText("Scale");
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -213,48 +232,53 @@ public class View extends javax.swing.JFrame{
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(16, 16, 16)
                                     .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(47, 47, 47)
+                                    .addGap(31, 31, 31)
                                     .addComponent(jLabel3)
-                                    .addGap(18, 18, 18)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jChat))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jChat)
+                        .addGap(231, 231, 231)
+                        .addComponent(jLabel1)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jConsole)
-                        .addGap(31, 31, 31))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jFile)
                             .addComponent(jSendIcon))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jConsole)
+                        .addGap(34, 34, 34))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
+                        .addGap(12, 12, 12)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jConsole)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jChat)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(28, 28, 28)
-                                        .addComponent(jLabel3))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(19, 19, 19)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jChat))
+                            .addComponent(jConsole))
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4))
+                            .addComponent(jLabel3))
+                        .addGap(12, 12, 12))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(8, 8, 8)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -263,7 +287,7 @@ public class View extends javax.swing.JFrame{
                         .addGap(18, 18, 18)
                         .addComponent(jFile))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
@@ -295,56 +319,58 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jAdrActionPerformed
 
     private void jSendKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jSendKeyPressed
-        if (evt.getKeyChar() == '\n'){
-            try {
-                int condition = WHEN_FOCUSED;
-                // get our maps for binding from the chatEnterArea JTextArea
-                InputMap inputMap = jSend.getInputMap(condition);
-                KeyStroke enterStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-                
-                // tell input map that we are handling the enter key
-                inputMap.put(enterStroke, enterStroke.toString());
-                String Text = jSend.getText();
-                
-               
-                
-                /* avoid String text to be interpreted as AT command */
-                /*
-                char[] charArray = Text.toCharArray();
-                for ( int i = 0 ; i < charArray.length ; i++){
-                    if (charArray[i] == plusByte){
-                        plusCpt++; 
-                    }
-                    if (plusCpt == 3){
-                        triplePlus = true;
-                        charArray[i-2] = '&';
-                        charArray[i-1] = '1';
-                        charArray[i] ='A';
-                    }
-                      
-                }
-                plusCpt = 0 ;
-           
-                if ( triplePlus == false){
-                */
-                        tcpclient.SendMessage(Text+"\n");
-                        jSend.setText("");
-                        jAreaConv.append("[Me] : "+Text+"\n");
-                        jAreaConv.append("\n");
-                        jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
-      
-                //}
-               // triplePlus = false ; 
-              
-                
-                
-                
-            } catch (IOException ex) {
-                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+     
+            if (evt.getKeyChar() == '\n'){
+                try {
+                    int condition = WHEN_FOCUSED;
+                    // get our maps for binding from the chatEnterArea JTextArea
+                    InputMap inputMap = jSend.getInputMap(condition);
+                    KeyStroke enterStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 
-        }
+                    // tell input map that we are handling the enter key
+                    inputMap.put(enterStroke, enterStroke.toString());
+                    String Text = jSend.getText();
+
+
+
+                    /* avoid String text to be interpreted as AT command */
+                    /*
+                    char[] charArray = Text.toCharArray();
+                    for ( int i = 0 ; i < charArray.length ; i++){
+                        if (charArray[i] == plusByte){
+                            plusCpt++; 
+                        }
+                        if (plusCpt == 3){
+                            triplePlus = true;
+                            charArray[i-2] = '&';
+                            charArray[i-1] = '1';
+                            charArray[i] ='A';
+                        }
+
+                    }
+                    plusCpt = 0 ;
+
+                    if ( triplePlus == false){
+                    */
+                            tcpclient.SendMessage(Text+"\n");
+                            jSend.setText("");
+                            jAreaConv.append("[Me] : "+Text+"\n");
+                            jAreaConv.append("\n");
+                            jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+
+                    //}
+                   // triplePlus = false ; 
+
+
+
+
+                } catch (IOException ex) {
+                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+
+            }
+        
     }//GEN-LAST:event_jSendKeyPressed
 
     private void jSendMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendMouseClicked
@@ -357,7 +383,8 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jSendIconMouseReleased
 
     private void jSendIconMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMousePressed
-       try {
+      
+        try {
            // When clicked take the text written from the jSend write it in the display text area and send it to remote host
            jSendIcon.setVisible(false);
            String Text = jSend.getText();
@@ -391,6 +418,7 @@ public class View extends javax.swing.JFrame{
        } catch (IOException ex) {
            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
        }
+       
         
 
     }//GEN-LAST:event_jSendIconMousePressed
@@ -400,36 +428,66 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jFileMouseReleased
 
     private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
-        jFile.setVisible(false);
-        JFileChooser popMenu = new JFileChooser("./ChatApp/Files/toSend"); // to do : make csv file
+       
+            jFile.setVisible(false);
+            JFileChooser popMenu = new JFileChooser("./ChatApp/Files/toSend"); 
 
-        popMenu.setDialogTitle("Choose a file to send");
-        popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        popMenu.setMultiSelectionEnabled(false);
+            popMenu.setDialogTitle("Choose a file to send");
+            popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            popMenu.setMultiSelectionEnabled(false);
 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG, PDF & TIF", "jpeg", "png","pdf","jpg","tif");
-        popMenu.setFileFilter(filter); //desactiver le type par défault ??
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG, PDF & TIF", "jpeg", "png","pdf","jpg","tif");
+            popMenu.setFileFilter(filter); //desactiver le type par défault ??
 
-        // cancel button
-        int result = popMenu.showDialog(null,"Send");
-        if (result == JFileChooser.APPROVE_OPTION) {
-            try {
-                File selectedFile = popMenu.getSelectedFile();
-                
+            // cancel button
+            int result = popMenu.showDialog(null,"Send");
+            if (result == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File selectedFile = popMenu.getSelectedFile();
+                    String name = selectedFile.getName();
+
+                    jFile.setVisible(true);
+
+
+
+
+                    BufferedImage image = ImageIO.read(selectedFile);
+  
+              BufferedImage tThumbImage = new BufferedImage( 500, 300, BufferedImage.TYPE_INT_RGB );
+              Graphics2D tGraphics2D = tThumbImage.createGraphics(); //create a graphics object to paint to
+              tGraphics2D.setBackground( Color.WHITE );
+              tGraphics2D.setPaint( Color.WHITE );
+              tGraphics2D.fillRect( 0, 0, 500, 300 );
+              tGraphics2D.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
+              tGraphics2D.drawImage( image, 0, 0, 500, 300, null ); //draw the image scaled
+
+
+
+
+
+                    File file = new File("./ChatApp/Files/toSend/RescaleFile.jpeg");
+
+                    ImageIO.write( tThumbImage, "JPG", file ); //write the image to a file
+                    
+                    /* deal with name : concatenate  */
+
+
+              tcpclient.SendFile(file); // Perform the sending of the file selected
+                } catch (IOException ex) {
+                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+
+
+
+
+            } else if (result == JFileChooser.CANCEL_OPTION) {
                 jFile.setVisible(true);
-                tcpclient.SendFile(selectedFile); // Perform the sending of the file selected
-            } catch (IOException ex) {
-                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+
             }
-
-            
-            
-        } else if (result == JFileChooser.CANCEL_OPTION) {
-            jFile.setVisible(true);
-
-        }
+        
     }//GEN-LAST:event_jFileMousePressed
 
     private void jChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jChatActionPerformed
@@ -460,11 +518,18 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jBoxModemActionPerformed
 
     private void jConsoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jConsoleMouseClicked
+        if (clickable){                             // avoid the sending of AT commands while a file is received
         ATConsole console = new ATConsole();
         console.setVisible(true);
         jSendAT.setText("Type AT commands here...");
         jSendAT.setForeground(Color.lightGray);
+        }
     }//GEN-LAST:event_jConsoleMouseClicked
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        ScalingOption scale = new ScalingOption();
+        scale.setVisible(true);
+    }//GEN-LAST:event_jLabel1MouseClicked
     
     public void  MenuBarTest()
     {
@@ -549,7 +614,7 @@ public class View extends javax.swing.JFrame{
             
 }
              });
-    }
+    }           
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JTextField jAdr;
@@ -559,6 +624,7 @@ public class View extends javax.swing.JFrame{
     private javax.swing.JLabel jConsole;
     private javax.swing.JLabel jFile;
     private javax.swing.JFrame jFrame1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

@@ -49,6 +49,7 @@ public class TCPreceiver extends Thread {
     private byte byteType;
  
     private boolean first_fragment = true ;
+    public static boolean clickable = true ;
     
     private int size ;
     private int i = 0 ; 
@@ -83,9 +84,11 @@ public class TCPreceiver extends Thread {
                 while  ( socket.getInputStream().available()>0){
                  
                     
-                    
+                    clickable = false ; 
                     DataInputStream  input = new DataInputStream(socket.getInputStream());
                     byte[] ByteArray = new byte[socket.getInputStream().available()];
+                    
+                 
                     
                     
                     
@@ -164,11 +167,17 @@ public class TCPreceiver extends Thread {
                             System.out.println("    -- Rate : "+df.format((size/1000.0) / ((endTime1-beginningTime)/1000.0))+" Kb/s") ;
                             System.out.print("\n");
                             System.out.println(" ChatApp > File saved on your disc");
+                          
+                            
+                            
                             
                                 
                                 size = 0;
                                 ratio = 0;
                                 first_fragment = true ;
+                         
+                              
+                                
                                 
                                 
                             /* Pop up window with the image file */    
@@ -182,9 +191,12 @@ public class TCPreceiver extends Thread {
                                 if ( ext.equals(extt)){
                                     
                                     BufferedImage bimg = ImageIO.read(new File("./ChatApp/Files/Received",fileName));
+
                                     int width = bimg.getWidth();
                                     int height = bimg.getHeight();
+
                                     JFrame imageFrame = new JFrame();
+                                    
                                     imageFrame.setTitle(fileName);
                                     imageFrame.setSize(width, height);
                                     imageFrame.setLocationRelativeTo(null);
@@ -301,15 +313,15 @@ public class TCPreceiver extends Thread {
                             System.out.println("    -- Transmission time : "+df.format((endTime2-beginningTime)/1000.0)+" s");
                             System.out.println("    -- Rate : "+df.format((size/1000.0) / ((endTime2-beginningTime)/1000.0))+" Kb/s") ;
                             System.out.print("\n");
+                            System.out.println(" ChatApp > File saved on your disc");
+                            
+                           
                 
                             
                             first_fragment = true ;
                             size = 0;
                             ratio = 0;
-                            
-                           
-                            
-                            
+                            clickable = true ; 
                             
                             /* Pop up window with the file */
                             
@@ -322,17 +334,17 @@ public class TCPreceiver extends Thread {
                                 if ( ext.equals(extt)){
                                     
                                     BufferedImage bimg = ImageIO.read(new File("./ChatApp/Files/Received",fileName));
-                                    int width = bimg.getWidth();
-                                    int height = bimg.getHeight();
+   
+                                    int width = bimg.getWidth(); 
+                                    int height = bimg.getHeight();                                
+                     
                                     JFrame imageFrame = new JFrame();
                                     imageFrame.setTitle(fileName);
                                     imageFrame.setSize(width, height);
                                     imageFrame.setLocationRelativeTo(null);
                                     imageFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                                    Icon icon = new ImageIcon(fileName);
-
-                                    JLabel label = new JLabel();
-                                    label.setIcon(icon);
+                               
+                                    JLabel label = new JLabel(new ImageIcon(bimg));
                                     imageFrame.add(label); // Add to  JFrame
                                     imageFrame.setVisible(true); 
                                 
