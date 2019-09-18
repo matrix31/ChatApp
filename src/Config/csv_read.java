@@ -37,30 +37,26 @@ public class csv_read {
    public String getAdr(){
        
        /* Get the corresponding IP address of the remote address */
+       /* if more than 4 modems change the NumberOfAdr value and add in the JbowxModem the correponding remote adr */
        
        String remote_adr = jBoxModem.getSelectedItem().toString();
-       String adr1 = "192.168.0.186"; 
-       String adr2 = "192.168.0.188"; 
-       String adr3= "192.168.0.189"; 
-       String adr4 = "192.168.0.190";
-       String er = "erreur";
+       csv_read read = new csv_read();
+       String IPadr = "";
+       int NumberOfAdr = 4;
        
-       if ( remote_adr.equals("1")){
-           return adr1;
+       
+       /* a voir */
+       for( int i = 0 ; i < NumberOfAdr ; i++){
+           if ( remoteAdr.equals(list.get(i).get(1))){
+               IPadr = list.get(i).get(0);
+           }
+         
+           
        }
-       if ( remote_adr.equals("2")){
-           return adr2;
-       }
-       if ( remote_adr.equals("3")){
-           return adr3;
-       }
-       if ( remote_adr.equals("4")){
-           return adr4;
-       }
-       else { 
-           return er ;
-       }
+       return IPadr; 
    }
+   
+   
    public int numberOfModem(){
        
        int element = 0 ; 

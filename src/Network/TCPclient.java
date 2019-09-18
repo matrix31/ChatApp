@@ -33,11 +33,8 @@ public class TCPclient {
     public TCPclient(String adr, int port) throws ClassNotFoundException{
         try {
             csv_read read = new csv_read();
-            System.out.println(" ------- Welcome to ChatApp ------- ");
             System.out.print("\n");
             socket = new Socket(adr,port);     // socket creation
-            System.out.println(" ChatApp > Socket created to " + read.getAdr());
-            System.out.println(" ChatApp > Select a remote Address\n");
         }
         catch (IOException e){
         }
@@ -45,14 +42,7 @@ public class TCPclient {
     
     
     
-   public static BufferedImage resize(BufferedImage img, int height, int width) {
-        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = resized.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
-        g2d.dispose();
-        return resized;
-    }
+  
     
   public void SendAT(String message) throws IOException{
       
@@ -118,8 +108,8 @@ public class TCPclient {
             System.out.println(" ChatApp > You are sending a file please wait...");
       
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            File fileTest = new File("./ChatApp/Files/toSend/new.jpeg");
-            byte[] FILE = Files.readAllBytes(fileTest.toPath());
+  
+            byte[] FILE = Files.readAllBytes(file.toPath());
 
             /* Header Construction */
             Integer fileSize =  FILE.length;

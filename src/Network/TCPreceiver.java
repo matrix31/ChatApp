@@ -38,6 +38,7 @@ public class TCPreceiver extends Thread {
     
     private final String checkAT = "+++AT!AR:2:OK\r\n";
     private final String adoptedRemoteAdr="+++AT:7:RADDR";
+    private final String BuffnotEmpty = "+++AT!AR:27:ERROR"+" "+"BUFFERS"+" "+"ARE"+" "+"NOT"+" "+"EMPTY\r\n";
     private String str;
     private String str_sub ;
     private String fileName ; 
@@ -84,9 +85,11 @@ public class TCPreceiver extends Thread {
                 while  ( socket.getInputStream().available()>0){
                  
                     
-                    clickable = false ; 
+        
                     DataInputStream  input = new DataInputStream(socket.getInputStream());
                     byte[] ByteArray = new byte[socket.getInputStream().available()];
+                    
+                    System.out.println("first :"+first_fragment);
                     
                  
                     
@@ -97,12 +100,13 @@ public class TCPreceiver extends Thread {
                     if (first_fragment){
                     byteType = ByteArray[0];
                     }
+                    
+                  
                  
                     
                     
                     /* first packet received */
                     if (first_fragment){
-                        System.out.println(first_fragment);
                         
                         /* Data received from file */
                         if (byteType == file_byte){
@@ -242,7 +246,7 @@ public class TCPreceiver extends Thread {
                             
                             csv_read adr1 = new csv_read();
   
-                            jAreaConv.append("["+adr1.getAdr()+"] : "+str_sub+"\n"); // display text
+                            jAreaConv.append("["+remoteAdr+"] : "+str_sub+"\n"); // display text
                             jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
                         }
                         
@@ -255,10 +259,22 @@ public class TCPreceiver extends Thread {
                             if (str.equals(checkAT)){
                                 System.out.println(" ChatApp > Remote Address has been set correctly");
                                 System.out.println(" ChatApp > You can chat and send files\n");
+                               
                         
                         }
+                            if ( str.equals((BuffnotEmpty))){
+                                tcpclient.SendAT("+++ATZ4"+"\n");
+                                System.out.println("clean buff send");
+                            }
                             /* command for ATconsole */ 
-                            if (ATcpt > 2){
+                            if (ATcpt > 1){
+                                /*
+                                if (str.equals(checkAT)){
+                                System.out.println(" ChatApp > Remote Address has been set correctly");
+                                System.out.println(" ChatApp > You can chat and send files\n");
+                                }
+                                */
+                                 if(!str.equals(checkAT))
                                 jATdisplay.append("    Modem >  "+str+"\n");
                             }
                                 
@@ -321,7 +337,7 @@ public class TCPreceiver extends Thread {
                             first_fragment = true ;
                             size = 0;
                             ratio = 0;
-                            clickable = true ; 
+               
                             
                             /* Pop up window with the file */
                             
@@ -376,8 +392,7 @@ public class TCPreceiver extends Thread {
         }   
         }
         catch (NullPointerException n){
-                System.out.println(" ChatApp > The program encountered an issue");
-                System.out.println(" ChatApp > Please check modem alimentation and reboot the sofware");
+               
             }
     }
 }

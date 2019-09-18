@@ -1,24 +1,26 @@
-/*
- * 
- */
+
+/* UnderWater Chat App | Franck Bourzat | IMDEA Network */
+
+
 package View;
 
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 
-/**
- *
- * @author franck
- */
+import javax.swing.WindowConstants;
+import static View.View.state;
+
+
 public class ScalingOption extends javax.swing.JFrame {
+    
+    
+    public static String height ; 
+    public static String width  ; 
 
-    /**
-     * Creates new form ScalingOption
-     */
+ 
+    
     public ScalingOption() {
         initComponents();
-        SpinnerNumberModel model = new SpinnerNumberModel(0.0, -1000.0, 1000.0, 0.1);
-        JSpinner jSpinner1 = new JSpinner(model);
+        this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE); // closing window
+        
      
          
     }
@@ -36,36 +38,32 @@ public class ScalingOption extends javax.swing.JFrame {
         buttonGroup2 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jWidth = new javax.swing.JComboBox<>();
-        jCheckBox1 = new javax.swing.JCheckBox();
         jHeight = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        Apply = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(242, 242, 242));
 
-        jWidth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "50", "100", "200", "300", "400", "500", "600", "700", "800" }));
+        jWidth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "200", "300", "400", "500", "600", "700", "800" }));
 
-        jCheckBox1.setText("On");
-        jCheckBox1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jCheckBox1ItemStateChanged(evt);
-            }
-        });
-        jCheckBox1.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentMoved(java.awt.event.ComponentEvent evt) {
-                jCheckBox1ComponentMoved(evt);
-            }
-        });
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
-
-        jHeight.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "50", "100", "200", "300", "400", "500", "600", "700", "800" }));
+        jHeight.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "200", "300", "400", "500", "600", "700", "800" }));
         jHeight.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jHeightActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Height");
+
+        jLabel2.setText("Width");
+
+        Apply.setText("Apply");
+        Apply.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApplyActionPerformed(evt);
             }
         });
 
@@ -74,27 +72,35 @@ public class ScalingOption extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
-                        .addComponent(jHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addComponent(Apply)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
                     .addComponent(jHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addComponent(Apply)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -111,30 +117,16 @@ public class ScalingOption extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
-
-    private void jCheckBox1ComponentMoved(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jCheckBox1ComponentMoved
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ComponentMoved
-
     private void jHeightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHeightActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jHeightActionPerformed
 
-    private void jCheckBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox1ItemStateChanged
-        if(evt.getStateChange() == 1 ){
-            System.out.println(evt.getStateChange());
-            jWidth.setEnabled(true);
-            jHeight.setEnabled(true);  
-        }
-        else {
-            jHeight.setEnabled(false);
-            jWidth.setEnabled(false);
-        }
-    }//GEN-LAST:event_jCheckBox1ItemStateChanged
-
+    private void ApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApplyActionPerformed
+         height = (String) jHeight.getSelectedItem();
+         width = (String) jWidth.getSelectedItem();
+         state = true ;
+    }//GEN-LAST:event_ApplyActionPerformed
+     
     /**
      * @param args the command line arguments
      */
@@ -173,11 +165,13 @@ public class ScalingOption extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Apply;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jHeight;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JComboBox<String> jWidth;
+    public javax.swing.JComboBox<String> jWidth;
     // End of variables declaration//GEN-END:variables
 }

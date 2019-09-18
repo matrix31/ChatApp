@@ -1,6 +1,8 @@
-/*
- * 
- */
+
+/* UnderWater Chat App | Franck Bourzat | IMDEA Network */
+
+
+
 package View;
 
 
@@ -70,9 +72,6 @@ public class ATConsole extends javax.swing.JFrame {
         jItemManuals = new javax.swing.JMenuItem();
         jItemWebSite = new javax.swing.JMenuItem();
         jItemClose = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        On = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -127,26 +126,6 @@ public class ATConsole extends javax.swing.JFrame {
             }
         });
         jMenuAT.add(jItemClose);
-
-        jMenu1.setText("Rescaling");
-
-        On.setText("On");
-        On.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                OnActionPerformed(evt);
-            }
-        });
-        jMenu1.add(On);
-
-        jMenuItem1.setText("Off");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem1);
-
-        jMenuAT.add(jMenu1);
 
         jMenuBar1.add(jMenuAT);
         jMenuBar1.add(jMenu2);
@@ -238,14 +217,6 @@ public class ATConsole extends javax.swing.JFrame {
         jSendAT.setForeground(Color.BLACK);
     }//GEN-LAST:event_jSendATMouseClicked
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void OnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_OnActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -285,16 +256,13 @@ public class ATConsole extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem On;
     public static javax.swing.JTextArea jATdisplay;
     private javax.swing.JMenuItem jItemClose;
     private javax.swing.JMenuItem jItemManuals;
     private javax.swing.JMenuItem jItemWebSite;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenuAT;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     public static javax.swing.JTextArea jSendAT;
