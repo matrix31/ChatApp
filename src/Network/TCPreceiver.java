@@ -5,8 +5,11 @@ package Network;
 
 
 import Config.csv_read;
+import static Config.csv_read.read;
+import ConsoleDisplay.display;
 import static View.ATConsole.jATdisplay;
 import static View.View.*;
+import static ConsoleDisplay.display.set;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.Socket;
@@ -49,8 +52,8 @@ public class TCPreceiver extends Thread {
     private final byte AT_byte = 0x2b;
     private byte byteType;
  
-    private boolean first_fragment = true ;
-    public static boolean clickable = true ;
+    public static boolean first_fragment = true ;
+    public static boolean clickable = true ;//???????,
     
     private int size ;
     private int i = 0 ; 
@@ -89,22 +92,11 @@ public class TCPreceiver extends Thread {
                     DataInputStream  input = new DataInputStream(socket.getInputStream());
                     byte[] ByteArray = new byte[socket.getInputStream().available()];
                     
-                    System.out.println("first :"+first_fragment);
-                    
-                 
-                    
-                    
-                    
-                    
                     input.read(ByteArray);
                     if (first_fragment){
                     byteType = ByteArray[0];
                     }
-                    
-                  
-                 
-                    
-                    
+ 
                     /* first packet received */
                     if (first_fragment){
                         
@@ -131,19 +123,12 @@ public class TCPreceiver extends Thread {
                             recept.write(ByteArray, byteFileSize+6,ByteArray.length-(byteFileSize+6));
                             byte[] FILE = recept.toByteArray();
                             
-                            /* Progress in %tage */
+                            /* Displays file tranfert progress in %tage */
                             ratio = ((float) FILE.length ) / ((float) size);
-                            
-                            csv_read adr = new csv_read();
-                            
-                            DecimalFormat df = new DecimalFormat("#.##");
-                            System.out.println(" ChatApp > "+adr.getAdr()+" is sending you a file" );
-                            System.out.print(" ChatApp > "+df.format(ratio*100)+" % of the file received\r");
+                            display Dfile = new display(ratio);
+                            Dfile.FilePercent(ratio);
                             
                             first_fragment = false ;
-                       //     System.out.print(Arrays.toString(ByteArray));
-                        //    System.out.println( "Size :"+size +" received : "+ByteArray.length);
-                        //    System.out.println("-------------------------");
                             
                             
                             /* if no fragmantation induced by the hardware */
@@ -161,21 +146,10 @@ public class TCPreceiver extends Thread {
                                 recept.close();
                                 recept.reset();
                                 
-                                csv_read read = new csv_read();
+                                /* Displays */
+                                display Displ = new display(fileName,size,beginningTime,endTime1);
+                                Displ.FileFeatures(fileName, size, beginningTime, endTime1);
            
-                            System.out.println(" ChatApp > Reception sucessfull");                          
-                            System.out.print("\n");
-                            System.out.println("    -- Name : "+fileName);
-                            System.out.println("    -- Size : "+df.format(size/1000.0)+" Kbytes");
-                            System.out.println("    -- Transmission time : "+df.format((endTime1-beginningTime)/1000.0)+" s");
-                            System.out.println("    -- Rate : "+df.format((size/1000.0) / ((endTime1-beginningTime)/1000.0))+" Kb/s") ;
-                            System.out.print("\n");
-                            System.out.println(" ChatApp > File saved on your disc");
-                          
-                            
-                            
-                            
-                                
                                 size = 0;
                                 ratio = 0;
                                 first_fragment = true ;
@@ -184,7 +158,9 @@ public class TCPreceiver extends Thread {
                                 
                                 
                                 
-                            /* Pop up window with the image file */    
+                            /* Pop up window with the image file */   
+                            
+                            /* make fonctions */
                             /* if not an image ->  not displayed */
                             String ext = "";
                             int point = fileName.lastIndexOf('.');
@@ -244,7 +220,7 @@ public class TCPreceiver extends Thread {
                             str = new String(ByteArray) ; // Byte to String
                             str_sub = str.substring(1); // Delete the type byte (first byte)
                             
-                            csv_read adr1 = new csv_read();
+                     
   
                             jAreaConv.append("["+remoteAdr+"] : "+str_sub+"\n"); // display text
                             jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
@@ -257,14 +233,22 @@ public class TCPreceiver extends Thread {
                             str = new String(ByteArray) ; // convert byte to string
 
                             if (str.equals(checkAT)){
-                                System.out.println(" ChatApp > Remote Address has been set correctly");
-                                System.out.println(" ChatApp > You can chat and send files\n");
+                                
+                                display d = new display();
+                                d.adrSetOk();
+                                set = false ; 
                                
                         
                         }
                             if ( str.equals((BuffnotEmpty))){
-                                tcpclient.SendAT("+++ATZ4"+"\n");
+                               // tcpclient.SendAT("+++ATZ4"+"\n");
+                                csv_read read = new csv_read();
+                                
+                    
                                 System.out.println("clean buff send");
+                               // tcpclient.SendAT(ATadr);
+                                /* a tester clean puis reset remote adr*/
+                                
                             }
                             /* command for ATconsole */ 
                             if (ATcpt > 1){
@@ -292,19 +276,19 @@ public class TCPreceiver extends Thread {
                         /* Reception */
                         recept.write(ByteArray, 0,ByteArray.length);
                         byte[] FILE = recept.toByteArray();
-                      //  System.out.println(Arrays.toString(ByteArray));
-                      //  System.out.println( "Size :"+size +" received : "+ByteArray.length);
-                      //  System.out.println("fragment "+i );
-                      //  System.out.println("-------------------------");
+                        
+                      
                         
                         
                         
-                        /* Progress in %tage */
-                        ratio = ((float) FILE.length ) / ((float) size);
-                        DecimalFormat df = new DecimalFormat("#.##");
-                        System.out.print(" ChatApp > "+df.format(ratio*100)+" % of the file received\r");
-                  //      System.out.println("\n");
-                    //    System.out.println( "Size :"+size +"received : "+FILE.length);
+                       
+                      /* Displays file tranfert progress in %tage */
+                         ratio = ((float) FILE.length ) / ((float) size);
+                         display Dfile = new display(ratio);
+                         csv_read read = new csv_read();
+                         Dfile.FilePercent(ratio);
+                       
+                
                         /* Wait the last fragment */
                         if ( FILE.length == size){
                             
@@ -320,16 +304,11 @@ public class TCPreceiver extends Thread {
                             recept.close();
                             recept.reset();
                             
-                            csv_read read = new csv_read();
+                            /* Displays */
+                           display displa = new display(fileName,size,beginningTime,endTime2);
+                           displa.FileFeatures(fileName, size, beginningTime, endTime2);
                             
-                            System.out.println(" ChatApp > Reception sucessfull");
-                            System.out.print("\n");
-                            System.out.println("    -- Name : "+fileName);
-                            System.out.println("    -- Size : "+df.format(size/1000.0)+" Kbytes");
-                            System.out.println("    -- Transmission time : "+df.format((endTime2-beginningTime)/1000.0)+" s");
-                            System.out.println("    -- Rate : "+df.format((size/1000.0) / ((endTime2-beginningTime)/1000.0))+" Kb/s") ;
-                            System.out.print("\n");
-                            System.out.println(" ChatApp > File saved on your disc");
+                            
                             
                            
                 
@@ -348,6 +327,7 @@ public class TCPreceiver extends Thread {
                             }
                             for ( String extt : imgExt ){       
                                 if ( ext.equals(extt)){
+                                    
                                     
                                     BufferedImage bimg = ImageIO.read(new File("./ChatApp/Files/Received",fileName));
    

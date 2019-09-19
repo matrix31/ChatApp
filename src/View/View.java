@@ -4,6 +4,7 @@
 package View;
 
 import Config.csv_read;
+import ConsoleDisplay.display;
 import Network.*;
 import static View.ATConsole.jSendAT;
 import static View.ScalingOption.height;
@@ -48,9 +49,10 @@ public class View extends javax.swing.JFrame{
    private int plusCpt = 0 ; 
    private final byte plusByte = 0x2b ;
     private boolean triplePlus = false ;
-    public static boolean state = false ; 
+    public static boolean state = false ;
     int i = 0;
     public static String remoteAdr;
+    public static String ATadr;
   
 
    public View() throws FileNotFoundException {
@@ -480,9 +482,10 @@ public class View extends javax.swing.JFrame{
                     jFile.setVisible(true);
                     
                    /* if user wants to rescale an image */
-                   System.out.println(state);
                     if (state){
                         
+                        
+                        /* make fonction */
                         String fileName = selectedFile.getName();
                         
 
@@ -499,7 +502,14 @@ public class View extends javax.swing.JFrame{
                         tGraphics2D.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
                         tGraphics2D.drawImage( image, 0, 0, intHeight, intWidth, null ); //draw the image scaled
                         
-                        File file = new File("./ChatApp/Files/toSend",fileName.concat(height).concat("x").concat(width));
+                        String ext = "";
+                            int point = fileName.lastIndexOf('.');
+                            if (i > 0) {
+                                ext = fileName.substring(0,point+1);
+                            }
+                            System.out.println(ext);
+                        
+                        File file = new File("./ChatApp/Files/Rescaled",ext);
                         ImageIO.write( tThumbImage, "JPG", file ); //write the image to a file
                         tcpclient.SendFile(file); // Perform the sending of the file selected
                         state = false ;
@@ -533,7 +543,9 @@ public class View extends javax.swing.JFrame{
 
         try {
             jAreaConv.setText("");
-            csv_read read = new csv_read();
+  
+             csv_read read = new csv_read();
+             
             tcpclient = new TCPclient(read.list.get(0).get(0),9200); // create Client Socket on IPadr,Port
             TCPreceiver thread = new TCPreceiver(tcpclient.socket) ;
             // Create the thread in charge of listening input streams
@@ -541,18 +553,23 @@ public class View extends javax.swing.JFrame{
             
             
             
+            
             jSend.setText("Type something here...");
             jSend.setForeground(Color.lightGray);
             remoteAdr = jBoxModem.getSelectedItem().toString();
             DataOutputStream out = new DataOutputStream(tcpclient.socket.getOutputStream());
-            if( i == 0){
-                 String ATdrop_buff = "+++ATZ4"+"\n"; // clear the buffer before set up a new remote Address
-                  tcpclient.SendAT(ATdrop_buff);
+            
+           //if( i == 0){
+                String ATdrop_buff = "+++ATZ4"+"\n"; // clear the buffer before set up a new remote Address
+                         tcpclient.SendAT(ATdrop_buff);
+                
                  
-                i=1;
-            }
+                            //  i=1;
+           //}
+           
+           
           
-            String ATadr = "+++AT!AR"+remoteAdr+"\n" ;
+            ATadr = "+++AT!AR"+remoteAdr+"\n" ;
 
      
             tcpclient.SendAT(ATadr);
@@ -566,13 +583,14 @@ public class View extends javax.swing.JFrame{
             */
             
             jAdr.setText(readAdr.getAdr());
+            
            
 
         } catch (IOException ex) {
             Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex) { 
            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-       }
+       } 
 
     }//GEN-LAST:event_jChatActionPerformed
 
@@ -648,36 +666,35 @@ public class View extends javax.swing.JFrame{
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    View view = new View(); // displaying interface
+                    View view = new View(); // displays main interface
                     view.setVisible(true);
-               
-                    
+   
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 new Thread() {
                 public void run() {
                     try {
-                        System.out.println("\033[H\033[2J");  // clean the console 
-                        System.out.flush();
-                        System.out.println(" ------- Welcome to ChatApp ------- ");
+                        display dis = new display();
+                        dis.welcome();
+   
                         csv_read adr_socket = new csv_read();
                         adr_socket.read();
                         
+                        csv_read read = new csv_read();
+            
                         String myRemoteAdr = adr_socket.list.get(0).get(1);
                         String myIPadr = adr_socket.list.get(0).get(0);
+                        
                         jBoxModem.removeItem(myRemoteAdr); // remove myRemoteAddress from the list of remote modem
                         jMyAdr.setText(myIPadr);
                         jMyRemAdr.setText(myRemoteAdr);
-                         System.out.println("\n");
-                        System.out.println(" ChatApp > Socket created to " + adr_socket.list.get(0).get(0)); // a enlever
-                        System.out.println(" ChatApp > Select a remote Address and hit begin\n");
-                         
+                        
+                        dis.SelectRemAdr();
+      
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                     } 
-                   
-                  
                 }
                }.start();
             
