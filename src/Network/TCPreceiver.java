@@ -1,5 +1,5 @@
 
-/* UnderWater Chat App | Franck Bourzat | IMDEA Network */
+/* UnderWater Chat App | Franck Bourzat | IMDEA Networks */
 
 package Network;
 
@@ -10,6 +10,7 @@ import ConsoleDisplay.display;
 import static View.ATConsole.jATdisplay;
 import static View.View.*;
 import static ConsoleDisplay.display.set;
+import ImageProcessing.ImageDisplay;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.Socket;
@@ -328,22 +329,8 @@ public class TCPreceiver extends Thread {
                             for ( String extt : imgExt ){       
                                 if ( ext.equals(extt)){
                                     
-                                    
-                                    BufferedImage bimg = ImageIO.read(new File("./ChatApp/Files/Received",fileName));
-   
-                                    int width = bimg.getWidth(); 
-                                    int height = bimg.getHeight();                                
-                     
-                                    JFrame imageFrame = new JFrame();
-                                    imageFrame.setTitle(fileName);
-                                    imageFrame.setSize(width, height);
-                                    imageFrame.setLocationRelativeTo(null);
-                                    imageFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                               
-                                    JLabel label = new JLabel(new ImageIcon(bimg));
-                                    imageFrame.add(label); // Add to  JFrame
-                                    imageFrame.setVisible(true); 
-                                
+                                    ImageDisplay display =new ImageDisplay();
+                                    display.displayImage("./ChatApp/Files/Received",fileName);
                                 }
                                 else {}
                             }

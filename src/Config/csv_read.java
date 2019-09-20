@@ -1,5 +1,5 @@
 
-/* UnderWater Chat App | Franck Bourzat | IMDEA Network */
+/* UnderWater Chat App | Franck Bourzat | IMDEA Networks */
 
 /* class which read input from csv file to configure addresses needed*/
 

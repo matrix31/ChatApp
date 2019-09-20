@@ -1,5 +1,5 @@
 
-/* UnderWater Chat App | Franck Bourzat | IMDEA Network */
+/* UnderWater Chat App | Franck Bourzat | IMDEA Networks */
 
 package View;
 
