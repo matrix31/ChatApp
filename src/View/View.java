@@ -5,6 +5,7 @@ package View;
 
 import Config.csv_read;
 import ConsoleDisplay.display;
+import ImageProcessing.Rescaling;
 import Network.*;
 import static View.ATConsole.jSendAT;
 import static View.ScalingOption.height;
@@ -485,33 +486,12 @@ public class View extends javax.swing.JFrame{
                     if (state){
                         
                         
-                        /* make fonction */
+                       
                         String fileName = selectedFile.getName();
-                        
-
-                        BufferedImage image = ImageIO.read(selectedFile);
-                        int intHeight = Integer.parseInt(height);
-                        int intWidth = Integer.parseInt(width);
-                        
-
-                        BufferedImage tThumbImage = new BufferedImage( intHeight, intWidth, BufferedImage.TYPE_INT_RGB );
-                        Graphics2D tGraphics2D = tThumbImage.createGraphics(); //create a graphics object to paint to
-                        tGraphics2D.setBackground( Color.WHITE );
-                        tGraphics2D.setPaint( Color.WHITE );
-                        tGraphics2D.fillRect( 0, 0, intHeight, intWidth );
-                        tGraphics2D.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
-                        tGraphics2D.drawImage( image, 0, 0, intHeight, intWidth, null ); //draw the image scaled
-                        
-                        String ext = "";
-                            int point = fileName.lastIndexOf('.');
-                            if (i > 0) {
-                                ext = fileName.substring(0,point+1);
-                            }
-                            System.out.println(ext);
-                        
-                        File file = new File("./ChatApp/Files/Rescaled",ext);
-                        ImageIO.write( tThumbImage, "JPG", file ); //write the image to a file
-                        tcpclient.SendFile(file); // Perform the sending of the file selected
+                        Rescaling res = new Rescaling(fileName);
+                   
+                        File fileToSend = res.RescaleProcess(selectedFile);
+                        tcpclient.SendFile(fileToSend); // Perform the sending of the file selected
                         state = false ;
 
                     }
