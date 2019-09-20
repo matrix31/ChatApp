@@ -17,10 +17,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-
-/* Rescaling file acording to the need of the uder (height,width) */
-
-
 public class Rescaling {
    public String fileName;
    public int i = 0 ; 
@@ -57,8 +53,8 @@ public class Rescaling {
         String fileNameWithoutExt = fileName.replaceFirst("[.][^.]+$", "");
                            
                         
-        File file = new File("./ChatApp/Files/Rescaled");
-        ImageIO.write( tThumbImage, "JPG", file ); //write the image to a file            
+        File file = new File("./ChatApp/Files/Rescaled",fileNameWithoutExt.concat(height).concat("x").concat(width).concat(".jpeg"));
+        ImageIO.write( Image, "JPG", file ); //write the image to a file            
         return file ; 
          
     }
