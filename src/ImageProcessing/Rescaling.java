@@ -38,9 +38,9 @@ public class Rescaling {
         int intHeight = Integer.parseInt(height);
         int intWidth = Integer.parseInt(width);
                         
-
-        BufferedImage tThumbImage = new BufferedImage( intHeight, intWidth, BufferedImage.TYPE_INT_RGB );
-        Graphics2D tGraphics2D = tThumbImage.createGraphics(); //create a graphics object to paint to
+        /*check items....*/
+        BufferedImage Image = new BufferedImage( intHeight, intWidth, BufferedImage.TYPE_INT_RGB );
+        Graphics2D tGraphics2D = Image.createGraphics(); //create a graphics object to paint to
         tGraphics2D.setBackground( Color.WHITE );
         tGraphics2D.setPaint( Color.WHITE );
         tGraphics2D.fillRect( 0, 0, intHeight, intWidth );
@@ -52,12 +52,14 @@ public class Rescaling {
         if (i > 0) {
             ext = fileName.substring(0,point+1);
         }
+        
+        /* regular expression to have the name of the file witout the .extension */
+        String fileNameWithoutExt = fileName.replaceFirst("[.][^.]+$", "");
                            
                         
-        File file = new File("./ChatApp/Files/Rescaled","pp.jpeg");
-        ImageIO.write( tThumbImage, "JPG", file ); //write the image to a file
-                        
-         return file ; 
+        File file = new File("./ChatApp/Files/Rescaled");
+        ImageIO.write( tThumbImage, "JPG", file ); //write the image to a file            
+        return file ; 
          
     }
     
