@@ -5,7 +5,10 @@ package ConsoleDisplay;
 
 import Config.csv_read;
 import static Network.TCPreceiver.first_fragment;
+
 import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class display {
@@ -14,13 +17,14 @@ public class display {
     public long beginningTime;
     public long endTime;
     public float ratio ;
+   
  
     
     
     public DecimalFormat df = new DecimalFormat("#.##");
     public csv_read read = new csv_read();
     
-    public static boolean set = true ;
+   
     
     
     
@@ -65,10 +69,9 @@ public class display {
     
     public void adrSetOk(){
         System.out.println(" ChatApp > Remote Address has been set correctly");
-        if (set){
-           System.out.println(" ChatApp > You can chat and send files\n");
+        System.out.println(" ChatApp > You can chat and send files\n");
              
-       }
+       
     }
     public void ConsoleSendFile(){
         System.out.println("");
@@ -88,18 +91,23 @@ public class display {
         System.out.println("    -- Name : "+fileName);
         System.out.println("    -- Size : "+df.format(size/1000.0)+" Kbytes");
         System.out.println("    -- Transmission time : "+df.format((endTime-beginningTime)/1000.0)+" s");
-        System.out.println("    -- Rate : "+df.format((size/1000.0) / ((endTime-beginningTime)/1000.0))+" Kb/s") ;
+        System.out.println("    -- Rate : "+df.format((size/1000.0) / ((endTime-beginningTime)/1000.0))+" Kbytes/s") ;
         System.out.print("\n");
         System.out.println(" ChatApp > File saved on your disc");
         System.out.println("\n");
         
     }
     public void FilePercent(float ratio){
+       
         
         if (first_fragment){
         System.out.println(" ChatApp > "+read.getAdr()+" is sending you a file" );
         }
+        
         System.out.print(" ChatApp > "+df.format(ratio*100)+" % of the file received\r");
+       
+      
+    
     }
     
     public void FileSent(){

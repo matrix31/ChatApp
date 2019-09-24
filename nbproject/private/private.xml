@@ -3,6 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/Users/franck/Downloads/ChatApp/src/SPIHT/Pixels.java</file>
+            <file>file:/Users/franck/Downloads/ChatApp/src/View/clip.png</file>
             <file>file:/Users/franck/Downloads/ChatApp/src/ImageProcessing/Rescaling.java</file>
             <file>file:/Users/franck/Downloads/ChatApp/src/View/ATConsole.java</file>
             <file>file:/Users/franck/Downloads/ChatApp/src/Network/TCPclient.java</file>
@@ -16,6 +18,7 @@
             <file>file:/Users/franck/Downloads/ChatApp/src/SPIHT/Node.java</file>
             <file>file:/Users/franck/Downloads/ChatApp/src/View/ScalingOption.java</file>
             <file>file:/Users/franck/Downloads/ChatApp/src/SPIHT/EndCoding.java</file>
+            <file>file:/Users/franck/Downloads/ChatApp/src/SPIHT/main.java</file>
         </group>
     </open-files>
 </project-private>

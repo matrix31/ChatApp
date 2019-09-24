@@ -9,8 +9,9 @@ import static Config.csv_read.read;
 import ConsoleDisplay.display;
 import static View.ATConsole.jATdisplay;
 import static View.View.*;
-import static ConsoleDisplay.display.set;
 import ImageProcessing.ImageDisplay;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.Socket;
@@ -32,6 +33,9 @@ import javax.swing.JLabel;
 import java.lang.Object.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 
 public class TCPreceiver extends Thread {
@@ -62,6 +66,9 @@ public class TCPreceiver extends Thread {
     private int ATcpt = 0 ;
     private long beginningTime; 
     private float ratio; 
+
+  
+   
     
  
 
@@ -78,21 +85,26 @@ public class TCPreceiver extends Thread {
         
         ByteArrayOutputStream recept = new ByteArrayOutputStream();
         byte [] fileSizeArray = new byte[4];
-        try{
+      
             
        
         while (true){
+                    
          
           
          
             try {
                 while  ( socket.getInputStream().available()>0){
-                 
                     
-        
+                    
+                  
+                    
+                   
                     DataInputStream  input = new DataInputStream(socket.getInputStream());
                     byte[] ByteArray = new byte[socket.getInputStream().available()];
+              
                     
+               
                     input.read(ByteArray);
                     if (first_fragment){
                     byteType = ByteArray[0];
@@ -103,8 +115,25 @@ public class TCPreceiver extends Thread {
                         
                         /* Data received from file */
                         if (byteType == file_byte){
-                        
+                            
+                            /*
+                            
+                            java.util.Timer time = new java.util.Timer();
+                            time.schedule(new TimerTask() {          
+                            public void run(){
+       
+                                System.out.print("pertes");
+  
+                            }
+                        },10000);
+       
                             i++;
+               */
+                            
+                          
+                       
+                            
+                            
                             beginningTime = System.currentTimeMillis();
                             /* Get de size of the file from the Header */
                             System.arraycopy(ByteArray,1,fileSizeArray,0,4);
@@ -132,6 +161,9 @@ public class TCPreceiver extends Thread {
                             first_fragment = false ;
                             
                             
+                          
+                            
+                            
                             /* if no fragmantation induced by the hardware */
                             if ( FILE.length == size){
                                 
@@ -150,10 +182,25 @@ public class TCPreceiver extends Thread {
                                 /* Displays */
                                 display Displ = new display(fileName,size,beginningTime,endTime1);
                                 Displ.FileFeatures(fileName, size, beginningTime, endTime1);
+                                
+                                /* Send a message to confirm that file sucessfully received */
+                                String text = "File sucessfully received\n";
+                                
+                                
+                                tcpclient.SendMessage(text+"\n");
+                      
+                               jAreaConv.append("[Me] : "+text+"\n");
+                               jAreaConv.append("\n");
+                               jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+                        
+                               
+                             
            
                                 size = 0;
                                 ratio = 0;
                                 first_fragment = true ;
+                                
+                                
                          
                               
                                 
@@ -161,7 +208,7 @@ public class TCPreceiver extends Thread {
                                 
                             /* Pop up window with the image file */   
                             
-                            /* make fonctions */
+                       
                             /* if not an image ->  not displayed */
                             String ext = "";
                             int point = fileName.lastIndexOf('.');
@@ -171,27 +218,13 @@ public class TCPreceiver extends Thread {
                             for ( String extt : imgExt ){       
                                 if ( ext.equals(extt)){
                                     
-                                    BufferedImage bimg = ImageIO.read(new File("./ChatApp/Files/Received",fileName));
-
-                                    int width = bimg.getWidth();
-                                    int height = bimg.getHeight();
-
-                                    JFrame imageFrame = new JFrame();
-                                    
-                                    imageFrame.setTitle(fileName);
-                                    imageFrame.setSize(width, height);
-                                    imageFrame.setLocationRelativeTo(null);
-                                    imageFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                                    Icon icon = new ImageIcon(fileName);
-
-                                    JLabel label = new JLabel();
-                                    label.setIcon(icon);
-                                    imageFrame.add(label); // Add to  JFrame
-                                    imageFrame.setVisible(true); 
+                                    ImageDisplay display =new ImageDisplay();
+                                    display.displayImage("./ChatApp/Files/Received",fileName);
                                 
                                 }
                                 else {}
                             }
+                          
                                 
                                 
                                     
@@ -237,7 +270,8 @@ public class TCPreceiver extends Thread {
                                 
                                 display d = new display();
                                 d.adrSetOk();
-                                set = false ; 
+                       
+                                
                                
                         
                         }
@@ -273,10 +307,22 @@ public class TCPreceiver extends Thread {
                     /* fragments number x received */
                     else {
                         i++;
+                  
+                     
+                        
+                        
+                       
+                        
+                        
+                        
+                   
+                        
                         
                         /* Reception */
                         recept.write(ByteArray, 0,ByteArray.length);
                         byte[] FILE = recept.toByteArray();
+                        
+                        
                         
                       
                         
@@ -308,6 +354,11 @@ public class TCPreceiver extends Thread {
                             /* Displays */
                            display displa = new display(fileName,size,beginningTime,endTime2);
                            displa.FileFeatures(fileName, size, beginningTime, endTime2);
+                           
+                           /* Send a message to confirm that file has been received */
+                           String text = "File sucessfully received\n";
+                           tcpclient.SendMessage(text);
+                           jAreaConv.append("[Me] : "+text+"\n");
                             
                             
                             
@@ -349,20 +400,29 @@ public class TCPreceiver extends Thread {
                     System.out.println("nombre byte du fichier recus jusqu'a maintenant "+byte_nb);
                     System.out.println("Index tableau "+arrayIndex);
                     */
-                    
+             
+                   
+                     
+                      
+             
                     
                 
             } 
+                
                 }  catch (IOException ex) {
                 Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
-            } 
-        }   
-        }
-        catch (NullPointerException n){
-               
             }
-    }
-}
+            
+            }
+            
+        } 
+        
+        
+        }
+       
+        
+    
+
             
         
 

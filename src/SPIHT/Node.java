@@ -19,8 +19,9 @@ public class Node {
     }
     public Node ( int i,int j,char type, Node last){
         this(i,j,type);
-        if( last != null)
-        last.next=this;
+        if( last != null){
+            last.next=this;
+        }
     }
     public void invalidate(){ 
         valid=false;

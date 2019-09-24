@@ -72,7 +72,7 @@ public class SPIHT {
     } 
     /* end of genTree */
     
-    /* Ccomputes the initial threshold */
+    /* Computes the initial threshold */
     public double retMax(){
         double max=0;
         for ( int i = 0 ; i < dim*dim ; i++ ){
@@ -80,10 +80,8 @@ public class SPIHT {
                 max = Math.abs(tab[i]);    
             }   
         }  
-        double a = Math.log(max) / Math.log((double) 2);        
-        double power = (double) Math.floor(a);
-        double resultDouble = Math.pow((double)2, power);
-        return (float) resultDouble ;
+        double power = (double) Math.floor ( Math.log(max) / Math.log(2) );
+        return (float)Math.pow(2,power);
     } 
     /* end of retMax */  
     
@@ -130,7 +128,7 @@ public class SPIHT {
             //Step2:Sort
             for(int i= 0 ; i < nrLIP ; i++){
                 // Verifies if the element vas not eliminated from LIP 
-                if(LIP[i]!=Float.POSITIVE_INFINITY)
+                if(LIP[i]!=Float.POSITIVE_INFINITY){
                     if( Math.abs(LIP[i]) >= n ){
                         putBit(true);
                         //move the coefficient to the LSP
@@ -173,10 +171,13 @@ public class SPIHT {
                                     //the set is of type B
                                     LISTypeB();
                                 }
-                        } //end the process of LIS
+                        }
+                        //end the process of LIS
                     }
+                }
             }
-                        
+                    
+               
             //step 3:
                         
             for( int i=0 ; i< noLSPPrev ; i++){
@@ -217,15 +218,17 @@ public class SPIHT {
             byteCod |= mask;
         }
         else{
-            byteCod &= ~mask;
-            noBitsCodif++ ; 
+            byteCod &= ~mask; // bitwise --> no mask 
         }
+        noBitsCodif++ ; 
+     
         if(noBitsCodif % 8 == 0){
             dos.writeByte(byteCod);
-        }
-        if(noBitsCodif >= lungCod){
+            
+            if(noBitsCodif >= lungCod){
             dos.close();
             throw new EndCoding("End of image coding");
+            }
         }
     } // end of putBit
       
