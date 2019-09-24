@@ -6,7 +6,7 @@
 package View;
 
 
-import static View.View.tcpclient;
+import static View.MainInterface.tcpclient;
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;

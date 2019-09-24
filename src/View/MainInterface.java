@@ -1,19 +1,59 @@
-/*
- * 
- */
+
+/* UnderWater Chat App | Franck Bourzat | IMDEA Networks */
+
 package View;
 
-/**
- *
- * @author franck
- */
+import Config.csv_read;
+import ConsoleDisplay.display;
+import ImageProcessing.Rescaling;
+import Network.TCPclient;
+import Network.TCPreceiver;
+import static View.ATConsole.jSendAT;
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.InputMap;
+import static javax.swing.JComponent.WHEN_FOCUSED;
+import javax.swing.JFileChooser;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.View;
+
+
 public class MainInterface extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainInterface
-     */
+    
+   public static TCPclient tcpclient;
+   private static final String plus = "+++";
+   private int plusCpt = 0 ; 
+   private final byte plusByte = 0x2b ;
+    private boolean triplePlus = false ;
+    public static boolean state = false ;
+    int i = 0;
+    public static String remoteAdr;
+    public static String ATadr;
+    
+    
     public MainInterface() {
         initComponents();
+       
+        /* Display parameters */
+        jAreaConv.setLineWrap(true);
+        jAreaConv.setWrapStyleWord(true);
+        //jAreaConv.setEditable(false);
+        //jAreaConv.setAutoscrolls(true);
+
+        jSend.setLineWrap(true);
+        jSend.setWrapStyleWord(true);
+        
+        
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // closing socket
     }
 
     /**
@@ -25,84 +65,369 @@ public class MainInterface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLayeredPane1 = new javax.swing.JLayeredPane();
-        jLabel2 = new javax.swing.JLabel();
-        jLayeredPane2 = new javax.swing.JLayeredPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jAreaConv = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jSend = new javax.swing.JTextArea();
+        jScale = new javax.swing.JLabel();
+        jConsole = new javax.swing.JLabel();
+        jMyRemAdr = new javax.swing.JLabel();
+        jMyAdr = new javax.swing.JLabel();
+        jSendIcon = new javax.swing.JLabel();
+        jProfil = new javax.swing.JLabel();
+        jFile = new javax.swing.JLabel();
+        jChat = new javax.swing.JButton();
+        jAdr = new javax.swing.JTextField();
+        jBoxModem = new javax.swing.JComboBox<>();
+        jRemAdr = new javax.swing.JLabel();
+        jIPModem = new javax.swing.JLabel();
+        jMenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLayeredPane1.setBackground(new java.awt.Color(255, 255, 255));
-        jLayeredPane1.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/Console.png"))); // NOI18N
-        jLabel2.setText("jLabel2");
+        jAreaConv.setEditable(false);
+        jAreaConv.setColumns(20);
+        jAreaConv.setRows(5);
+        jAreaConv.setFocusable(false);
+        jScrollPane1.setViewportView(jAreaConv);
 
-        jLayeredPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jSend.setBackground(new java.awt.Color(239, 239, 239));
+        jSend.setColumns(20);
+        jSend.setRows(5);
+        jScrollPane2.setViewportView(jSend);
 
-        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
-        jLayeredPane1.setLayout(jLayeredPane1Layout);
-        jLayeredPane1Layout.setHorizontalGroup(
-            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2))
+        jScale.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/scale.png"))); // NOI18N
+        jScale.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jScaleMouseClicked(evt);
+            }
+        });
+
+        jConsole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/Console.png"))); // NOI18N
+        jConsole.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jConsoleMouseClicked(evt);
+            }
+        });
+
+        jSendIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/paper-plane.png"))); // NOI18N
+        jSendIcon.setText("jLabel1");
+        jSendIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jSendIconMousePressed(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jSendIconMouseClicked(evt);
+            }
+        });
+
+        jProfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/profile-user.png"))); // NOI18N
+
+        jFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/clip.png"))); // NOI18N
+        jFile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jFileMousePressed(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jFileMouseClicked(evt);
+            }
+        });
+
+        jChat.setText("Connect");
+        jChat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jChatActionPerformed(evt);
+            }
+        });
+
+        jAdr.setEditable(false);
+        jAdr.setBackground(new java.awt.Color(182, 208, 243));
+        jAdr.setFocusable(false);
+
+        jBoxModem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4" }));
+
+        jRemAdr.setText("Available on local address : ");
+
+        jIPModem.setText("Connected on local transceiver :");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(jProfil)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jChat))
+                            .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSendIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jFile)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jRemAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jMyRemAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jIPModem, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jMyAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScale)
+                        .addGap(18, 18, 18)
+                        .addComponent(jConsole)))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
-        jLayeredPane1Layout.setVerticalGroup(
-            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScale)
+                            .addComponent(jConsole)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jMyAdr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jIPModem, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jRemAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jMyRemAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jChat)
+                            .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jProfil, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jSendIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jFile))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25))
         );
 
-        javax.swing.GroupLayout jLayeredPane2Layout = new javax.swing.GroupLayout(jLayeredPane2);
-        jLayeredPane2.setLayout(jLayeredPane2Layout);
-        jLayeredPane2Layout.setHorizontalGroup(
-            jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jLayeredPane2Layout.setVerticalGroup(
-            jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 192, Short.MAX_VALUE)
-        );
+        jMenu1.setText("Settings");
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
+        jMenu3.setText("jMenu3");
+        jMenu1.add(jMenu3);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        jMenuBar.add(jMenu1);
+        jMenuBar.add(jMenu2);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(jMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(122, 122, 122)
-                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLayeredPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(436, 436, 436))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(212, 212, 212)
-                        .addComponent(jLayeredPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(134, 134, 134)
-                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(132, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jChatActionPerformed
+        try {
+            jAreaConv.setText("");
+
+            csv_read read = new csv_read();
+
+            tcpclient = new TCPclient(read.list.get(0).get(0),9200); // create Client Socket on IPadr,Port
+            TCPreceiver thread = new TCPreceiver(tcpclient.socket) ;
+            // Create the thread in charge of listening input streams
+            thread.start();
+
+            jSend.setText("Type something here...");
+            jSend.setForeground(Color.lightGray);
+            remoteAdr = jBoxModem.getSelectedItem().toString();
+            DataOutputStream out = new DataOutputStream(tcpclient.socket.getOutputStream());
+
+            //if( i == 0){
+                String ATdrop_buff = "+++ATZ4"+"\n"; // clear the buffer before set up a new remote Address
+                tcpclient.SendAT(ATdrop_buff);
+
+                //  i=1;
+                //}
+
+            ATadr = "+++AT!AR"+remoteAdr+"\n" ;
+
+            tcpclient.SendAT(ATadr);
+
+            csv_read readAdr = new csv_read();
+            /*
+            if (remoteAdr.equals("0")){
+                jAdr.setText("Listen Mode");
+            }
+            else{
+                */
+
+                jAdr.setText(readAdr.getAdr());
+
+            } catch (IOException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }//GEN-LAST:event_jChatActionPerformed
+
+    private void jFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFileMouseClicked
+
+    private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
+
+        JFileChooser popMenu = new JFileChooser("./ChatApp/Files/toSend");
+
+        popMenu.setDialogTitle("Choose a file to send");
+        popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        popMenu.setMultiSelectionEnabled(false);
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG, PDF & TIF", "jpeg", "png","pdf","jpg","tif");
+        popMenu.setFileFilter(filter); //desactiver le type par défault ??
+
+        // cancel button
+        int result = popMenu.showDialog(null,"Send");
+        if (result == JFileChooser.APPROVE_OPTION) {
+            try {
+
+                File selectedFile = popMenu.getSelectedFile();
+                jFile.setVisible(true);
+
+                /* if user wants to rescale an image */
+                if (state){
+
+                    String fileName = selectedFile.getName();
+                    Rescaling res = new Rescaling(fileName);
+
+                    File fileToSend = res.RescaleProcess(selectedFile);
+                    tcpclient.SendFile(fileToSend); // Perform the sending of the file selected
+                    state = false ;
+
+                }
+                /* no scaling */
+                else if (!state){
+                    tcpclient.SendFile(selectedFile);
+                }
+
+                /* deal with name : concatenate  */
+
+            } catch (IOException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            while ( jAreaConv.getText() != "File sucessfully received\n"){
+                jSend.setEditable(false);
+                jChat.setEnabled(false);
+                jConsole.setEnabled(false);
+                jSendIcon.setEnabled(false);
+                jFile.setEnabled(false);
+                jScale.setEnabled(false);
+            }
+
+            jSend.setEditable(true);
+            jChat.setEnabled(true);
+            jConsole.setEnabled(true);
+            jSendIcon.setEnabled(true);
+            jFile.setEnabled(true);
+            jScale.setEnabled(true);
+
+        } else if (result == JFileChooser.CANCEL_OPTION) {
+            jFile.setVisible(true);
+
+        }
+    }//GEN-LAST:event_jFileMousePressed
+
+    private void jSendIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMouseClicked
+        jSend.setText("");
+        jSend.setForeground(Color.BLACK);
+    }//GEN-LAST:event_jSendIconMouseClicked
+
+    private void jSendIconMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMousePressed
+        try {
+            // When clicked take the text written from the jSend write it in the display text area and send it to remote host
+
+            String Text = jSend.getText();
+
+            /* avoid String text to be interpreted as AT command */
+            char[] charArray = Text.toCharArray();
+            for ( int i = 0 ; i < charArray.length ; i++){
+                if (charArray[i] == plusByte){
+                    plusCpt++;
+                }
+                if (plusCpt == 3){
+                    triplePlus = true;
+                }
+
+            }
+
+            plusCpt = 0 ;
+
+            if ( triplePlus == false){
+                tcpclient.SendMessage(Text+"\n");
+                jSend.setText("");
+                jAreaConv.append("[Me] : "+Text+"\n");
+                jAreaConv.append("\n");
+                jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+
+            }
+            triplePlus = false ;
+
+        } catch (IOException ex) {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jSendIconMousePressed
+
+    private void jConsoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jConsoleMouseClicked
+        //to do    avoid the sending of AT commands while a file is received
+        ATConsole console = new ATConsole();
+        console.setVisible(true);
+        jSendAT.setText("Type AT commands here...");
+        jSendAT.setForeground(Color.lightGray);
+    }//GEN-LAST:event_jConsoleMouseClicked
+
+    private void jScaleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScaleMouseClicked
+        ScalingOption scale = new ScalingOption();
+        scale.setVisible(true);
+    }//GEN-LAST:event_jScaleMouseClicked
 
     /**
      * @param args the command line arguments
@@ -135,16 +460,56 @@ public class MainInterface extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainInterface().setVisible(true);
+                 new Thread() {
+                public void run() {
+                    try {
+                        display dis = new display();
+                        dis.welcome();
+   
+                        csv_read adr_socket = new csv_read();
+                        adr_socket.read();
+                        
+                        csv_read read = new csv_read();
+            
+                        String myRemoteAdr = adr_socket.list.get(0).get(1);
+                        String myIPadr = adr_socket.list.get(0).get(0);
+                        
+                        jBoxModem.removeItem(myRemoteAdr); // remove myRemoteAddress from the list of remote modem
+                        jIPModem.setText(myIPadr);
+                        jRemAdr.setText(myRemoteAdr);
+                        
+                        dis.SelectRemAdr();
+      
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                    } 
+                }
+               }.start();
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLayeredPane jLayeredPane1;
-    private javax.swing.JLayeredPane jLayeredPane2;
+    public static javax.swing.JTextField jAdr;
+    public static javax.swing.JTextArea jAreaConv;
+    public static javax.swing.JComboBox<String> jBoxModem;
+    private javax.swing.JButton jChat;
+    private javax.swing.JLabel jConsole;
+    private javax.swing.JLabel jFile;
+    public static javax.swing.JLabel jIPModem;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JLabel jMyAdr;
+    private javax.swing.JLabel jMyRemAdr;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jProfil;
+    public static javax.swing.JLabel jRemAdr;
+    private javax.swing.JLabel jScale;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jSend;
+    private javax.swing.JLabel jSendIcon;
     // End of variables declaration//GEN-END:variables
 }

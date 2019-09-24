@@ -6,7 +6,7 @@ package View;
 
 
 import javax.swing.WindowConstants;
-import static View.View.state;
+import static View.MainInterface.state;
 
 
 public class ScalingOption extends javax.swing.JFrame {
@@ -25,6 +25,7 @@ public class ScalingOption extends javax.swing.JFrame {
          
     }
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

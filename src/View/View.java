@@ -304,7 +304,7 @@ public class View extends javax.swing.JFrame{
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jChat)
@@ -316,7 +316,7 @@ public class View extends javax.swing.JFrame{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,7 +325,7 @@ public class View extends javax.swing.JFrame{
                         .addGap(18, 18, 18)
                         .addComponent(jFile))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
@@ -341,7 +341,9 @@ public class View extends javax.swing.JFrame{
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 6, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -424,7 +426,7 @@ public class View extends javax.swing.JFrame{
       
         try {
            // When clicked take the text written from the jSend write it in the display text area and send it to remote host
-           jSendIcon.setVisible(false);
+          
            String Text = jSend.getText();
            
             /* avoid String text to be interpreted as AT command */
@@ -462,12 +464,12 @@ public class View extends javax.swing.JFrame{
     }//GEN-LAST:event_jSendIconMousePressed
 
     private void jFileMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMouseReleased
-        jFile.setVisible(true);
+       
     }//GEN-LAST:event_jFileMouseReleased
 
     private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
        
-            jFile.setVisible(false);
+           
             JFileChooser popMenu = new JFileChooser("./ChatApp/Files/toSend"); 
 
             popMenu.setDialogTitle("Choose a file to send");

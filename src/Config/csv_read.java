@@ -5,7 +5,7 @@
 
 package Config;
 
-import static View.View.* ; 
+import static View.MainInterface.* ; 
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
