@@ -31,20 +31,68 @@ public class Pixels {
     
     public int[] PixelToARGB(BufferedImage image) throws IOException, InterruptedException{
          
-         /* tableau de int */
-        
+         
+        /* return a array of int representing [A,R,G,B] */
         Raster r = image.getData();
         int[] pixel = r.getPixels(0,0,r.getWidth(), r.getHeight(), (int[])null);
-        System.out.println(Arrays.toString(pixel));
-
-        
-         return pixel;
+        return pixel;
     }
     
+        public double[] redPixels(int[] Pixels, double max){
+            double[] normPixels = new double[32*32];
+            int [] RedPix = new int[32*32];
+            
+            for ( int i = 0 ; i < 32*32 ; i++){
+                System.arraycopy(Pixels, i*4, RedPix, i, 1);
+                normPixels[i] = RedPix[i]/ (double)max ;
+                
+            }
+            return normPixels;
+        }
+        public double[] greenPixels(int[] Pixels, double max){
+            double[] normPixels = new double[32*32];
+            int [] GreenPix = new int[32*32];
+            for ( int i = 0 ; i < 32*32 ; i++){
+                System.arraycopy(Pixels, (i*4)+1, GreenPix, i, 1);
+                normPixels[i] = (int) (GreenPix[i]/ (double)max) ;
+            }
+            return normPixels;
+        }
+        public double[] bluePixels(int[] Pixels, double max){
+            int [] BluePix = new int[32*32];
+            double[] normPixels = new double[32*32];
+            
+            for ( int i = 0 ; i < 32*32 ; i++){
+                System.arraycopy(Pixels, (i*4)+2, BluePix, i, 1);
+                normPixels[i] = BluePix[i]/ (double)max ;
+            }
+            
+            return normPixels;
+        }
+        public double[] alpha(int[] Pixels, double max){
+            int [] Alpha = new int[32*32];
+            double[] normPixels = new double[32*32];
+            
+            for ( int i = 0 ; i < 32*32 ; i++){
+                System.arraycopy(Pixels, (i*4)+3, Alpha, i, 1);
+                normPixels[i] = Alpha[i]/ (double)max ;
+            }
+             
+            return normPixels;
+        }
+        
     
-    
+        
+        
+
+        
     
 }
+
+    
+    
+    
+    
       
       
          //   BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);

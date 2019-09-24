@@ -32,10 +32,46 @@ import jwave.transforms.wavelets.Wavelet;
 public class main {
     public static void main(String [] args) throws IOException, InterruptedException{
         
-        int[] ARGB = new int[32*32*4];
+        int[] ARGB = new int[32*32*4]; // passer height*width
         BufferedImage img = ImageIO.read(new File("/Users/franck/Desktop/stop.png"));
         Pixels pix = new Pixels();
-        pix.PixelToARGB(img);
+        ARGB = pix.PixelToARGB(img);
+        
+        double [] Red = new double[32*32];
+        double [] Green = new double[32*32];
+        double [] Blue = new double[32*32];
+        double [] Alpha = new double[32*32]; //////???????????????????????????, max 
+        
+        Red = pix.redPixels(ARGB,255);
+        Green = pix.greenPixels(ARGB,255);
+        Blue = pix.bluePixels(ARGB,255);
+        Alpha =pix.alpha(ARGB,255);
+                
+        System.out.println(Arrays.toString(Red));
+        System.out.println(Arrays.toString(ARGB));
+        System.out.println(Arrays.toString(Blue));
+        System.out.println(Arrays.toString(Green));
+        System.out.println(Arrays.toString(Alpha));
+        
+         Transform transform = TransformBuilder.create( "Fast Wavelet Transform", "Haar");
+         double[ ] dwtRedcoeff = transform.forward(Red);
+         double[ ] dwtGreencoeff = transform.forward(Green);
+         double[ ] dwtBluecoeff = transform.forward(Blue);
+         double[ ] dwtAlphacoeff = transform.forward(Alpha);
+         
+         DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("/Users/franck/Desktop/newi.jpg")));
+         new SPIHT(dwtRedcoeff,4,32,dos );
+         
+         
+        
+        
+        
+        
+        
+      //  --> Construitre Red[], Green[], blue[], alpha[]
+      // divide each number by max value
+      // pondre un double float
+      // prendre chaque tableau "normalisé" et insérer dans DWT 
         
         
         
@@ -64,10 +100,8 @@ public class main {
         
         
             /* final part */
-            Transform transform = TransformBuilder.create( "Fast Wavelet Transform", "Haar");
-            Wavelet wavelet = transform.getWavelet( );
-           // double[ ] DWTcoeff = transform.forward( Double);
-            DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("/Users/franck/Desktop/newi.png")));
+           
+            //DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("/Users/franck/Desktop/newi")));
             //new SPIHT(DWTcoeff,4,32,dos );
     }
 }
