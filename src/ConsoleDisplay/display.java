@@ -75,11 +75,14 @@ public class display {
     }
     public void ConsoleSendFile(){
         System.out.println("");
-        System.out.println(" ChatApp > You are sending a file please wait...");
+        System.out.println(" ChatApp > You are sending a file...");
     }
     
-    public void FileSucess(String filename){
-         System.out.println(" ChatApp > File "+filename+" sucessfully sent to "+read.getAdr());
+    public void FileSucess(){
+         System.out.println(" ChatApp > File "+fileName+" sucessfully sent to "+read.getAdr());
+         System.out.println(" ChatApp > A message will be send notifying the state of the file");
+         System.out.println("");
+         
         
     }
     public void FileFeatures(String fileName, int size ,long beginningTime, long endTime){
@@ -105,15 +108,18 @@ public class display {
         }
         
         System.out.print(" ChatApp > "+df.format(ratio*100)+" % of the file received\r");
-       
-      
-    
+        
+  
     }
     
-    public void FileSent(){
-        
-        
-         System.out.println(" ChatApp > File sucessfully sent to "+read.getAdr());
-        
+    public void PacketLost(){
+        System.out.println("");
+        System.out.println(" ChatApp > Timeout has been reach due to packet losses");
+        System.out.println(" ChatApp > File can't be received");
+        System.out.println(" ChatApp > If you can't reach the user - it can take few minutes - reboot the modem");
+        System.out.println("");
     }
+    
+    
+    
 }

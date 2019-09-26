@@ -47,12 +47,12 @@ public class TCPreceiver extends Thread {
    
     
     private final String checkAT = "+++AT!AR:2:OK\r\n";
-    private final String adoptedRemoteAdr="+++AT:7:RADDR";
     private final String BuffnotEmpty = "+++AT!AR:27:ERROR"+" "+"BUFFERS"+" "+"ARE"+" "+"NOT"+" "+"EMPTY\r\n";
     private String str;
     private String str_sub ;
     private String fileName ; 
     private final String[] imgExt = {"ai", "eps","pdf","psd","jpg","jpeg","gif","tif","png","svg"} ;
+    
    
     private final byte txt_byte = 0x01 ;
     private final byte file_byte = 0x02 ;
@@ -60,7 +60,11 @@ public class TCPreceiver extends Thread {
     private byte byteType;
  
     public static boolean first_fragment = true ;
-    public static boolean clickable = true ;//???????,
+    public static boolean clickable = true ;
+    public boolean received ;
+    public boolean oneDipslay = true;
+    
+    public long end = 0 ; 
     
     private int size ;
     private int i = 0 ; 
@@ -87,26 +91,19 @@ public class TCPreceiver extends Thread {
         
         ByteArrayOutputStream recept = new ByteArrayOutputStream();
         byte [] fileSizeArray = new byte[4];
-      
-            
-       
+
         while (true){
-                    
-         
-          
-         
+            
+            /* set time for each new packet */ 
+            long start = System.currentTimeMillis();
+            
             try {
                 while  ( socket.getInputStream().available()>0){
                     
-                    
-                  
-                    
-                   
                     DataInputStream  input = new DataInputStream(socket.getInputStream());
                     byte[] ByteArray = new byte[socket.getInputStream().available()];
+                    received = false ;
               
-                    
-               
                     input.read(ByteArray);
                     if (first_fragment){
                     byteType = ByteArray[0];
@@ -132,10 +129,7 @@ public class TCPreceiver extends Thread {
                             i++;
                */
                             
-                          
-                       
-                            
-                            
+   
                             beginningTime = System.currentTimeMillis();
                             /* Get de size of the file from the Header */
                             System.arraycopy(ByteArray,1,fileSizeArray,0,4);
@@ -161,15 +155,14 @@ public class TCPreceiver extends Thread {
                             Dfile.FilePercent(ratio);
                             
                             first_fragment = false ;
-                            
-                            
-                          
-                            
+  
                             
                             /* if no fragmantation induced by the hardware */
                             if ( FILE.length == size){
                                 
                                 long endTime1 = System.currentTimeMillis();
+                                received = true;
+                               
                                 
                                 /* File creation */
                                 File file = new File("./ChatApp/Files/Received",fileName);
@@ -185,28 +178,24 @@ public class TCPreceiver extends Thread {
                                 display Displ = new display(fileName,size,beginningTime,endTime1);
                                 Displ.FileFeatures(fileName, size, beginningTime, endTime1);
                                 
-                                /* Send a message to confirm that file sucessfully received */
-                                String text = "File sucessfully received\n";
+                                /* Send a message to confirm that file successfully received */
+                                String text = "File successfully received\n";
                                 
                                 
                                 tcpclient.SendMessage(text+"\n");
                       
                                jAreaConv.append("[Me] : "+text+"\n");
-                               jAreaConv.append("\n");
+
                                jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
                         
-                               
-                             
-           
+   
                                 size = 0;
                                 ratio = 0;
                                 first_fragment = true ;
+                                end = 0 ; 
                                 
                                 
-                         
-                              
-                                
-                                
+      
                                 
                             /* Pop up window with the image file */   
                             
@@ -226,16 +215,14 @@ public class TCPreceiver extends Thread {
                                 }
                                 else {}
                             }
-                          
-                                
-                                
-                                    
+                   
                         }
                         }
                         
                         /* Data for conversation to be displayed */
                         
                         if (byteType == txt_byte){
+                           
                             
                             // avoid 
                             for ( int i = 0 ; i < ByteArray.length ; i++){
@@ -254,16 +241,23 @@ public class TCPreceiver extends Thread {
                                 }
                             }
                             str = new String(ByteArray) ; // Byte to String
+                            
+                           
+                   
+                   
+             
+                            
                             str_sub = str.substring(1); // Delete the type byte (first byte)
                             
-                     
-  
+                           
                             jAreaConv.append("["+remoteAdr+"] : "+str_sub+"\n"); // display text
                             jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
                         }
                         
+                        
                         /* AT command for setting the remote address */               
                         if (byteType == AT_byte){
+                             
                              ATcpt++; 
        
                             str = new String(ByteArray) ; // convert byte to string
@@ -275,62 +269,50 @@ public class TCPreceiver extends Thread {
                        
                                 
                                
-                        
+                        /**** to test ********/
                         }
                             if ( str.equals((BuffnotEmpty))){
                                // tcpclient.SendAT("+++ATZ4"+"\n");
                                 csv_read read = new csv_read();
                                 
                     
-                                System.out.println("clean buff send");
+                                System.out.println(" ChatApp > Transmission buffer not empty please restart");
                                // tcpclient.SendAT(ATadr);
                                 /* a tester clean puis reset remote adr*/
                                 
                             }
                             /* command for ATconsole */ 
                             if (ATcpt > 1){
-                                /*
-                                if (str.equals(checkAT)){
-                                System.out.println(" ChatApp > Remote Address has been set correctly");
-                                System.out.println(" ChatApp > You can chat and send files\n");
-                                }
-                                */
-                                 if(!str.equals(checkAT))
-                                jATdisplay.append("    Modem >  "+str+"\n");
+                           
+                                 if(!str.equals(checkAT)){
+                                    jATdisplay.append("    Modem >  "+str+"\n");
+                                 }
+                                 else{
+                                     System.out.println("arret du thread");
+                                 }
                             }
-                                
-                                
-                        
+                                 
+                            
+              
+                    }
+                }
                     
-                        
-                    }
-                    }
                     
                     /* fragments number x received */
                     else {
+                          
                         i++;
-                  
-                     
+                        /* set time after receving a fragment */ 
+                        end = System.currentTimeMillis();
                         
                         
-                       
-                        
-                        
-                        
-                   
-                        
-                        
+                            
+            
                         /* Reception */
                         recept.write(ByteArray, 0,ByteArray.length);
                         byte[] FILE = recept.toByteArray();
                         
-                        
-                        
-                      
-                        
-                        
-                        
-                       
+                    
                       /* Displays file tranfert progress in %tage */
                          ratio = ((float) FILE.length ) / ((float) size);
                          display Dfile = new display(ratio);
@@ -342,6 +324,7 @@ public class TCPreceiver extends Thread {
                         if ( FILE.length == size){
                             
                             long endTime2 = System.currentTimeMillis();
+                            received = true; 
                             
                             /* File creation */
                             File file = new File("./ChatApp/Files/Received",fileName);
@@ -358,18 +341,16 @@ public class TCPreceiver extends Thread {
                            displa.FileFeatures(fileName, size, beginningTime, endTime2);
                            
                            /* Send a message to confirm that file has been received */
-                           String text = "File sucessfully received\n";
+                           String text = "File successfully received\n";
                            tcpclient.SendMessage(text);
                            jAreaConv.append("[Me] : "+text+"\n");
-                            
-                            
-                            
+                         
                            
-                
-                            
+       
                             first_fragment = true ;
                             size = 0;
                             ratio = 0;
+                            end=0;
                
                             
                             /* Pop up window with the file */
@@ -384,6 +365,7 @@ public class TCPreceiver extends Thread {
                                     
                                     ImageDisplay display =new ImageDisplay();
                                     display.displayImage("./ChatApp/Files/Received",fileName);
+                                    
                                 }
                                 else {}
                             }
@@ -391,155 +373,63 @@ public class TCPreceiver extends Thread {
                             
                         }
                     }
-                    
-                    /*
-                    System.out.println("----------------------------------------------------------------------------------");
-                    System.out.println("\n");
-                    System.out.println("Fragment numero "+i+" : "+ Arrays.toString(ByteArray));
-                    System.out.println("\n");
-                    System.out.println("Taille du fichier sur 4 bytes : "+ Arrays.toString(fileSizeArray));
-                    System.out.println("Taille du fichier "+size);
-                    System.out.println("nombre byte du fichier recus jusqu'a maintenant "+byte_nb);
-                    System.out.println("Index tableau "+arrayIndex);
-                    */
-             
                    
-                     
-                      
-             
-                    
-                
             } 
                 
                 }  catch (IOException ex) {
                 Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                }
+            
+            
+           /* Timer of 15 seconds to inform the user of packet losses for file transfer */
+            
+            if (end!=0){
+                    if ( start-end > 15000){
+                    
+                        try {
+                            /* Displays */
+                            display dis = new display();
+                            dis.PacketLost();
+                            
+                            /* Reset ByteArrayOutputStream */
+                            recept.close();
+                            recept.reset();
+
+                            /* set initial paramters */
+                            first_fragment = true ;
+                            size = 0;
+                            ratio = 0;
+                            end = 0 ;
+                            
+                            /* Send a message to inform that file packets have been lost  */
+                            String text = "File packets have been lost\n"; 
+                            tcpclient.SendMessage(text+"\n");
+                            jAreaConv.append("[Me] : "+text+"\n");  
+                            jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+                            
+                            
+                             } catch (IOException ex) {
+                            Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                   
+                    }
+                        
+                       
+                           
+                        
             
             }
+            
+
+            
             
         } 
+    }
+}
         
         
-        }
+        
        
-        
-    
-
-            
-        
-
-
-/*******************************************************************************************************/
-                      
-    
-                /*
-                int t = ByteArray.length -1 ;
-                byte [] test = new byte[t] ;
-                System.arraycopy(ByteArray,1,test,0,t); // new array without the header
-                Inflater decompressor = new Inflater(); // decompression of the file
-                decompressor.setInput(test);
-                ByteArrayOutputStream bos = new ByteArrayOutputStream(test.length);
-                
-                byte[] buf = new byte[8192];
-                while (!decompressor.finished()) {
-                try {
-                int count = decompressor.inflate(buf);
-                bos.write(buf, 0, count);
-                } catch (DataFormatException e) {
-                }
-                }
-                try {
-                bos.close();
-                } catch (IOException e) {
-                }
-                byte[] decompressedData = bos.toByteArray();
-                FileOutputStream fileOut = new FileOutputStream("/home/ubiquity/Downloads/img.jpeg");
-                System.out.println("I have received a file");
-                fileOut.write(decompressedData);
-                System.out.println(Arrays.toString(decompressedData));
-                fileOut.close();
-                }
-                
-                else {
-                
-                }
-                }
-                System.out.println("nb de byte recu : "+ i);
-                
-                
-                
-                /*
-                if(str.substring(0,13).equals(adoptedRemoteAdr)){
-                System.out.println();
-                
-                System.out.println("Remote modem "+str.substring(14,15)+" send you a message while you were not connected");
-                jAreaConv.append("["+socket.getInetAddress()+"] : "+str.substring(17)+"\n"); // display text
-                }
-                */
-                
-                
-                
-                
-                
-                
-                //     ByteArrayOutputStream bos = new ByteArrayOutputStream(t);
-                
-                
-                //  while(socket.getInputStream().available() >0) {
-                //    bos.write(test);
-                
-                
-                
-                // }
-                
-                
-                //   byte[] Fragment = bos.toByteArray();
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                /*
-                byte[] Data = new byte[2192]; // a changer avec taille totale
-                
-                for ( int j = 0 ; j < 2 ; j++){
-                
-                System.arraycopy(Fragement,0,Data,j*1024,Fragement.length);
-                System.out.println(Arrays.toString(Data));
-                }
-                
-                ByteArrayInputStream bin = new ByteArrayInputStream(Data);
-                BufferedImage imageReceived = ImageIO.read(bin);
-                File fichier = new File("/home/ubiquity/Downloads/img.jpeg");
-                ImageIO.write(imageReceived, "jpeg",fichier);
-                System.out.println("I have received a file");
-                System.out.println(Arrays.toString(Data));
-                
-                //  System.out.println(Arrays.toString(decompressedData));
-                //  FileOutputStream fileOut = new FileOutputStream("/home/ubiquity/Downloads/img.jpeg");
-                //fileOut.write(decompressedData);
-                
-                
-                System.out.println("nb de byte recu : "+ i);
-                
-                
-                
-                
-                
-                int sizeInt = (byteSize & 0xFF) ;
-                System.out.println("taille fichier "+ sizeInt);
-                System.out.println(byteSize);
-                */
- 
-                // alimenter le tableau finale ici
-                // quand fin attente construire image
-           
-
-         
    
                    
             

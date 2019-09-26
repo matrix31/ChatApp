@@ -1,6 +1,6 @@
-/*
- * 
- */
+
+
+/* Image Processing on pixels */
 package SPIHT;
 
 
@@ -38,42 +38,42 @@ public class Pixels {
         return pixel;
     }
     
-        public double[] redPixels(int[] Pixels, double max){
-            double[] normPixels = new double[32*32];
-            int [] RedPix = new int[32*32];
+        public double[] redPixels(int[] Pixels, double max, int height, int width){
+            double[] normPixels = new double[height*width];
+            int [] RedPix = new int[height*width];
             
-            for ( int i = 0 ; i < 32*32 ; i++){
+            for ( int i = 0 ; i < height*width ; i++){
                 System.arraycopy(Pixels, i*4, RedPix, i, 1);
                 normPixels[i] = RedPix[i]/ (double)max ;
                 
             }
             return normPixels;
         }
-        public double[] greenPixels(int[] Pixels, double max){
-            double[] normPixels = new double[32*32];
-            int [] GreenPix = new int[32*32];
-            for ( int i = 0 ; i < 32*32 ; i++){
+        public double[] greenPixels(int[] Pixels, double max,int height, int width){
+            double[] normPixels = new double[height*width];
+            int [] GreenPix = new int[height*width];
+            for ( int i = 0 ; i < height*width ; i++){
                 System.arraycopy(Pixels, (i*4)+1, GreenPix, i, 1);
                 normPixels[i] = (int) (GreenPix[i]/ (double)max) ;
             }
             return normPixels;
         }
-        public double[] bluePixels(int[] Pixels, double max){
-            int [] BluePix = new int[32*32];
-            double[] normPixels = new double[32*32];
+        public double[] bluePixels(int[] Pixels, double max,int height, int width){
+            int [] BluePix = new int[height*width];
+            double[] normPixels = new double[height*width];
             
-            for ( int i = 0 ; i < 32*32 ; i++){
+            for ( int i = 0 ; i < height*width ; i++){
                 System.arraycopy(Pixels, (i*4)+2, BluePix, i, 1);
                 normPixels[i] = BluePix[i]/ (double)max ;
             }
             
             return normPixels;
         }
-        public double[] alpha(int[] Pixels, double max){
-            int [] Alpha = new int[32*32];
-            double[] normPixels = new double[32*32];
+        public double[] alpha(int[] Pixels, double max,int height, int width){
+            int [] Alpha = new int[height*width];
+            double[] normPixels = new double[height*width];
             
-            for ( int i = 0 ; i < 32*32 ; i++){
+            for ( int i = 0 ; i < height*width ; i++){
                 System.arraycopy(Pixels, (i*4)+3, Alpha, i, 1);
                 normPixels[i] = Alpha[i]/ (double)max ;
             }

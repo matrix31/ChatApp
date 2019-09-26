@@ -179,7 +179,7 @@ public class TCPclient {
              
             /* Console display */
             display disp = new display(fileName);
-            disp.FileSent();
+            disp.FileSucess();
             
             
            
@@ -191,74 +191,3 @@ public class TCPclient {
    
    
 }
- 
-
-
-     
- 
-    
-      
-/********************************************************************************
-      DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-      byte[] header ={0x02};
-      byte[] FILE = Files.readAllBytes(file.toPath());
-
-      // use of Deflater compression
-      Deflater compressor = new Deflater();
-      compressor.setLevel(Deflater.BEST_COMPRESSION);
-      compressor.setInput(FILE);
-      compressor.finish();
-      
-      ByteArrayOutputStream bos = new ByteArrayOutputStream(FILE.length);
-      byte[] buf = new byte[2048];
-      while (!compressor.finished()) {
-            int count = compressor.deflate(buf);
-            bos.write(buf, 0, count);
-      }
-      try {
-        bos.close();
-      }
-      catch (IOException e) {}
-      byte[] compressedData = bos.toByteArray();
-      byte[] Packet = new byte[header.length + compressedData.length];
-      
-      System.arraycopy(header,0,Packet,0,header.length);
-      System.arraycopy(compressedData, 0,Packet, header.length, compressedData.length);
-      
-      out.flush();
-      out.write(Packet);
-      out.flush(); 
-      
-      System.out.println(FILE.length);
-      System.out.println(compressedData.length); 
-      */
-      
-
-  
-
-//BufferedImage originalImage = ImageIO.read(file);
-       //float quality = 0.7f;
-   
-
-  // ByteArrayOutputStream os = new ByteArrayOutputStream(FILE.length);
-    /* Compresion */
-    
-    
-    //Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpeg");
-    //if (!writers.hasNext())
-    // throw new IllegalStateException("No writers found");
-    // ImageWriter writer = (ImageWriter) writers.next();
-    //ImageOutputStream ios = ImageIO.createImageOutputStream(os);
-    //writer.setOutput(ios);
-    //ImageWriteParam param = writer.getDefaultWriteParam();
-    // param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-    //param.setCompressionQuality(quality);
-    
-    /*           */ 
-    
-    
-    //ImageIO.write(originalImage,"jpeg",os);         // utiliser tableau de byte File au lieu de  la taille de FileToByte
-    //os.flush();                                   // 2192 vs 2883 byte 
-    
-    //byte [] FileToByte  = os.toByteArray(); // Array Byte of File 
- 

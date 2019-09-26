@@ -35,8 +35,8 @@ public class SPIHT {
         this.tab = tab ;
         this.dim = dim ;
         this.bpp = bpp ;
-        float[] LIP = new float[dim*dim] ;
-        float[] LSP = new float[dim*dim] ;
+        double[] LIP = new double[dim*dim] ;
+        double[] LSP = new double[dim*dim] ;
         LIS= new List();
         nrLIP = 0 ; 
         nrLSP = 0 ;
@@ -77,17 +77,18 @@ public class SPIHT {
         double max=0;
         for ( int i = 0 ; i < dim*dim ; i++ ){
             if ( Math.abs(tab[i]) > max ){
-                max = Math.abs(tab[i]);    
-            }   
+                max = Math.abs(tab[i]);                
+            }  
         }  
         double power = (double) Math.floor ( Math.log(max) / Math.log(2) );
-        return (float)Math.pow(2,power);
+        return (double)Math.pow(2,power);
+        
     } 
     /* end of retMax */  
     
     /*   code the coefficient at position(k,l) */
     public void treatCoef(int k,int l)throws EndCoding, IOException{   
-        double coef = tab [dim*k+l];
+        double coef = tab [(dim*k)+l];
         if ( Math.abs(coef) >= n){
             putBit(true);                                   //code SN(k,l)=1
             LSP[nrLSP++] = (float) (Math.abs(coef)-n);               //add coefficient(k,l) to the LSP
@@ -108,16 +109,16 @@ public class SPIHT {
         double n = retMax();                      //initializethethreshold
         // write thefile header
         dos.writeInt(dim);                 //sideoftheimage
-        dos.writeFloat((float) tab[0]);            //general average 
-        dos.writeFloat((float) n);                 //initial threshold
+        dos.writeDouble( tab[0]);            //general average 
+        dos.writeDouble(n);                 //initial threshold
         dos.writeFloat(bpp);               //encoding bitrate
         
         //step1 : Initialization
         
         //Initialize the LIP 
-        LIP[nrLIP++] = (float) tab[1];
-        LIP[nrLIP++] = (float) tab[dim];
-        LIP[nrLIP++] = (float) tab[dim+1];
+        LIP[nrLIP++] =  (float)  tab[1];
+        LIP[nrLIP++] =  (float) tab[dim];
+        LIP[nrLIP++] =  (float) tab[dim+1];
         
         //Initialize the LIS
         LIS.add(0,1,'A');
@@ -132,7 +133,7 @@ public class SPIHT {
                     if( Math.abs(LIP[i]) >= n ){
                         putBit(true);
                         //move the coefficient to the LSP
-                        LSP[nrLSP++]= (float) Math.abs( ( LIP[i]) - n);
+                        LSP[nrLSP++]=  (float) ((Math.abs(LIP[i]))-n) ;
                         //The previous bit 1 indicates the most significant bit of the
                         //coefficient. This coefficient will not be processed in the refinement
                         //step. Next code the sign of the coefficient.
@@ -145,9 +146,11 @@ public class SPIHT {
                         boolean nextBit;        //holds the next bit of the code
                         //process the LIS
                         for( LIS.start() ; LIS.current != null ; LIS.next()){
-                            if(!LIS.current.valid)
+                            if(!LIS.current.valid){
                                 continue; //step over the eliminated sets
-                                if(LIS.current.type=='A'){
+                            }
+                        
+                            if(LIS.current.type=='A'){
                                     nextBit=SD(LIS.current.i,LIS.current.j);
                                     putBit(nextBit);
                                     if(nextBit){
@@ -177,10 +180,10 @@ public class SPIHT {
                 }
             }
                     
-               
-            //step 3:
-                        
-            for( int i=0 ; i< noLSPPrev ; i++){
+              
+            //step 3:   Refinement
+          
+         for( int i=0 ; i< noLSPPrev ; i++){
                  if( LSP[i] >= n){
                      putBit(true);
                      LSP[i] -= n ;
@@ -189,9 +192,12 @@ public class SPIHT {
                     putBit(false);
                     noLSPPrev = nrLSP ;// No of coeficients that will be processed at
                     // the next crossing of step3
-                    //step4 : Update the threshold n/=2;
+                   
+                    
                 }
             }
+          //step4 : Update the threshold
+         n/=2;    
         }while(true);
     } // end of codeImage
     
@@ -226,7 +232,7 @@ public class SPIHT {
             dos.writeByte(byteCod);
             
             if(noBitsCodif >= lungCod){
-            dos.close();
+                dos.close();
             throw new EndCoding("End of image coding");
             }
         }
