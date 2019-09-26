@@ -10,6 +10,8 @@ import ConsoleDisplay.display;
 import static View.ATConsole.jATdisplay;
 import static View.MainInterface.jAreaConv;
 import ImageProcessing.ImageDisplay;
+import static View.MainInterface.jAdr;
+import static View.MainInterface.jBoxModem;
 import static View.MainInterface.remoteAdr;
 import static View.MainInterface.tcpclient;
 import java.awt.event.ActionEvent;
@@ -48,6 +50,7 @@ public class TCPreceiver extends Thread {
     
     private final String checkAT = "+++AT!AR:2:OK\r\n";
     private final String BuffnotEmpty = "+++AT!AR:27:ERROR"+" "+"BUFFERS"+" "+"ARE"+" "+"NOT"+" "+"EMPTY\r\n";
+    private final String autoSetAdr = "+++AT:7:RADDR,1\r\n";
     private String str;
     private String str_sub ;
     private String fileName ; 
@@ -261,41 +264,77 @@ public class TCPreceiver extends Thread {
                              ATcpt++; 
        
                             str = new String(ByteArray) ; // convert byte to string
+                            
 
                             if (str.equals(checkAT)){
+                           
                                 
                                 display d = new display();
                                 d.adrSetOk();
-                       
-                                
-                               
-                        /**** to test ********/
-                        }
-                            if ( str.equals((BuffnotEmpty))){
-                               // tcpclient.SendAT("+++ATZ4"+"\n");
-                                csv_read read = new csv_read();
-                                
-                    
-                                System.out.println(" ChatApp > Transmission buffer not empty please restart");
-                               // tcpclient.SendAT(ATadr);
-                                /* a tester clean puis reset remote adr*/
-                                
+                            }                     
+                            if ( str.equals((BuffnotEmpty))){                     
+                                System.out.println(" ChatApp > Transmission buffer not empty please try again or restart");         
                             }
-                            /* command for ATconsole */ 
-                            if (ATcpt > 1){
+                            /* command for ATconsole  or error messages */ 
+                            if (ATcpt > 2){
                            
                                  if(!str.equals(checkAT)){
-                                    jATdisplay.append("    Modem >  "+str+"\n");
+                                     
+                                     // En suspent
+                                        
+                                       
+                                       if(str.length() < 14){
+                                           jATdisplay.append("    Modem >  "+str+"\n");   
+                                       }
+                                       else{
+                                        String s = str.substring(0,14);
+                                    
+                                        if ( s.equals("+++AT:7:RADDR,")){
+                                             String RemAdr = str.substring(14,15);
+                                             jAreaConv.setText("    Remote modem "+RemAdr+" want to talk to you\n");
+                                             remoteAdr = RemAdr ;
+                                             jBoxModem.setSelectedItem(RemAdr);
+                                             
+                                             
+                                            
+                                             
+                                             csv_read csv = new csv_read();
+                                             jAdr.setText(csv.getAdr());
+                                             
+                                            
+                                             //jAreaConv.setText("    You can now select it\n");
+                                             
+                                             
+                                        }
+                                        else{
+                                     
+                                        jATdisplay.append("    Modem >  "+str+"\n");
+                                        }
+                                       }
+                                     
+                                     
+                                 
+                                     
+                                    
                                  }
-                                 else{
-                                     System.out.println("arret du thread");
+                                 if(str.equals(BuffnotEmpty)){
+                                     System.out.println(" ChatApp > Transmission buffer not empty please try again or restart");
+                                     
                                  }
+                                
+      
                             }
+                            }
+                                     
+                                     
+                                 }
+                            
+            
                                  
                             
               
-                    }
-                }
+                    
+                
                     
                     
                     /* fragments number x received */

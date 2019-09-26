@@ -7,8 +7,6 @@ import Config.csv_read;
 import static Network.TCPreceiver.first_fragment;
 
 import java.text.DecimalFormat;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class display {
@@ -29,7 +27,7 @@ public class display {
     
     
     /* Constructors */
-    public display( String filename){
+    public display( String fileName){
         this.fileName= fileName ;
         
     }
@@ -80,7 +78,7 @@ public class display {
     
     public void FileSucess(){
          System.out.println(" ChatApp > File "+fileName+" sucessfully sent to "+read.getAdr());
-         System.out.println(" ChatApp > A message will be send notifying the state of the file");
+         System.out.println(" ChatApp > A message will be send notifying the state of the file, please wait");
          System.out.println("");
          
         
@@ -113,7 +111,7 @@ public class display {
     }
     
     public void PacketLost(){
-        System.out.println("");
+        System.out.println();
         System.out.println(" ChatApp > Timeout has been reach due to packet losses");
         System.out.println(" ChatApp > File can't be received");
         System.out.println(" ChatApp > If you can't reach the user - it can take few minutes - reboot the modem");

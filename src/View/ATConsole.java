@@ -205,9 +205,9 @@ public class ATConsole extends javax.swing.JFrame {
     }//GEN-LAST:event_jItemCloseActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        String WebScript = "./ChatApp/Scripts/EvoWeb.sh";
+    
         try {
-            Process proc = new ProcessBuilder(WebScript).start();
+            Process proc = Runtime.getRuntime().exec("sensible-browser https://www.evologics.de");
         } catch (IOException ex) {
             Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -215,56 +215,35 @@ public class ATConsole extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        String WebScriptS = "./ChatApp/Scripts/Symbiosis.sh";
+       
 
-        Runtime r = Runtime.getRuntime();
-        Process pr;
         try {
-            pr = r.exec(WebScriptS);
-            pr.waitFor();// wait fot the end ;
+            Process proc = Runtime.getRuntime().exec("sensible-browser http://symbiosis.networks.imdea.org");
+          
         } catch (IOException ex) {
             Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jItemManualsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jItemManualsActionPerformed
-        String cmd = "./ChatApp/Scripts/manuals.sh";
+        
 
-        try {
-            Process proc = new ProcessBuilder(cmd).start();
-        } catch (IOException ex) {
-            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
+          //  Process proc1 = Runtime.getRuntime().exec("nautilus ./ChatApp/EvoLogics/Manuals/S2C\ User\ Guide");
+        
+       
 
-        Runtime r = Runtime.getRuntime();
-        Process pr;
-        /*
-        try {
-            pr = r.exec(cmd);
-            pr.waitFor();// wait fot the end ;
-        } catch (IOException ex) {
-            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
+        
     }//GEN-LAST:event_jItemManualsActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        String cmdadr = "./ChatApp/Scripts/Addressing.sh";
+        
 
-        Runtime r = Runtime.getRuntime();
-        Process pr;
-        try {
-            pr = r.exec(cmdadr);
-            pr.waitFor();// wait fot the end ;
-        } catch (IOException ex) {
-            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        }
+      
+         //   Process proc = Runtime.getRuntime().exec("nano ./ChatApp/adr_config.csv");
+        
+
+        
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**

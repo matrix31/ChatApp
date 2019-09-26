@@ -53,6 +53,7 @@ public class MainInterface extends javax.swing.JFrame {
         jSend.setLineWrap(true);
         jSend.setWrapStyleWord(true);
         jSend.setEditable((false));
+       
         
       
         
@@ -86,6 +87,9 @@ public class MainInterface extends javax.swing.JFrame {
         jBoxModem = new javax.swing.JComboBox<>();
         jIPModemLabel = new javax.swing.JLabel();
         jRemAdrLabel = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -152,6 +156,7 @@ public class MainInterface extends javax.swing.JFrame {
             }
         });
 
+        jChat.setBackground(new java.awt.Color(255, 255, 255));
         jChat.setText("Connect");
         jChat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,11 +168,12 @@ public class MainInterface extends javax.swing.JFrame {
         jAdr.setBackground(new java.awt.Color(182, 208, 243));
         jAdr.setFocusable(false);
 
+        jBoxModem.setBackground(new java.awt.Color(255, 255, 255));
         jBoxModem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4" }));
 
         jIPModemLabel.setText("Connected on local transceiver :");
 
-        jRemAdrLabel.setText("Available on local address :");
+        jRemAdrLabel.setText("Transceiver local address :");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -199,7 +205,7 @@ public class MainInterface extends javax.swing.JFrame {
                                 .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jChat))
-                            .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(52, 52, 52)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -248,10 +254,18 @@ public class MainInterface extends javax.swing.JFrame {
                         .addComponent(jSendIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
                         .addComponent(jFile)
-                        .addGap(0, 34, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
                 .addContainerGap())
         );
+
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -578,6 +592,9 @@ public class MainInterface extends javax.swing.JFrame {
     public static javax.swing.JLabel jConsole;
     private javax.swing.JLabel jFile;
     private static javax.swing.JLabel jIPModemLabel;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     public static javax.swing.JLabel jMyAdr;
     public static javax.swing.JLabel jMyRemAdr;
     private javax.swing.JPanel jPanel1;
