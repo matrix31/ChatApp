@@ -1,11 +1,12 @@
 
 /* UnderWater Chat App | Franck Bourzat | IMDEA Networks */
 
+/* This class uses a thread to receive data and make process on them */
+
 package Network;
 
 
 import Config.csv_read;
-import static Config.csv_read.read;
 import ConsoleDisplay.display;
 import static View.ATConsole.jATdisplay;
 import static View.MainInterface.jAreaConv;
@@ -13,33 +14,17 @@ import ImageProcessing.ImageDisplay;
 import static View.MainInterface.jAdr;
 import static View.MainInterface.jBoxModem;
 import static View.MainInterface.remoteAdr;
-import static View.MainInterface.state;
 import static View.MainInterface.tcpclient;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.Socket;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import java.lang.Object.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 
 
@@ -47,11 +32,9 @@ public class TCPreceiver extends Thread {
 
     public Socket socket;
 
-   
-    
+ 
     private final String checkAT = "+++AT!AR:2:OK\r\n";
     private final String BuffnotEmpty = "+++AT!AR:27:ERROR"+" "+"BUFFERS"+" "+"ARE"+" "+"NOT"+" "+"EMPTY\r\n";
-    private final String autoSetAdr = "+++AT:7:RADDR,1\r\n";
     private String str;
     private String str_sub ;
     private String fileName ; 
@@ -65,29 +48,26 @@ public class TCPreceiver extends Thread {
  
     public static boolean first_fragment = true ;
     public static boolean clickable = true ;
+    
+     /* boolean to disable the action that a user can send a file 
+    while he/she is receving one */
     public static boolean stateFileLocal = true ; 
     public boolean received ;
     public boolean oneDipslay = true;
     
-    /* boolean to disable the action that a user can send a file 
+    /* boolean to disable the action that a user can receive a file 
     while he/she is receving one */
     public static boolean stateFile = true ;  
     
-    public long end = 0 ; 
+    private long end = 0 ; 
     
     private int size ;
     private int i = 0 ; 
     private int byteFileSize;
     private int ATcpt = 0 ;
     private long beginningTime; 
+    
     private float ratio; 
-
-  
-   
-    
- 
-
-    
 
     // Constructor : take current socket in argument
     public TCPreceiver(Socket socket) {
@@ -112,7 +92,8 @@ public class TCPreceiver extends Thread {
                     DataInputStream  input = new DataInputStream(socket.getInputStream());
                     byte[] ByteArray = new byte[socket.getInputStream().available()];
                     received = false ;
-              
+                    
+                    /* read data */
                     input.read(ByteArray);
                     if (first_fragment){
                     byteType = ByteArray[0];
@@ -124,31 +105,13 @@ public class TCPreceiver extends Thread {
                         /* Data received from file */
                         if (byteType == file_byte){
                             
-                            stateFile = false ; 
-                           
-                         
-                            
-                            /*
-                            
-                            java.util.Timer time = new java.util.Timer();
-                            time.schedule(new TimerTask() {          
-                            public void run(){
-       
-                                System.out.print("pertes");
-  
-                            }
-                        },10000);
-       
-                            i++;
-               */
-                            
-   
+                            stateFile = false ;                        
                             beginningTime = System.currentTimeMillis();
+                            
                             /* Get de size of the file from the Header */
                             System.arraycopy(ByteArray,1,fileSizeArray,0,4);
                             ByteBuffer bytebuff = ByteBuffer.allocate(4);
                             bytebuff = ByteBuffer.wrap(fileSizeArray);
-                            
                             
                             size = bytebuff.getInt();
                             
@@ -168,7 +131,6 @@ public class TCPreceiver extends Thread {
                             Dfile.FilePercent(ratio);
                             
                             first_fragment = false ;
-  
                             
                             /* if no fragmantation induced by the hardware */
                             if ( FILE.length == size){
@@ -192,14 +154,10 @@ public class TCPreceiver extends Thread {
                                 Displ.FileFeatures(fileName, size, beginningTime, endTime1);
                                 
                                 /* Send a message to confirm that file successfully received */
-                                String text = "File successfully received\n";
-                                
-                                
+                                String text = "File successfully received\n"; 
                                 tcpclient.SendMessage(text+"\n");
-                      
-                               jAreaConv.append("[Me] : "+text+"\n");
-
-                               jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+                                jAreaConv.append("[Me] : "+text+"\n");
+                                jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
                         
    
                                 size = 0;
@@ -207,14 +165,9 @@ public class TCPreceiver extends Thread {
                                 first_fragment = true ;
                                 end = 0 ;
                                 stateFile = true ; 
-                                stateFileLocal = true ; // state to send nothing when receiveing
+                                stateFileLocal = true ; 
                                 
-                                
-      
-                                
-                            /* Pop up window with the image file */   
-                            
-                       
+                              
                             /* if not an image ->  not displayed */
                             String ext = "";
                             int point = fileName.lastIndexOf('.');
@@ -234,12 +187,10 @@ public class TCPreceiver extends Thread {
                         }
                         }
                         
-                        /* Data for conversation to be displayed */
-                        
+                        /* Data for conversation to be displayed */ 
                         if (byteType == txt_byte){
                            
-                            
-                            // avoid 
+                            // Avoid AT commands to be interpreted
                             for ( int i = 0 ; i < ByteArray.length ; i++){
                                 if (ByteArray[i]== 0x26){
                                     if (ByteArray[i+1]== 0x25){
@@ -255,52 +206,34 @@ public class TCPreceiver extends Thread {
                                     
                                 }
                             }
+                            
                             str = new String(ByteArray) ; // Byte to String
-                            
-                           
-                   
-                   
-             
-                            
                             str_sub = str.substring(1); // Delete the type byte (first byte)
-                            
-                           
                             jAreaConv.append("["+remoteAdr+"] : "+str_sub+"\n"); // display text
                             jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
                             
-                           if ( str_sub.equals("File successfully received\n")){
-                             
+                            if ( str_sub.equals("File successfully received\n")){ 
                                stateFileLocal = true ;
                                
-                           }
+                            }
                            else {
-                               
                                 if( str_sub.equals("File packets have been lost\n")){
-                                  
-                               
-                               stateFileLocal = true ;
-                               
-                           }
-                           }
-                           
-                           
+                                    stateFileLocal = true ;
+                                }
+                           }   
                         }
-                        
                         
                         /* AT command for setting the remote address */               
                         if (byteType == AT_byte){
-                             
                              ATcpt++; 
-       
-                            str = new String(ByteArray) ; // convert byte to string
+                             str = new String(ByteArray) ; // convert byte to string
                             
-
                             if (str.equals(checkAT)){
-                           
-                                
+                                /* Address is ok */
                                 display d = new display();
                                 d.adrSetOk();
-                            }                     
+                            } 
+                            /* Buffer not empty failure */
                             if ( str.equals((BuffnotEmpty))){                     
                                 System.out.println(" ChatApp > Transmission buffer not empty please try again or restart");         
                             }
@@ -308,82 +241,51 @@ public class TCPreceiver extends Thread {
                             if (ATcpt > 2){
                            
                                  if(!str.equals(checkAT)){
-                                     
-                                
-                                        
-                                       
+
                                        if(str.length() < 14){
                                            jATdisplay.append("    Modem >  "+str+"\n");   
                                        }
+                                       
                                        else{
+                                           
+                                        /* listen mode processing */
                                         String s = str.substring(0,14);
-                                    
                                         if ( s.equals("+++AT:7:RADDR,")){
                                              String RemAdr = str.substring(14,15);
                                              jAreaConv.setText("    Remote modem "+RemAdr+" want to communicate to you\n");
                                              remoteAdr = RemAdr ;
                                              jBoxModem.setSelectedItem(RemAdr);
-                                             
-                                             
-                                            
-                                             
                                              csv_read csv = new csv_read();
-                                             jAdr.setText(csv.getAdr());
-                                             
-                                            
-                                        
-                                             
-                                             
+                                             jAdr.setText(csv.getAdr());                                               
                                         }
                                         else{
-                                     
-                                        jATdisplay.append("    Modem >  "+str+"\n");
+                                            jATdisplay.append("    Modem >  "+str+"\n");
                                         }
-                                       }
-                                     
-                                     
-                                 
-                                     
-                                    
+                                       }   
                                  }
                                  if(str.equals(BuffnotEmpty)){
-                                     System.out.println(" ChatApp > Transmission buffer not empty please try again or restart");
-                                     
+                                     System.out.println(" ChatApp > Transmission buffer not empty please try again or restart");   
                                  }
                                 
       
                             }
-                            }
+                        }
                                      
                                      
-                                 }
-                            
-            
-                                 
-                            
-              
-                    
-                
-                    
-                    
+                }
                     /* fragments number x received */
                     else {
                           
                         i++;
                         /* set time after receving a fragment */ 
                         end = System.currentTimeMillis();
-                        
-                        
-                        
-                     
-                            
-            
+ 
                         /* Reception */
                         recept.write(ByteArray, 0,ByteArray.length);
                         byte[] FILE = recept.toByteArray();
                         
                     
-                      /* Displays file tranfert progress in %tage */
+                         /* Displays file tranfert progress in %tage */
                          ratio = ((float) FILE.length ) / ((float) size);
                          display Dfile = new display(ratio);
                          csv_read read = new csv_read();
@@ -415,18 +317,14 @@ public class TCPreceiver extends Thread {
                            tcpclient.SendMessage(text);
                            jAreaConv.append("[Me] : "+text+"\n");
                          
-                           
-       
                             first_fragment = true ;
                             size = 0;
                             ratio = 0;
                             end=0;
                             stateFile = true; 
                            
-               
                             
                             /* Pop up window with the file */
-                            
                             String ext = "";
                             int point = fileName.lastIndexOf('.');
                             if (i > 0) {
@@ -448,13 +346,12 @@ public class TCPreceiver extends Thread {
                    
             } 
                 
-                }  catch (IOException ex) {
+        }  catch (IOException ex) {
                 Logger.getLogger(TCPreceiver.class.getName()).log(Level.SEVERE, null, ex);
-                }
+           }
             
             
-           /* Timer of 15 seconds to inform the user of packet losses for file transfer */
-            
+           /* Timer of 15 seconds to inform the user of packet losses for file transfer */         
             if (end!=0){
                     if ( start-end > 15000){
                     
@@ -473,7 +370,7 @@ public class TCPreceiver extends Thread {
                             ratio = 0;
                             end = 0 ;
                             stateFile = true; 
-                       //     stateFileLocal = true;
+                   
                             
                             /* Send a message to inform that file packets have been lost  */
                             String text = "File packets have been lost"; 
@@ -487,16 +384,7 @@ public class TCPreceiver extends Thread {
                         }
                    
                     }
-                        
-                       
-                           
-                        
-            
-            }
-            
-
-            
-            
+            }  
         } 
     }
 }
