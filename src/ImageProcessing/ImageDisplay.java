@@ -20,8 +20,7 @@ public class ImageDisplay {
     }
     
     public void displayImage(String path, String fileName) throws IOException {
-        
-                                    
+                                     
         BufferedImage bimg = ImageIO.read(new File("./Files/Received",fileName));
    
         int width = bimg.getWidth(); 
