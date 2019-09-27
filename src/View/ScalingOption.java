@@ -1,16 +1,16 @@
 
 /* UnderWater Chat App | Franck Bourzat | IMDEA Networks */
 
+/* Option of weight and height interface */
+
 
 package View;
 
 
 import javax.swing.WindowConstants;
 import static View.MainInterface.state;
-import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 
 public class ScalingOption extends javax.swing.JFrame {
@@ -59,11 +59,6 @@ public class ScalingOption extends javax.swing.JFrame {
         jWidth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "200", "300", "400", "500", "600", "700", "800" }));
 
         jHeight.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "200", "300", "400", "500", "600", "700", "800" }));
-        jHeight.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jHeightActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Height");
 
@@ -139,16 +134,11 @@ public class ScalingOption extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jHeightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHeightActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jHeightActionPerformed
-
     private void ApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApplyActionPerformed
          height = (String) jHeight.getSelectedItem();
          width = (String) jWidth.getSelectedItem();
          state = true ;
          
-         /**** a tester ******/ 
         float h = Float.valueOf(height);
         float  w = Float.valueOf((width));
         

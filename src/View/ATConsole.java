@@ -1,6 +1,7 @@
 
 /* UnderWater Chat App | Franck Bourzat | IMDEA Networks */
 
+/* AT console interface to send AT commands */
 
 
 package View;
@@ -16,17 +17,11 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import static javax.swing.JComponent.WHEN_FOCUSED;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 
 
-/**
- *
- * @author franck
- */
 public class ATConsole extends javax.swing.JFrame {
 
     /**
@@ -40,19 +35,14 @@ public class ATConsole extends javax.swing.JFrame {
         Insets in = new Insets(0,30,0,30); 
         jATdisplay.setMargin(in);
       
-        
         jSendAT.setLineWrap(true);
         jSendAT.setWrapStyleWord(true);
         
         this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE); // hidding windows
        
-  
-        
-        
-        
-        
-       Border border = BorderFactory.createLineBorder(Color.white);
-     //  jATdispaly.setBorder(BorderFactory.createCompoundBorder(border,BorderFactory.createEmptyBorder(0, 0, 0, 0)));
+ 
+        Border border = BorderFactory.createLineBorder(Color.white);
+   
     }
 
     /**
@@ -180,16 +170,12 @@ public class ATConsole extends javax.swing.JFrame {
     private void jItemManualsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jItemManualsActionPerformed
         
 
-       
         try {
             Process proc1 = Runtime.getRuntime().exec("nautilus ./EvoLogics/Manuals");
         } catch (IOException ex) {
             Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-       
-
-        
+         
     }//GEN-LAST:event_jItemManualsActionPerformed
 
     /**
