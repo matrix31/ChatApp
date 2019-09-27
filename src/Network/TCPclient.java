@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
+import static Network.TCPreceiver.stateFileLocal;
 
 
 public class TCPclient {
@@ -103,7 +104,8 @@ public class TCPclient {
 
    
    public void SendFile(File file) throws IOException, InterruptedException{
-
+       
+            stateFileLocal = false ;
             display dis = new display();
             dis.ConsoleSendFile();
       

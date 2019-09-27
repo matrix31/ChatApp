@@ -9,6 +9,7 @@ import ImageProcessing.Rescaling;
 import Network.TCPclient;
 import Network.TCPreceiver;
 import static Network.TCPreceiver.stateFile;
+import static Network.TCPreceiver.stateFileLocal;
 import static View.ATConsole.jSendAT;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -274,6 +275,8 @@ public class MainInterface extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jMenuBar1.setBackground(new java.awt.Color(182, 208, 243));
+
         jMenu1.setText("File");
 
         jMenuItem1.setText("Received");
@@ -403,59 +406,62 @@ public class MainInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jFileMouseClicked
 
     private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
-        
-        if(clickable){
-            if(stateFile){
-            JFileChooser popMenu = new JFileChooser("/home");
+       System.out.println(stateFileLocal);
+        if(stateFileLocal){
+            
+            if(clickable){
+                if(stateFile){
+                JFileChooser popMenu = new JFileChooser("/home");
 
-            popMenu.setDialogTitle("Choose a file to send");
-            popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            popMenu.setMultiSelectionEnabled(false);
+                popMenu.setDialogTitle("Choose a file to send");
+                popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                popMenu.setMultiSelectionEnabled(false);
 
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG, PDF & TIF", "jpeg", "png","pdf","jpg","tif");
-            popMenu.setFileFilter(filter); //desactiver le type par défault ??
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG, PDF & TIF", "jpeg", "png","pdf","jpg","tif");
+                popMenu.setFileFilter(filter); //desactiver le type par défault ??
 
-            // cancel button
-            int result = popMenu.showDialog(null,"Send");
-            if (result == JFileChooser.APPROVE_OPTION) {
-                try {
+                // cancel button
+                int result = popMenu.showDialog(null,"Send");
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    try {
 
-                    File selectedFile = popMenu.getSelectedFile();
+                        File selectedFile = popMenu.getSelectedFile();
+                        jFile.setVisible(true);
+
+
+
+                        /* if user wants to rescale an image */
+                        if (state){
+
+                            String fileName = selectedFile.getName();
+                            Rescaling res = new Rescaling(fileName);
+
+                            File fileToSend = res.RescaleProcess(selectedFile);
+                            tcpclient.SendFile(fileToSend); // Perform the sending of the file selected
+                            state = false ;
+
+                        }
+                        /* no scaling */
+                        else if (!state){
+                            tcpclient.SendFile(selectedFile);
+                        }
+
+
+
+                    } catch (IOException ex) {
+                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+
+
+                } else if (result == JFileChooser.CANCEL_OPTION) {
                     jFile.setVisible(true);
 
-                
-                    
-                    /* if user wants to rescale an image */
-                    if (state){
-
-                        String fileName = selectedFile.getName();
-                        Rescaling res = new Rescaling(fileName);
-
-                        File fileToSend = res.RescaleProcess(selectedFile);
-                        tcpclient.SendFile(fileToSend); // Perform the sending of the file selected
-                        state = false ;
-
-                    }
-                    /* no scaling */
-                    else if (!state){
-                        tcpclient.SendFile(selectedFile);
-                    }
-
-           
-
-                } catch (IOException ex) {
-                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-
-
-            } else if (result == JFileChooser.CANCEL_OPTION) {
-                jFile.setVisible(true);
-
             }
-        }
+            }
         }
     }//GEN-LAST:event_jFileMousePressed
 
@@ -466,34 +472,38 @@ public class MainInterface extends javax.swing.JFrame {
 
     private void jSendIconMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMousePressed
         try {
-            if(clickable){
-            // When clicked take the text written from the jSend write it in the display text area and send it to remote host
-            
-            String Text = jSend.getText();
+            if(stateFileLocal){
+                if(stateFile){
+                    if(clickable){
+                    // When clicked take the text written from the jSend write it in the display text area and send it to remote host
 
-            /* avoid String text to be interpreted as AT command */
-            char[] charArray = Text.toCharArray();
-            for ( int i = 0 ; i < charArray.length ; i++){
-                if (charArray[i] == plusByte){
-                    plusCpt++;
+                    String Text = jSend.getText();
+
+                    /* avoid String text to be interpreted as AT command */
+                    char[] charArray = Text.toCharArray();
+                    for ( int i = 0 ; i < charArray.length ; i++){
+                        if (charArray[i] == plusByte){
+                            plusCpt++;
+                        }
+                        if (plusCpt == 3){
+                            triplePlus = true;
+                        }
+
+                    }
+
+                    plusCpt = 0 ;
+
+                    if ( triplePlus == false){
+                        tcpclient.SendMessage(Text+"\n");
+                        jSend.setText("");
+                        jAreaConv.append("[Me] : "+Text+"\n");
+                        jAreaConv.append("\n");
+                        jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+
+                    }
+                    triplePlus = false ;
+                    }
                 }
-                if (plusCpt == 3){
-                    triplePlus = true;
-                }
-
-            }
-
-            plusCpt = 0 ;
-
-            if ( triplePlus == false){
-                tcpclient.SendMessage(Text+"\n");
-                jSend.setText("");
-                jAreaConv.append("[Me] : "+Text+"\n");
-                jAreaConv.append("\n");
-                jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
-
-            }
-            triplePlus = false ;
             }
 
         } catch (IOException ex) {
@@ -503,19 +513,22 @@ public class MainInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jSendIconMousePressed
 
     private void jConsoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jConsoleMouseClicked
-        //to do    avoid the sending of AT commands while a file is received
         
-        ATConsole ATconsole = new ATConsole();
-        ATconsole.setVisible(true);
-       ATconsole.setTitle("AT commands console");
-       ATconsole.setLocationRelativeTo(null);
-        jSendAT.setText("Type AT commands here...");
-        jSendAT.setForeground(Color.lightGray);
-        if (clickable){
-            jSendAT.setEditable(true);
+        if(stateFileLocal){
+            if (stateFile){  //boolean to  avoid the sending of AT commands while a file is received
+                ATConsole ATconsole = new ATConsole();
+                ATconsole.setVisible(true);
+                ATconsole.setTitle("AT commands console");
+                ATconsole.setLocationRelativeTo(null);
+                jSendAT.setText("Type AT commands here...");
+                jSendAT.setForeground(Color.lightGray);
+                if (clickable){
+                    jSendAT.setEditable(true);
+                }
+                else{
+                    jSendAT.setEditable(false);
+            }
         }
-        else{
-            jSendAT.setEditable(false);
         }
         
     }//GEN-LAST:event_jConsoleMouseClicked
@@ -539,55 +552,122 @@ public class MainInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jSendMouseClicked
 
     private void jSendKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jSendKeyPressed
-        
+        if(!stateFileLocal){
             if (evt.getKeyChar() == '\n'){
-                try {
-                    int condition = WHEN_FOCUSED;
-                    // get our maps for binding from the chatEnterArea JTextArea
-                    InputMap inputMap = jSend.getInputMap(condition);
-                    KeyStroke enterStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 
-                    // tell input map that we are handling the enter key
-                    inputMap.put(enterStroke, enterStroke.toString());
-                    String Text = jSend.getText();
-
-
-
-                    /* avoid String text to be interpreted as AT command */
-                    /*
-                    char[] charArray = Text.toCharArray();
-                    for ( int i = 0 ; i < charArray.length ; i++){
-                        if (charArray[i] == plusByte){
-                            plusCpt++; 
-                        }
-                        if (plusCpt == 3){
-                            triplePlus = true;
-                            charArray[i-2] = '&';
-                            charArray[i-1] = '1';
-                            charArray[i] ='A';
-                        }
                     }
-                    plusCpt = 0 ;
-                    if ( triplePlus == false){
-                    */
-                            tcpclient.SendMessage(Text+"\n");
-                            jSend.setText("");
-                            jAreaConv.append("[Me] : "+Text+"\n");
-                            jAreaConv.append("\n");
-                            jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+            else {
+                if (evt.getKeyChar() == '\n'){
+                    try {
+                        int condition = WHEN_FOCUSED;
+                        // get our maps for binding from the chatEnterArea JTextArea
+                        InputMap inputMap = jSend.getInputMap(condition);
+                        KeyStroke enterStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 
-                    //}
-                   // triplePlus = false ; 
-
-                  
+                        // tell input map that we are handling the enter key
+                        inputMap.put(enterStroke, enterStroke.toString());
+                        String Text = jSend.getText();
 
 
-                } catch (IOException ex) {
-                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-                }
+
+                        /* avoid String text to be interpreted as AT command */
+                        /*
+                        char[] charArray = Text.toCharArray();
+                        for ( int i = 0 ; i < charArray.length ; i++){
+                            if (charArray[i] == plusByte){
+                                plusCpt++; 
+                            }
+                            if (plusCpt == 3){
+                                triplePlus = true;
+                                charArray[i-2] = '&';
+                                charArray[i-1] = '1';
+                                charArray[i] ='A';
+                            }
+                        }
+                        plusCpt = 0 ;
+                        if ( triplePlus == false){
+                        */
+                                tcpclient.SendMessage(Text+"\n");
+                                jSend.setText("");
+                                jAreaConv.append("[Me] : "+Text+"\n");
+                                jAreaConv.append("\n");
+                                jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+
+                        //}
+                       // triplePlus = false ; 
 
 
+
+
+                    } catch (IOException ex) {
+                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+               }
             }
+        }
+            else{
+   
+                 if(!stateFile){
+                    if (evt.getKeyChar() == '\n'){
+
+                    }
+                 }
+                    else {
+                          if (evt.getKeyChar() == '\n'){
+                            try {
+                                int condition = WHEN_FOCUSED;
+                                // get our maps for binding from the chatEnterArea JTextArea
+                                InputMap inputMap = jSend.getInputMap(condition);
+                                KeyStroke enterStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+
+                                // tell input map that we are handling the enter key
+                                inputMap.put(enterStroke, enterStroke.toString());
+                                String Text = jSend.getText();
+
+
+
+                                /* avoid String text to be interpreted as AT command */
+                                /*
+                                char[] charArray = Text.toCharArray();
+                                for ( int i = 0 ; i < charArray.length ; i++){
+                                    if (charArray[i] == plusByte){
+                                        plusCpt++; 
+                                    }
+                                    if (plusCpt == 3){
+                                        triplePlus = true;
+                                        charArray[i-2] = '&';
+                                        charArray[i-1] = '1';
+                                        charArray[i] ='A';
+                                    }
+                                }
+                                plusCpt = 0 ;
+                                if ( triplePlus == false){
+                                */
+                                        tcpclient.SendMessage(Text+"\n");
+                                        jSend.setText("");
+                                        jAreaConv.append("[Me] : "+Text+"\n");
+                                        jAreaConv.append("\n");
+                                        jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+
+                                //}
+                               // triplePlus = false ; 
+
+
+
+
+                            } catch (IOException ex) {
+                                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                       }
+                            }
+        }
+
+
+        
+               
+              
+
+
     }//GEN-LAST:event_jSendKeyPressed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -636,7 +716,8 @@ public class MainInterface extends javax.swing.JFrame {
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         try {
-            Process proc1 = Runtime.getRuntime().exec("nautilus ./EvoLogics/Manuals");
+           Process proc1 = Runtime.getRuntime().exec("nautilus ./EvoLogics/Manuals");
+           
         } catch (IOException ex) {
             Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
         }

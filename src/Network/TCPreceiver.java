@@ -13,6 +13,7 @@ import ImageProcessing.ImageDisplay;
 import static View.MainInterface.jAdr;
 import static View.MainInterface.jBoxModem;
 import static View.MainInterface.remoteAdr;
+import static View.MainInterface.state;
 import static View.MainInterface.tcpclient;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,6 +65,7 @@ public class TCPreceiver extends Thread {
  
     public static boolean first_fragment = true ;
     public static boolean clickable = true ;
+    public static boolean stateFileLocal = true ; 
     public boolean received ;
     public boolean oneDipslay = true;
     
@@ -123,6 +125,8 @@ public class TCPreceiver extends Thread {
                         if (byteType == file_byte){
                             
                             stateFile = false ; 
+                           
+                         
                             
                             /*
                             
@@ -203,6 +207,7 @@ public class TCPreceiver extends Thread {
                                 first_fragment = true ;
                                 end = 0 ;
                                 stateFile = true ; 
+                                stateFileLocal = true ; // state to send nothing when receiveing
                                 
                                 
       
@@ -262,6 +267,23 @@ public class TCPreceiver extends Thread {
                            
                             jAreaConv.append("["+remoteAdr+"] : "+str_sub+"\n"); // display text
                             jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+                            
+                           if ( str_sub.equals("File successfully received\n")){
+                               System.out.print("ok");
+                               stateFileLocal = true ;
+                               
+                           }
+                           else {
+                               
+                                if( str_sub.equals("File packets have been lost\n\n")){
+                                     System.out.print("okok");
+                               
+                               stateFileLocal = true ;
+                               
+                           }
+                           }
+                           
+                           
                         }
                         
                         
@@ -309,7 +331,7 @@ public class TCPreceiver extends Thread {
                                              jAdr.setText(csv.getAdr());
                                              
                                             
-                                             //jAreaConv.setText("    You can now select it\n");
+                                        
                                              
                                              
                                         }
@@ -400,6 +422,7 @@ public class TCPreceiver extends Thread {
                             ratio = 0;
                             end=0;
                             stateFile = true; 
+                           
                
                             
                             /* Pop up window with the file */
@@ -450,9 +473,10 @@ public class TCPreceiver extends Thread {
                             ratio = 0;
                             end = 0 ;
                             stateFile = true; 
+                       //     stateFileLocal = true;
                             
                             /* Send a message to inform that file packets have been lost  */
-                            String text = "File packets have been lost\n"; 
+                            String text = "File packets have been lost"; 
                             tcpclient.SendMessage(text+"\n");
                             jAreaConv.append("[Me] : "+text+"\n");  
                             jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
