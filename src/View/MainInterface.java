@@ -356,6 +356,7 @@ public class MainInterface extends javax.swing.JFrame {
             jAreaConv.setText("");
             clickable = true; 
             jSend.setEditable((true));
+            stateFileLocal = true;
           
             
             
@@ -406,7 +407,7 @@ public class MainInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jFileMouseClicked
 
     private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
-       System.out.println(stateFileLocal);
+     
         if(stateFileLocal){
             
             if(clickable){

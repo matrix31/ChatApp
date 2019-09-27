@@ -269,14 +269,14 @@ public class TCPreceiver extends Thread {
                             jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
                             
                            if ( str_sub.equals("File successfully received\n")){
-                               System.out.print("ok");
+                             
                                stateFileLocal = true ;
                                
                            }
                            else {
                                
-                                if( str_sub.equals("File packets have been lost\n\n")){
-                                     System.out.print("okok");
+                                if( str_sub.equals("File packets have been lost\n")){
+                                  
                                
                                stateFileLocal = true ;
                                

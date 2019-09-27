@@ -1,11 +1,13 @@
-/*
- * 
- */
+
+/* UnderWater Chat App | Franck Bourzat | IMDEA Network */
+
+/* This class is to make all the displays of the bash console */
+
+
 package ConsoleDisplay;
 
-import Config.csv_read;
 import static Network.TCPreceiver.first_fragment;
-
+import Config.csv_read;
 import java.text.DecimalFormat;
 
 
@@ -16,15 +18,8 @@ public class display {
     public long endTime;
     public float ratio ;
    
- 
-    
-    
     public DecimalFormat df = new DecimalFormat("#.##");
     public csv_read read = new csv_read();
-    
-   
-    
-    
     
     /* Constructors */
     public display( String fileName){
@@ -43,8 +38,6 @@ public class display {
         this.ratio = ratio ; 
         
     }
-    
- 
     
     public display(){
  
@@ -111,7 +104,7 @@ public class display {
     }
     
     public void PacketLost(){
-        System.out.println();
+        System.out.println("\n");
         System.out.println(" ChatApp > Timeout has been reach due to packet losses");
         System.out.println(" ChatApp > File can't be received");
         System.out.println(" ChatApp > If you can't reach the user - it can take few minutes - reboot the modem");
