@@ -1,0 +1,9 @@
+Put your addressing configuration here beginning by the addresse of your modem
+and your local addresses, following the format :
+
+IPaddress_of_local_transceiver::Transceiver_local_address
+
+For example 192.168.0.188::2
+
+Do not comment this file or add other strings that adddress
+

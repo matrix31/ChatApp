@@ -8,6 +8,7 @@ import ConsoleDisplay.display;
 import ImageProcessing.Rescaling;
 import Network.TCPclient;
 import Network.TCPreceiver;
+import static Network.TCPreceiver.stateFile;
 import static View.ATConsole.jSendAT;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -20,7 +21,10 @@ import java.util.logging.Logger;
 import javax.swing.InputMap;
 import static javax.swing.JComponent.WHEN_FOCUSED;
 import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.View;
@@ -48,11 +52,14 @@ public class MainInterface extends javax.swing.JFrame {
         jAreaConv.setLineWrap(true);
         jAreaConv.setWrapStyleWord(true);
         //jAreaConv.setEditable(false);
-        //jAreaConv.setAutoscrolls(true);
+ 
 
         jSend.setLineWrap(true);
         jSend.setWrapStyleWord(true);
         jSend.setEditable((false));
+ 
+       jScrollPane2.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
+     
        
         
       
@@ -89,7 +96,13 @@ public class MainInterface extends javax.swing.JFrame {
         jRemAdrLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,6 +117,7 @@ public class MainInterface extends javax.swing.JFrame {
         jSend.setBackground(new java.awt.Color(239, 239, 239));
         jSend.setColumns(20);
         jSend.setRows(5);
+        jSend.setAutoscrolls(false);
         jSend.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jSendMousePressed(evt);
@@ -205,17 +219,18 @@ public class MainInterface extends javax.swing.JFrame {
                                 .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jChat))
-                            .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSendIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jFile))))
+                            .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSendIcon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jFile, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(14, 14, 14))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,9 +275,59 @@ public class MainInterface extends javax.swing.JFrame {
         );
 
         jMenu1.setText("File");
+
+        jMenuItem1.setText("Received");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setText("Rescaled");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Options");
+
+        jMenuItem6.setText("See Manuals");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
+
+        jMenuItem5.setText("Addressing configuration");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuItem4.setText("Symbiosis project");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
+        jMenuItem3.setText("EvoLogics Website");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -340,7 +405,8 @@ public class MainInterface extends javax.swing.JFrame {
     private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
         
         if(clickable){
-            JFileChooser popMenu = new JFileChooser("./ChatApp/Files/toSend");
+            if(stateFile){
+            JFileChooser popMenu = new JFileChooser("/home");
 
             popMenu.setDialogTitle("Choose a file to send");
             popMenu.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -357,6 +423,8 @@ public class MainInterface extends javax.swing.JFrame {
                     File selectedFile = popMenu.getSelectedFile();
                     jFile.setVisible(true);
 
+                
+                    
                     /* if user wants to rescale an image */
                     if (state){
 
@@ -387,6 +455,7 @@ public class MainInterface extends javax.swing.JFrame {
                 jFile.setVisible(true);
 
             }
+        }
         }
     }//GEN-LAST:event_jFileMousePressed
 
@@ -521,6 +590,58 @@ public class MainInterface extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_jSendKeyPressed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        try {
+            Process proc = Runtime.getRuntime().exec("nautilus ./Files/Received");
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        
+        try {
+            Process proc = Runtime.getRuntime().exec("nautilus ./Files/Rescaled");
+          
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+            try {
+            Process proc = Runtime.getRuntime().exec("sensible-browser http://symbiosis.networks.imdea.org");
+          
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        try {
+            Process proc = Runtime.getRuntime().exec("sensible-browser https://www.evologics.de");
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+         try {
+            Process proc = Runtime.getRuntime().exec("nautilus .");
+            
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        try {
+            Process proc1 = Runtime.getRuntime().exec("nautilus ./EvoLogics/Manuals");
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -595,6 +716,12 @@ public class MainInterface extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     public static javax.swing.JLabel jMyAdr;
     public static javax.swing.JLabel jMyRemAdr;
     private javax.swing.JPanel jPanel1;

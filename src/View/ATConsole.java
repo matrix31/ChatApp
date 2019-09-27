@@ -214,22 +214,15 @@ public class ATConsole extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-       
-
-        try {
-            Process proc = Runtime.getRuntime().exec("sensible-browser http://symbiosis.networks.imdea.org");
-          
-        } catch (IOException ex) {
-            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void jItemManualsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jItemManualsActionPerformed
         
 
        
-          //  Process proc1 = Runtime.getRuntime().exec("nautilus ./ChatApp/EvoLogics/Manuals/S2C\ User\ Guide");
+        try {
+            Process proc1 = Runtime.getRuntime().exec("nautilus ./EvoLogics/Manuals");
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
        
 
@@ -238,13 +231,28 @@ public class ATConsole extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         
-
+        
       
-         //   Process proc = Runtime.getRuntime().exec("nano ./ChatApp/adr_config.csv");
+        try {
+            Process proc = Runtime.getRuntime().exec("nautilus .");
+            
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
 
         
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+
+        try {
+            Process proc = Runtime.getRuntime().exec("sensible-browser http://symbiosis.networks.imdea.org");
+
+        } catch (IOException ex) {
+            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments

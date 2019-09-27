@@ -67,6 +67,10 @@ public class TCPreceiver extends Thread {
     public boolean received ;
     public boolean oneDipslay = true;
     
+    /* boolean to disable the action that a user can send a file 
+    while he/she is receving one */
+    public static boolean stateFile = true ;  
+    
     public long end = 0 ; 
     
     private int size ;
@@ -118,6 +122,8 @@ public class TCPreceiver extends Thread {
                         /* Data received from file */
                         if (byteType == file_byte){
                             
+                            stateFile = false ; 
+                            
                             /*
                             
                             java.util.Timer time = new java.util.Timer();
@@ -168,7 +174,7 @@ public class TCPreceiver extends Thread {
                                
                                 
                                 /* File creation */
-                                File file = new File("./ChatApp/Files/Received",fileName);
+                                File file = new File("./Files/Received",fileName);
                                 FileOutputStream recvFile = new FileOutputStream(file);
                                 recvFile.write(FILE);
                                 recvFile.close();
@@ -195,7 +201,8 @@ public class TCPreceiver extends Thread {
                                 size = 0;
                                 ratio = 0;
                                 first_fragment = true ;
-                                end = 0 ; 
+                                end = 0 ;
+                                stateFile = true ; 
                                 
                                 
       
@@ -213,7 +220,7 @@ public class TCPreceiver extends Thread {
                                 if ( ext.equals(extt)){
                                     
                                     ImageDisplay display =new ImageDisplay();
-                                    display.displayImage("./ChatApp/Files/Received",fileName);
+                                    display.displayImage("./Files/Received",fileName);
                                 
                                 }
                                 else {}
@@ -280,7 +287,7 @@ public class TCPreceiver extends Thread {
                            
                                  if(!str.equals(checkAT)){
                                      
-                                     // En suspent
+                                
                                         
                                        
                                        if(str.length() < 14){
@@ -291,7 +298,7 @@ public class TCPreceiver extends Thread {
                                     
                                         if ( s.equals("+++AT:7:RADDR,")){
                                              String RemAdr = str.substring(14,15);
-                                             jAreaConv.setText("    Remote modem "+RemAdr+" want to talk to you\n");
+                                             jAreaConv.setText("    Remote modem "+RemAdr+" want to communicate to you\n");
                                              remoteAdr = RemAdr ;
                                              jBoxModem.setSelectedItem(RemAdr);
                                              
@@ -345,6 +352,8 @@ public class TCPreceiver extends Thread {
                         end = System.currentTimeMillis();
                         
                         
+                        
+                     
                             
             
                         /* Reception */
@@ -366,7 +375,7 @@ public class TCPreceiver extends Thread {
                             received = true; 
                             
                             /* File creation */
-                            File file = new File("./ChatApp/Files/Received",fileName);
+                            File file = new File("./Files/Received",fileName);
                             FileOutputStream recvFile = new FileOutputStream(file);
                             recvFile.write(FILE);                         
                             recvFile.close();
@@ -390,6 +399,7 @@ public class TCPreceiver extends Thread {
                             size = 0;
                             ratio = 0;
                             end=0;
+                            stateFile = true; 
                
                             
                             /* Pop up window with the file */
@@ -403,7 +413,7 @@ public class TCPreceiver extends Thread {
                                 if ( ext.equals(extt)){
                                     
                                     ImageDisplay display =new ImageDisplay();
-                                    display.displayImage("./ChatApp/Files/Received",fileName);
+                                    display.displayImage("./Files/Received",fileName);
                                     
                                 }
                                 else {}
@@ -439,6 +449,7 @@ public class TCPreceiver extends Thread {
                             size = 0;
                             ratio = 0;
                             end = 0 ;
+                            stateFile = true; 
                             
                             /* Send a message to inform that file packets have been lost  */
                             String text = "File packets have been lost\n"; 

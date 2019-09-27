@@ -45,7 +45,7 @@ public class Rescaling {
         String fileNameWithoutExt = fileName.replaceFirst("[.][^.]+$", "");
                            
         /* creation of the new file to send */                
-        File file = new File("./ChatApp/Files/Rescaled",fileNameWithoutExt.concat(height).concat("x").concat(width).concat(".jpeg"));
+        File file = new File("./Files/Rescaled",fileNameWithoutExt.concat(height).concat("x").concat(width).concat(".jpeg"));
         ImageIO.write( Image, "JPG", file ); //write the image to a file            
         return file ; 
          
