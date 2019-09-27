@@ -22,9 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.InputMap;
 import static javax.swing.JComponent.WHEN_FOCUSED;
 import javax.swing.JFileChooser;
-import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
-import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -38,34 +36,26 @@ public class MainInterface extends javax.swing.JFrame {
    private static final String plus = "+++";
    private int plusCpt = 0 ; 
    private final byte plusByte = 0x2b ;
-    private boolean triplePlus = false ;
-    public static boolean state = false ;
-    public boolean clickable = false ; 
-    int i = 0;
-    public static String remoteAdr;
-    public static String ATadr;
+   private boolean triplePlus = false ;
+   public static boolean state = false ;
+   public boolean clickable = false ; 
+   int i = 0;
+   public static String remoteAdr;
+   public static String ATadr;
     
     
     public MainInterface() {
         initComponents();
-       
-        /* Display parameters */
+      
         jAreaConv.setLineWrap(true);
         jAreaConv.setWrapStyleWord(true);
-        //jAreaConv.setEditable(false);
- 
-
         jSend.setLineWrap(true);
         jSend.setWrapStyleWord(true);
         jSend.setEditable((false));
  
-       jScrollPane2.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane2.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_NEVER);
      
-       
-        
-      
-        
-        
+
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // closing socket
     }
 
@@ -120,9 +110,6 @@ public class MainInterface extends javax.swing.JFrame {
         jSend.setRows(5);
         jSend.setAutoscrolls(false);
         jSend.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jSendMousePressed(evt);
-            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jSendMouseClicked(evt);
             }
@@ -166,9 +153,6 @@ public class MainInterface extends javax.swing.JFrame {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jFileMousePressed(evt);
             }
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jFileMouseClicked(evt);
-            }
         });
 
         jChat.setBackground(new java.awt.Color(255, 255, 255));
@@ -200,16 +184,16 @@ public class MainInterface extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jRemAdrLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jRemAdrLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jMyRemAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jIPModemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jIPModemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jMyAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScale)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScale)
+                        .addGap(18, 18, 18)
                         .addComponent(jConsole))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(76, 76, 76)
@@ -220,18 +204,17 @@ public class MainInterface extends javax.swing.JFrame {
                                 .addComponent(jBoxModem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jChat))
-                            .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jAdr, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSendIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jFile))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSendIcon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFile, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(14, 14, 14))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -357,10 +340,7 @@ public class MainInterface extends javax.swing.JFrame {
             clickable = true; 
             jSend.setEditable((true));
             stateFileLocal = true;
-          
-            
-            
-
+  
             csv_read read = new csv_read();
 
             tcpclient = new TCPclient(read.list.get(0).get(0),9200); // create Client Socket on IPadr,Port
@@ -373,13 +353,11 @@ public class MainInterface extends javax.swing.JFrame {
             remoteAdr = jBoxModem.getSelectedItem().toString();
             DataOutputStream out = new DataOutputStream(tcpclient.socket.getOutputStream());
 
-            //if( i == 0){
+          
                 String ATdrop_buff = "+++ATZ4"+"\n"; // clear the transmission buffer before set up a new remote Address
                 tcpclient.SendAT(ATdrop_buff);
 
-                //  i=1;
-                //}
-
+    
             ATadr = "+++AT!AR"+remoteAdr+"\n" ;
 
             tcpclient.SendAT(ATadr);
@@ -391,7 +369,6 @@ public class MainInterface extends javax.swing.JFrame {
             }
             else{
              
-
                 jAdr.setText(readAdr.getAdr());
             }
 
@@ -401,10 +378,6 @@ public class MainInterface extends javax.swing.JFrame {
                 Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
             }
     }//GEN-LAST:event_jChatActionPerformed
-
-    private void jFileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFileMouseClicked
 
     private void jFileMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFileMousePressed
      
@@ -429,8 +402,6 @@ public class MainInterface extends javax.swing.JFrame {
                         File selectedFile = popMenu.getSelectedFile();
                         jFile.setVisible(true);
 
-
-
                         /* if user wants to rescale an image */
                         if (state){
 
@@ -447,15 +418,11 @@ public class MainInterface extends javax.swing.JFrame {
                             tcpclient.SendFile(selectedFile);
                         }
 
-
-
                     } catch (IOException ex) {
                         Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
-
 
                 } else if (result == JFileChooser.CANCEL_OPTION) {
                     jFile.setVisible(true);
@@ -470,48 +437,6 @@ public class MainInterface extends javax.swing.JFrame {
         jSend.setText("");
         jSend.setForeground(Color.BLACK);
     }//GEN-LAST:event_jSendIconMouseClicked
-
-    private void jSendIconMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMousePressed
-        try {
-            if(stateFileLocal){
-                if(stateFile){
-                    if(clickable){
-                    // When clicked take the text written from the jSend write it in the display text area and send it to remote host
-
-                    String Text = jSend.getText();
-
-                    /* avoid String text to be interpreted as AT command */
-                    char[] charArray = Text.toCharArray();
-                    for ( int i = 0 ; i < charArray.length ; i++){
-                        if (charArray[i] == plusByte){
-                            plusCpt++;
-                        }
-                        if (plusCpt == 3){
-                            triplePlus = true;
-                        }
-
-                    }
-
-                    plusCpt = 0 ;
-
-                    if ( triplePlus == false){
-                        tcpclient.SendMessage(Text+"\n");
-                        jSend.setText("");
-                        jAreaConv.append("[Me] : "+Text+"\n");
-                        jAreaConv.append("\n");
-                        jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
-
-                    }
-                    triplePlus = false ;
-                    }
-                }
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }//GEN-LAST:event_jSendIconMousePressed
 
     private void jConsoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jConsoleMouseClicked
         
@@ -543,10 +468,6 @@ public class MainInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jScaleMouseClicked
 
-    private void jSendMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendMousePressed
-        
-    }//GEN-LAST:event_jSendMousePressed
-
     private void jSendMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendMouseClicked
         jSend.setText("");
         jSend.setForeground(Color.BLACK);
@@ -569,37 +490,13 @@ public class MainInterface extends javax.swing.JFrame {
                         inputMap.put(enterStroke, enterStroke.toString());
                         String Text = jSend.getText();
 
-
-
-                        /* avoid String text to be interpreted as AT command */
-                        /*
-                        char[] charArray = Text.toCharArray();
-                        for ( int i = 0 ; i < charArray.length ; i++){
-                            if (charArray[i] == plusByte){
-                                plusCpt++; 
-                            }
-                            if (plusCpt == 3){
-                                triplePlus = true;
-                                charArray[i-2] = '&';
-                                charArray[i-1] = '1';
-                                charArray[i] ='A';
-                            }
-                        }
-                        plusCpt = 0 ;
-                        if ( triplePlus == false){
-                        */
                                 tcpclient.SendMessage(Text+"\n");
                                 jSend.setText("");
                                 jAreaConv.append("[Me] : "+Text+"\n");
                                 jAreaConv.append("\n");
                                 jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
 
-                        //}
-                       // triplePlus = false ; 
-
-
-
-
+   
                     } catch (IOException ex) {
                         Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -625,48 +522,19 @@ public class MainInterface extends javax.swing.JFrame {
                                 inputMap.put(enterStroke, enterStroke.toString());
                                 String Text = jSend.getText();
 
-
-
-                                /* avoid String text to be interpreted as AT command */
-                                /*
-                                char[] charArray = Text.toCharArray();
-                                for ( int i = 0 ; i < charArray.length ; i++){
-                                    if (charArray[i] == plusByte){
-                                        plusCpt++; 
-                                    }
-                                    if (plusCpt == 3){
-                                        triplePlus = true;
-                                        charArray[i-2] = '&';
-                                        charArray[i-1] = '1';
-                                        charArray[i] ='A';
-                                    }
-                                }
-                                plusCpt = 0 ;
-                                if ( triplePlus == false){
-                                */
                                         tcpclient.SendMessage(Text+"\n");
                                         jSend.setText("");
                                         jAreaConv.append("[Me] : "+Text+"\n");
                                         jAreaConv.append("\n");
                                         jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
 
-                                //}
-                               // triplePlus = false ; 
-
-
-
-
+ 
                             } catch (IOException ex) {
                                 Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                             }
                        }
                             }
         }
-
-
-        
-               
-              
 
 
     }//GEN-LAST:event_jSendKeyPressed
@@ -723,6 +591,48 @@ public class MainInterface extends javax.swing.JFrame {
             Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jSendIconMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSendIconMousePressed
+        try {
+            if(stateFileLocal){
+                if(stateFile){
+                    if(clickable){
+                        // When clicked take the text written from the jSend write it in the display text area and send it to remote host
+
+                        String Text = jSend.getText();
+
+                        /* avoid String text to be interpreted as AT command */
+                        char[] charArray = Text.toCharArray();
+                        for ( int i = 0 ; i < charArray.length ; i++){
+                            if (charArray[i] == plusByte){
+                                plusCpt++;
+                            }
+                            if (plusCpt == 3){
+                                triplePlus = true;
+                            }
+
+                        }
+
+                        plusCpt = 0 ;
+
+                        if ( triplePlus == false){
+                            tcpclient.SendMessage(Text+"\n");
+                            jSend.setText("");
+                            jAreaConv.append("[Me] : "+Text+"\n");
+                            jAreaConv.append("\n");
+                            jAreaConv.setCaretPosition(jAreaConv.getDocument().getLength()); // auto scroll when adding text
+
+                        }
+                        triplePlus = false ;
+                    }
+                }
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jSendIconMousePressed
 
     /**
      * @param args the command line arguments

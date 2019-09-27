@@ -70,10 +70,7 @@ public class ATConsole extends javax.swing.JFrame {
         jSendAT = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuAT = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jItemManuals = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jItemClose = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
@@ -106,14 +103,6 @@ public class ATConsole extends javax.swing.JFrame {
 
         jMenuAT.setText("Options");
 
-        jMenuItem2.setText("Addressing Configuration");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        jMenuAT.add(jMenuItem2);
-
         jItemManuals.setText("See Manuals");
         jItemManuals.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,22 +110,6 @@ public class ATConsole extends javax.swing.JFrame {
             }
         });
         jMenuAT.add(jItemManuals);
-
-        jMenuItem1.setText("Symbiosis Project");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenuAT.add(jMenuItem1);
-
-        jMenuItem3.setText("EvoLogics Website");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenuAT.add(jMenuItem3);
 
         jItemClose.setText("Close");
         jItemClose.addActionListener(new java.awt.event.ActionListener() {
@@ -204,16 +177,6 @@ public class ATConsole extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jItemCloseActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-    
-        try {
-            Process proc = Runtime.getRuntime().exec("sensible-browser https://www.evologics.de");
-        } catch (IOException ex) {
-            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
-
     private void jItemManualsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jItemManualsActionPerformed
         
 
@@ -228,31 +191,6 @@ public class ATConsole extends javax.swing.JFrame {
 
         
     }//GEN-LAST:event_jItemManualsActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        
-        
-      
-        try {
-            Process proc = Runtime.getRuntime().exec("nautilus .");
-            
-        } catch (IOException ex) {
-            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-
-        
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-
-        try {
-            Process proc = Runtime.getRuntime().exec("sensible-browser http://symbiosis.networks.imdea.org");
-
-        } catch (IOException ex) {
-            Logger.getLogger(ATConsole.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -300,9 +238,6 @@ public class ATConsole extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenuAT;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     public static javax.swing.JTextArea jSendAT;
