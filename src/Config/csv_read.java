@@ -38,9 +38,9 @@ public class csv_read {
        
        /* Get the corresponding IP address of the remote address */
        /* if more than 4 modems, change the NumberOfAdr value and add in the JboxModem the correponding remote adr */
-       
+       csv_read r = new csv_read();
        String IPadr = "";
-       int NumberOfAdr = 4;
+       int NumberOfAdr = r.numberOfModem();
        
        for( int i = 0 ; i < NumberOfAdr ; i++){
            if ( remoteAdr.equals(list.get(i).get(1))){
