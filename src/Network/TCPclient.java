@@ -1,23 +1,17 @@
 
 /* UnderWater Chat App | Franck Bourzat | IMDEA Networks */
 
+/* This class implements methods to create a socket and sent data */
 
 package Network;
 
-import Config.csv_read;
 import ConsoleDisplay.display;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.nio.file.Path;
-import java.util.Arrays;
-import javax.imageio.ImageIO;
 import static Network.TCPreceiver.stateFileLocal;
 
 
@@ -25,16 +19,11 @@ public class TCPclient {
     
     public Socket socket ;
     private int fileSizeInt; 
-    private int cpt = 0 ;
-    private int  plusCpt = 0; 
-    private int i = 0 ; 
-    private boolean triplePlus = false ;
     private byte plusByte = 0x2b;
 
     
     public TCPclient(String adr, int port) throws ClassNotFoundException{
         try {
-            csv_read read = new csv_read();
             System.out.print("\n");
             socket = new Socket(adr,port);     // socket creation
         }
@@ -42,27 +31,19 @@ public class TCPclient {
         }
     }
     
-    
-    
-  
-    
+
   public void SendAT(String message) throws IOException{
       
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-           // byte[] Type_file ={0x0B};
+          
             byte[] Message = message.getBytes();
-           // byte[] Packet = new byte[Type_file.length + Message.length];
-            
-            
+ 
             /* Construction of the array */
-            // System.arraycopy(Type_file,0,Packet,0,Type_file.length);
-            //System.arraycopy(Message, 0,Packet, Type_file.length, Message.length);
-      
             out.flush();
             out.write(Message);
             out.flush();
           
-            /* Temporary store data to send in a buffer and clear it so data can be sent in one go : 
+            /* flush temporary store data to send in a buffer and clear it so data can be sent in one go : 
             improve performances */
          
   }
@@ -93,14 +74,14 @@ public class TCPclient {
             }
             
              /* Construction of the array */
-                        System.arraycopy(Type_file,0,Packet,0,Type_file.length);
-                        System.arraycopy(Message, 0,Packet, Type_file.length, Message.length);
+             System.arraycopy(Type_file,0,Packet,0,Type_file.length);
+             System.arraycopy(Message, 0,Packet, Type_file.length, Message.length);
 
-                        /* Sending */ 
-                        out.flush();
-                        out.write(Packet);
-                        out.flush();
-                }
+             /* Sending */ 
+              out.flush();
+              out.write(Packet);
+              out.flush();
+   }
 
    
    public void SendFile(File file) throws IOException, InterruptedException{
@@ -155,7 +136,7 @@ public class TCPclient {
             System.arraycopy(FILE, 0,Packet, Header.length, FILE.length);
 
             
-            int nb_frag = Math.round(Packet.length/1024);        // nb of fragmentes of 1024 bytes transmits
+            int nb_frag = Math.round(Packet.length/1024);        // nb of fragments of 1024 bytes
             int sizeLastFrag = Packet.length - (1024*nb_frag) ;
            
             /* fragmenting in 1024 packet bytes */
@@ -183,13 +164,6 @@ public class TCPclient {
             display disp = new display(fileName);
             disp.FileSucess();
             
-            
-           
-            
-         
-            
-    
     }
-   
    
 }
