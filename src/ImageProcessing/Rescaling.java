@@ -41,10 +41,10 @@ public class Rescaling {
         tGraphics2D.drawImage( image, 0, 0, intHeight, intWidth, null ); //draw the image scaled
                         
         
-        /* regular expression to have the name of the file without the .extension */
+        /* Regular expression to have the name of the file without the .extension */
         String fileNameWithoutExt = fileName.replaceFirst("[.][^.]+$", "");
                            
-        /* creation of the new file to send */                
+        /* Creation of the new file to send */                
         File file = new File("./Files/Rescaled",fileNameWithoutExt.concat(height).concat("x").concat(width).concat(".jpeg"));
         ImageIO.write( Image, "JPG", file ); //write the image to a file            
         return file ; 
